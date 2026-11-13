@@ -10167,8 +10167,6 @@ com.psei.launcher.R$string:
     public static int pref_show_calendar_summary
     public static int pref_show_duolingo
     public static int pref_show_duolingo_summary
-    public static int pref_show_wallpaper
-    public static int pref_show_wallpaper_summary
     public static int pref_theme_light
     public static int pref_theme_system
     public static int rename_dialog_title
@@ -10227,7 +10225,6 @@ com.psei.launcher.data.Prefs:
     private static final java.lang.String KEY_SHORTCUT_SWIPE_RIGHT
     private static final java.lang.String KEY_SHOW_CALENDAR_WIDGET
     private static final java.lang.String KEY_SHOW_DUOLINGO_WIDGET
-    private static final java.lang.String KEY_SHOW_WALLPAPER
     private static final java.lang.String KEY_SLOT_PREFIX
     private static final java.lang.String KEY_TEXT_SIZE
     private static final java.lang.String KEY_THEME
@@ -22966,7 +22963,6 @@ com.psei.launcher.data.Prefs:
     public final java.lang.String getShortcutSwipeRight()
     public final boolean getShowCalendarWidget()
     public final boolean getShowDuolingoWidget()
-    public final boolean getShowWallpaper()
     public static java.lang.String getTodayDateString()
     public static boolean isAppSnoozed()
     public final boolean isBiometricLockEnabled()
@@ -22983,13 +22979,11 @@ com.psei.launcher.data.Prefs:
     public final void setLockoutEndTime(long)
     public static void setMindfulDelayEnabled()
     public static void setMindfulDelaySeconds()
-    public final void setMindfulPackages(java.util.Set)
     public final void setProUser()
     public final void setShortcutSwipeLeft(java.lang.String)
     public final void setShortcutSwipeRight(java.lang.String)
     public static void setShowCalendarWidget()
     public static void setShowDuolingoWidget()
-    public static void setShowWallpaper()
     public static void setTextSize()
     public static void setTheme()
     public static void setVipUser()
@@ -23145,10 +23139,8 @@ kotlin.collections.MapsKt__MapsKt:
 kotlin.collections.MapsKt___MapsJvmKt
 kotlin.collections.MapsKt___MapsKt
 kotlin.collections.SetsKt
-kotlin.collections.SetsKt__SetsJVMKt:
-    public static final java.util.Set setOf(java.lang.Object)
-kotlin.collections.SetsKt__SetsKt:
-    public static java.util.Set emptySet()
+kotlin.collections.SetsKt__SetsJVMKt
+kotlin.collections.SetsKt__SetsKt
 kotlin.collections.SetsKt___SetsKt
 kotlin.comparisons.ComparisonsKt
 kotlin.comparisons.ComparisonsKt__ComparisonsKt

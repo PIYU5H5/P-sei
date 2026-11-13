@@ -132,14 +132,6 @@ class SettingsActivity : AppCompatActivity() {
             showThemeDialog()
         }
 
-        // Show Wallpaper
-        binding.switchWallpaper.setOnCheckedChangeListener { _, isChecked ->
-            prefs.showWallpaper = isChecked
-        }
-        binding.rowWallpaper.setOnClickListener {
-            binding.switchWallpaper.toggle()
-        }
-
         // Text Size
         binding.rowTextSize.setOnClickListener {
             showTextSizeDialog()
@@ -396,8 +388,6 @@ class SettingsActivity : AppCompatActivity() {
             }
         }
 
-        binding.switchWallpaper.isChecked = prefs.showWallpaper
-
         binding.tvTextSizeSummary.text = when (prefs.textSize) {
             Prefs.TEXT_SIZE_SMALL -> getString(R.string.pref_text_size_small)
             Prefs.TEXT_SIZE_LARGE -> getString(R.string.pref_text_size_large)
@@ -417,7 +407,20 @@ class SettingsActivity : AppCompatActivity() {
         // Digital Detox (Pro) state
         binding.switchMindfulDelay.isChecked = prefs.isMindfulDelayEnabled
         binding.tvMindfulDurationSummary.text = "${prefs.mindfulDelaySeconds} seconds"
-        binding.tvMindfulAppsSummary.text = "${prefs.mindfulPackages.size} apps configured with pause"
+        val installedApps = appRepo.getCachedApps()
+        if (installedApps.isNotEmpty()) {
+            val installedPackageNames = installedApps.map { it.packageName }.toSet()
+            val validMindful = prefs.mindfulPackages.filter { installedPackageNames.contains(it) }.toSet()
+            if (validMindful != prefs.mindfulPackages) {
+                prefs.mindfulPackages = validMindful
+            }
+        }
+        val mindfulCount = prefs.mindfulPackages.size
+        binding.tvMindfulAppsSummary.text = if (mindfulCount == 1) {
+            "1 app configured with pause"
+        } else {
+            "$mindfulCount apps configured with pause"
+        }
         val configuredLimitsCount = prefs.getAllConfiguredLimits().size
         binding.tvAppLimitsSummary.text = if (configuredLimitsCount > 0) {
             "$configuredLimitsCount apps with daily caps"
@@ -592,8 +595,15 @@ class SettingsActivity : AppCompatActivity() {
 
     private fun showMindfulAppsDialog() {
         val allApps = appRepo.getCachedApps().sortedBy { it.label.lowercase() }
+        val installedPackageNames = allApps.map { it.packageName }.toSet()
+        // Prune any stale or uninstalled packages
+        val validCurrent = prefs.mindfulPackages.filter { installedPackageNames.contains(it) }.toSet()
+        if (validCurrent != prefs.mindfulPackages) {
+            prefs.mindfulPackages = validCurrent
+        }
+
         val labels = allApps.map { it.label }.toTypedArray()
-        val checked = allApps.map { prefs.mindfulPackages.contains(it.packageName) }.toBooleanArray()
+        val checked = allApps.map { validCurrent.contains(it.packageName) }.toBooleanArray()
 
         AlertDialog.Builder(this)
             .setTitle("Select Mindful Apps 🧘")

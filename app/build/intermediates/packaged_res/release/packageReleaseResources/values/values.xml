@@ -85,8 +85,6 @@
     <string name="pref_show_calendar_summary">Displays today\'s events below the date</string>
     <string name="pref_show_duolingo">Show Duolingo Streak Widget</string>
     <string name="pref_show_duolingo_summary">Displays your streak count and status flame next to the date</string>
-    <string name="pref_show_wallpaper">Show System Wallpaper</string>
-    <string name="pref_show_wallpaper_summary">Displays your device wallpaper under the launcher</string>
     <string name="pref_text_size">Text Size</string>
     <string name="pref_text_size_large">Large</string>
     <string name="pref_text_size_medium">Medium (Default)</string>

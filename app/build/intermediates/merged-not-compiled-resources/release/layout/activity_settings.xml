@@ -215,47 +215,6 @@
                     tools:text="Dark (AMOLED pure black)" />
             </LinearLayout>
 
-            <!-- Show Wallpaper Item -->
-            <LinearLayout
-                android:id="@+id/rowWallpaper"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="?android:attr/selectableItemBackground"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:paddingStart="24dp"
-                android:paddingTop="14dp"
-                android:paddingEnd="24dp"
-                android:paddingBottom="14dp">
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/pref_show_wallpaper"
-                        android:textColor="?attr/primaryTextColor"
-                        android:textSize="18sp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="2dp"
-                        android:text="@string/pref_show_wallpaper_summary"
-                        android:textColor="?attr/secondaryTextColor"
-                        android:textSize="13sp" />
-                </LinearLayout>
-
-                <androidx.appcompat.widget.SwitchCompat
-                    android:id="@+id/switchWallpaper"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-            </LinearLayout>
-
             <!-- Text Size Item -->
             <LinearLayout
                 android:id="@+id/rowTextSize"

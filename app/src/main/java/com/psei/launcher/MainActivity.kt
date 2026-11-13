@@ -121,7 +121,6 @@ class MainActivity : AppCompatActivity(), AppRepository.OnAppsChangedListener {
     }
 
     private var currentAppliedTheme: String = ""
-    private var lastAppliedWallpaperFlag: Boolean? = null
 
     private fun applyCustomTheme() {
         val themeToApply = if (!prefs.isProUser) Prefs.THEME_DARK else prefs.theme
@@ -152,7 +151,10 @@ class MainActivity : AppCompatActivity(), AppRepository.OnAppsChangedListener {
         onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
 
         setupInsets()
-        setupWallpaperFlag()
+        val bgColor = getThemeColor(R.attr.launcherBackground)
+        binding.rootLayout.setBackgroundColor(bgColor)
+        binding.homeContainer.setBackgroundColor(Color.TRANSPARENT)
+        binding.drawerContainer.setBackgroundColor(bgColor)
         setupRecyclerView()
         setupSearch()
         setupGestures()
@@ -217,8 +219,7 @@ class MainActivity : AppCompatActivity(), AppRepository.OnAppsChangedListener {
             }
         }
 
-        // Refresh wallpaper flag and UI state in case user changed settings
-        setupWallpaperFlag()
+        // Refresh UI state in case user changed settings
         renderHomeSlots()
         updateShortcutsText()
         updateTextSizes()
@@ -274,26 +275,6 @@ class MainActivity : AppCompatActivity(), AppRepository.OnAppsChangedListener {
             topView = binding.tvLockoutSubhead,
             bottomView = binding.btnLockoutEmergencyExit
         )
-    }
-
-    private fun setupWallpaperFlag() {
-        val showWallpaper = prefs.showWallpaper
-        if (lastAppliedWallpaperFlag != showWallpaper) {
-            lastAppliedWallpaperFlag = showWallpaper
-            if (showWallpaper) {
-                window.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WALLPAPER)
-                binding.rootLayout.setBackgroundColor(Color.TRANSPARENT)
-                binding.homeContainer.setBackgroundColor(Color.TRANSPARENT)
-                // Slightly translucent drawer background so wallpaper subtly shines through
-                binding.drawerContainer.setBackgroundColor(Color.parseColor("#E6000000"))
-            } else {
-                window.clearFlags(WindowManager.LayoutParams.FLAG_SHOW_WALLPAPER)
-                val bgColor = getThemeColor(R.attr.launcherBackground)
-                binding.rootLayout.setBackgroundColor(bgColor)
-                binding.homeContainer.setBackgroundColor(Color.TRANSPARENT)
-                binding.drawerContainer.setBackgroundColor(bgColor)
-            }
-        }
     }
 
     private fun setupRecyclerView() {

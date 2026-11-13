@@ -33,7 +33,6 @@ class Prefs private constructor(context: Context) {
         private const val KEY_IS_PRO_USER = "pref_is_pro_user"
 
         private const val KEY_THEME = "pref_theme"
-        private const val KEY_SHOW_WALLPAPER = "pref_show_wallpaper"
         private const val KEY_HOME_SLOTS_COUNT = "pref_home_slots_count"
         private const val KEY_SLOT_PREFIX = "pref_slot_"
         private const val KEY_TEXT_SIZE = "pref_text_size"
@@ -85,10 +84,6 @@ class Prefs private constructor(context: Context) {
     var theme: String
         get() = sp.getString(KEY_THEME, THEME_DARK) ?: THEME_DARK
         set(value) = sp.edit().putString(KEY_THEME, value).apply()
-
-    var showWallpaper: Boolean
-        get() = sp.getBoolean(KEY_SHOW_WALLPAPER, false)
-        set(value) = sp.edit().putBoolean(KEY_SHOW_WALLPAPER, value).apply()
 
     var homeSlotsCount: Int
         get() = sp.getInt(KEY_HOME_SLOTS_COUNT, 6)
@@ -214,15 +209,7 @@ class Prefs private constructor(context: Context) {
         set(value) = sp.edit().putInt(KEY_MINDFUL_DELAY_SECONDS, value.coerceIn(3, 15)).apply()
 
     var mindfulPackages: Set<String>
-        get() = sp.getStringSet(KEY_MINDFUL_PACKAGES, setOf(
-            "com.instagram.android",
-            "com.zhiliaoapp.musically",
-            "com.google.android.youtube",
-            "com.twitter.android",
-            "com.facebook.katana",
-            "com.snapchat.android",
-            "com.reddit.frontpage"
-        )) ?: emptySet()
+        get() = sp.getStringSet(KEY_MINDFUL_PACKAGES, emptySet()) ?: emptySet()
         set(value) = sp.edit().putStringSet(KEY_MINDFUL_PACKAGES, value).apply()
 
     fun isMindfulApp(packageName: String): Boolean {

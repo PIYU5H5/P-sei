@@ -936,7 +936,6 @@ id rowShortcutSwipeLeft
 id rowShortcutSwipeRight
 id rowTextSize
 id rowTheme
-id rowWallpaper
 id rvAppDrawer
 id rvHiddenApps
 id rvPickerApps
@@ -980,7 +979,6 @@ id switchCalendarWidget
 id switchDuolingoWidget
 id switchMindfulDelay
 id switchPracticedToday
-id switchWallpaper
 id tabMode
 id tag_accessibility_actions
 id tag_accessibility_clickable_spans
@@ -1250,8 +1248,6 @@ string pref_show_calendar
 string pref_show_calendar_summary
 string pref_show_duolingo
 string pref_show_duolingo_summary
-string pref_show_wallpaper
-string pref_show_wallpaper_summary
 string pref_text_size
 string pref_text_size_large
 string pref_text_size_medium

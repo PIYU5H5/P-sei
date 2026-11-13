@@ -96,9 +96,6 @@ public final class ActivitySettingsBinding implements ViewBinding {
   public final LinearLayout rowTheme;
 
   @NonNull
-  public final LinearLayout rowWallpaper;
-
-  @NonNull
   public final LinearLayout settingsContent;
 
   @NonNull
@@ -124,9 +121,6 @@ public final class ActivitySettingsBinding implements ViewBinding {
 
   @NonNull
   public final SwitchCompat switchMindfulDelay;
-
-  @NonNull
-  public final SwitchCompat switchWallpaper;
 
   @NonNull
   public final TextView tvAppLimitsSummary;
@@ -192,12 +186,11 @@ public final class ActivitySettingsBinding implements ViewBinding {
       @NonNull LinearLayout rowShortcutBottomLeft, @NonNull LinearLayout rowShortcutBottomRight,
       @NonNull LinearLayout rowShortcutSwipeLeft, @NonNull LinearLayout rowShortcutSwipeRight,
       @NonNull LinearLayout rowTextSize, @NonNull LinearLayout rowTheme,
-      @NonNull LinearLayout rowWallpaper, @NonNull LinearLayout settingsContent,
-      @NonNull LinearLayout settingsHeader, @NonNull LinearLayout settingsRoot,
-      @NonNull SwitchCompat switchAutoKeyboard, @NonNull SwitchCompat switchAutoLaunch,
-      @NonNull SwitchCompat switchBiometricLock, @NonNull SwitchCompat switchCalendarWidget,
-      @NonNull SwitchCompat switchDuolingoWidget, @NonNull SwitchCompat switchMindfulDelay,
-      @NonNull SwitchCompat switchWallpaper, @NonNull TextView tvAppLimitsSummary,
+      @NonNull LinearLayout settingsContent, @NonNull LinearLayout settingsHeader,
+      @NonNull LinearLayout settingsRoot, @NonNull SwitchCompat switchAutoKeyboard,
+      @NonNull SwitchCompat switchAutoLaunch, @NonNull SwitchCompat switchBiometricLock,
+      @NonNull SwitchCompat switchCalendarWidget, @NonNull SwitchCompat switchDuolingoWidget,
+      @NonNull SwitchCompat switchMindfulDelay, @NonNull TextView tvAppLimitsSummary,
       @NonNull TextView tvDuolingoStreakSummary, @NonNull TextView tvHiddenAppsSummary,
       @NonNull TextView tvHomeSlotsSummary, @NonNull TextView tvLockMethodSummary,
       @NonNull TextView tvLockoutSummary, @NonNull TextView tvMindfulAppsSummary,
@@ -232,7 +225,6 @@ public final class ActivitySettingsBinding implements ViewBinding {
     this.rowShortcutSwipeRight = rowShortcutSwipeRight;
     this.rowTextSize = rowTextSize;
     this.rowTheme = rowTheme;
-    this.rowWallpaper = rowWallpaper;
     this.settingsContent = settingsContent;
     this.settingsHeader = settingsHeader;
     this.settingsRoot = settingsRoot;
@@ -242,7 +234,6 @@ public final class ActivitySettingsBinding implements ViewBinding {
     this.switchCalendarWidget = switchCalendarWidget;
     this.switchDuolingoWidget = switchDuolingoWidget;
     this.switchMindfulDelay = switchMindfulDelay;
-    this.switchWallpaper = switchWallpaper;
     this.tvAppLimitsSummary = tvAppLimitsSummary;
     this.tvDuolingoStreakSummary = tvDuolingoStreakSummary;
     this.tvHiddenAppsSummary = tvHiddenAppsSummary;
@@ -439,12 +430,6 @@ public final class ActivitySettingsBinding implements ViewBinding {
         break missingId;
       }
 
-      id = R.id.rowWallpaper;
-      LinearLayout rowWallpaper = ViewBindings.findChildViewById(rootView, id);
-      if (rowWallpaper == null) {
-        break missingId;
-      }
-
       id = R.id.settingsContent;
       LinearLayout settingsContent = ViewBindings.findChildViewById(rootView, id);
       if (settingsContent == null) {
@@ -492,12 +477,6 @@ public final class ActivitySettingsBinding implements ViewBinding {
       id = R.id.switchMindfulDelay;
       SwitchCompat switchMindfulDelay = ViewBindings.findChildViewById(rootView, id);
       if (switchMindfulDelay == null) {
-        break missingId;
-      }
-
-      id = R.id.switchWallpaper;
-      SwitchCompat switchWallpaper = ViewBindings.findChildViewById(rootView, id);
-      if (switchWallpaper == null) {
         break missingId;
       }
 
@@ -609,13 +588,13 @@ public final class ActivitySettingsBinding implements ViewBinding {
           rowFuntouchHelp, rowHiddenApps, rowHomeSlotsCount, rowLockMethod, rowLockoutMode,
           rowMindfulApps, rowMindfulDelay, rowMindfulDuration, rowShortcutBottomLeft,
           rowShortcutBottomRight, rowShortcutSwipeLeft, rowShortcutSwipeRight, rowTextSize,
-          rowTheme, rowWallpaper, settingsContent, settingsHeader, settingsRoot, switchAutoKeyboard,
+          rowTheme, settingsContent, settingsHeader, settingsRoot, switchAutoKeyboard,
           switchAutoLaunch, switchBiometricLock, switchCalendarWidget, switchDuolingoWidget,
-          switchMindfulDelay, switchWallpaper, tvAppLimitsSummary, tvDuolingoStreakSummary,
-          tvHiddenAppsSummary, tvHomeSlotsSummary, tvLockMethodSummary, tvLockoutSummary,
-          tvMindfulAppsSummary, tvMindfulDurationSummary, tvProBadge, tvProSubtitle,
-          tvSettingsTitle, tvShortcutBottomLeft, tvShortcutBottomRight, tvShortcutSwipeLeft,
-          tvShortcutSwipeRight, tvTextSizeSummary, tvThemeSummary);
+          switchMindfulDelay, tvAppLimitsSummary, tvDuolingoStreakSummary, tvHiddenAppsSummary,
+          tvHomeSlotsSummary, tvLockMethodSummary, tvLockoutSummary, tvMindfulAppsSummary,
+          tvMindfulDurationSummary, tvProBadge, tvProSubtitle, tvSettingsTitle,
+          tvShortcutBottomLeft, tvShortcutBottomRight, tvShortcutSwipeLeft, tvShortcutSwipeRight,
+          tvTextSizeSummary, tvThemeSummary);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));

@@ -44,8 +44,6 @@
     <string name="pref_theme_dark">Dark (AMOLED pure black)</string>
     <string name="pref_theme_light">Light</string>
     <string name="pref_theme_system">System default</string>
-    <string name="pref_show_wallpaper">Show System Wallpaper</string>
-    <string name="pref_show_wallpaper_summary">Displays your device wallpaper under the launcher</string>
     <string name="pref_text_size">Text Size</string>
     <string name="pref_text_size_small">Small</string>
     <string name="pref_text_size_medium">Medium (Default)</string>

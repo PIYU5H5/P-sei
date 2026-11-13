@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!--
+        P Launcher Minimalist Geometric Logo
+        Strictly centered within the 66dp adaptive icon safe zone (coordinates 21..87).
+    -->
+    <!-- Geometric 'P' Stem and Loop -->
+    <path
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="5.5"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:pathData="M38,74 L38,34 L58,34 C67,34 72,40 72,48 C72,56 67,62 58,62 L38,62" />
+
+    <!-- Minimalist Accent Dot -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M60,74m-3.5,0a3.5,3.5 0 1,1 7,0a3.5,3.5 0 1,1 -7,0" />
+</vector>

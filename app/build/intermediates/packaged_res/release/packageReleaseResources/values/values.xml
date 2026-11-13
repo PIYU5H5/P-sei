@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr format="color" name="dividerColor"/>
+    <attr format="reference|color" name="itemHighlight"/>
+    <attr format="color" name="launcherBackground"/>
+    <attr format="color" name="primaryTextColor"/>
+    <attr format="reference|color" name="searchBackground"/>
+    <attr format="color" name="secondaryTextColor"/>
+    <color name="bg_dark">#000000</color>
+    <color name="bg_light">#FFFFFF</color>
+    <color name="divider_dark">#222222</color>
+    <color name="divider_light">#EEEEEE</color>
+    <color name="highlight_dark">#2A2A2A</color>
+    <color name="highlight_light">#E0E0E0</color>
+    <color name="search_bg_dark">#181818</color>
+    <color name="search_bg_light">#F0F0F0</color>
+    <color name="text_primary_dark">#FFFFFF</color>
+    <color name="text_primary_light">#111111</color>
+    <color name="text_secondary_dark">#999999</color>
+    <color name="text_secondary_light">#666666</color>
+    <color name="transparent">#00000000</color>
+    <string name="accessibility_prompt">Please enable "P-Sei Screen Lock" in Accessibility Settings.</string>
+    <string name="accessibility_service_desc">Enables double-tap to lock screen without requiring PIN instead of fingerprint unlock, and enables swiping down to view notifications for P-Sei.</string>
+    <string name="action_hide">Hide from list</string>
+    <string name="action_info">App info</string>
+    <string name="action_rename">Rename</string>
+    <string name="action_uninstall">Uninstall</string>
+    <string name="admin_receiver_description">Allows P-Sei to lock the screen on double tap.</string>
+    <string name="admin_receiver_label">P-Sei Screen Lock</string>
+    <string name="all_day">All day</string>
+    <string name="app_hidden_toast">App hidden. Manage in Settings.</string>
+    <string name="app_name">P-Sei</string>
+    <string name="calendar_permission_denied">Calendar permission is required to display your events</string>
+    <string name="cancel">Cancel</string>
+    <string name="clear_slot">Clear Slot</string>
+    <string name="connect_calendar">+ Connect Google Calendar</string>
+    <string name="default_camera_name">Camera</string>
+    <string name="default_phone_name">Phone</string>
+    <string name="device_admin_prompt">Please activate Device Admin to allow screen locking.</string>
+    <string name="duolingo_dialog_subtitle">Track your daily language streak</string>
+    <string name="duolingo_dialog_title">Duolingo Streak</string>
+    <string name="duolingo_not_installed">Duolingo app is not installed</string>
+    <string name="duolingo_practiced_desc">Flame turns red when practiced; grey when at risk</string>
+    <string name="duolingo_practiced_today">Practiced Today</string>
+    <string name="duolingo_streak_count">Streak Count</string>
+    <string name="lockout_emergency_exit">Emergency Exit</string>
+    <string name="lockout_focus">FOCUS</string>
+    <string name="lockout_message">All apps are locked.\nStep away from your screen and breathe.</string>
+    <string name="lockout_monk_mode">MONK MODE</string>
+    <string name="lockout_phone_calls">Phone Calls  📞</string>
+    <string name="no_apps_found">No apps found</string>
+    <string name="no_events_today">No events today</string>
+    <string name="no_hidden_apps">No hidden apps.</string>
+    <string name="none_assigned">None</string>
+    <string name="open_duolingo">Open Duolingo</string>
+    <string name="permission_required">Permission required</string>
+    <string name="pref_auto_keyboard">Auto-open Keyboard</string>
+    <string name="pref_auto_keyboard_summary">Focus search box and show keyboard upon opening drawer</string>
+    <string name="pref_auto_launch">Auto-launch Single Result</string>
+    <string name="pref_auto_launch_summary">Launch app immediately when search narrows to 1 result</string>
+    <string name="pref_category_drawer">App Drawer</string>
+    <string name="pref_category_general">General</string>
+    <string name="pref_category_gestures">Gestures &amp; Shortcuts</string>
+    <string name="pref_category_system">vivo / Funtouch OS Help</string>
+    <string name="pref_category_widgets">Widgets</string>
+    <string name="pref_default_launcher">Set as Default Launcher</string>
+    <string name="pref_default_launcher_summary">Open system settings to select P-Sei</string>
+    <string name="pref_duolingo_auto_sync">Auto-sync with Notifications</string>
+    <string name="pref_duolingo_auto_sync_summary">Automatically update streak count from Duolingo notifications</string>
+    <string name="pref_funtouch_help">Funtouch OS Stability Guide</string>
+    <string name="pref_funtouch_help_summary">Tips to prevent Funtouch OS from killing or resetting P-Sei</string>
+    <string name="pref_home_slots_count">Home screen apps count</string>
+    <string name="pref_home_slots_count_summary">Currently showing %d apps</string>
+    <string name="pref_lock_method">Double-tap to Lock Screen</string>
+    <string name="pref_lock_method_summary">Choose Accessibility Service (preserves fingerprint) or Device Admin</string>
+    <string name="pref_lockout_summary">Lock distraction-free focus mode with only phone calls allowed</string>
+    <string name="pref_lockout_title">Deep Lockout (Monk Mode) ⭐</string>
+    <string name="pref_manage_hidden">Manage Hidden Apps</string>
+    <string name="pref_manage_hidden_summary">%d apps currently hidden</string>
+    <string name="pref_shortcut_bottom_left">Bottom-Left Shortcut</string>
+    <string name="pref_shortcut_bottom_right">Bottom-Right Shortcut</string>
+    <string name="pref_shortcut_swipe_left">Swipe Left Shortcut</string>
+    <string name="pref_shortcut_swipe_right">Swipe Right Shortcut</string>
+    <string name="pref_show_calendar">Show Google Calendar Events</string>
+    <string name="pref_show_calendar_summary">Displays today\'s events below the date</string>
+    <string name="pref_show_duolingo">Show Duolingo Streak Widget</string>
+    <string name="pref_show_duolingo_summary">Displays your streak count and status flame next to the date</string>
+    <string name="pref_show_wallpaper">Show System Wallpaper</string>
+    <string name="pref_show_wallpaper_summary">Displays your device wallpaper under the launcher</string>
+    <string name="pref_text_size">Text Size</string>
+    <string name="pref_text_size_large">Large</string>
+    <string name="pref_text_size_medium">Medium (Default)</string>
+    <string name="pref_text_size_small">Small</string>
+    <string name="pref_theme">Theme</string>
+    <string name="pref_theme_dark">Dark (AMOLED pure black)</string>
+    <string name="pref_theme_light">Light</string>
+    <string name="pref_theme_system">System default</string>
+    <string name="reassign_slot">Assign Slot</string>
+    <string name="rename_dialog_title">Rename App</string>
+    <string name="rename_hint">Enter new display name</string>
+    <string name="reset_default">Reset</string>
+    <string name="save">Save</string>
+    <string name="search_hint">Search apps…</string>
+    <string name="slot_empty">(Empty)</string>
+    <string name="title_hidden_apps">Hidden Apps</string>
+    <string name="title_settings">Settings</string>
+    <string name="unhide">Unhide</string>
+    <style name="Theme.MinimalLauncher" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowBackground">@color/bg_dark</item>
+        <item name="android:colorBackground">@color/bg_dark</item>
+        <item name="android:statusBarColor">@color/transparent</item>
+        <item name="android:navigationBarColor">@color/transparent</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:windowLightNavigationBar">false</item>
+
+        
+        <item name="launcherBackground">@color/bg_dark</item>
+        <item name="primaryTextColor">@color/text_primary_dark</item>
+        <item name="secondaryTextColor">@color/text_secondary_dark</item>
+        <item name="searchBackground">@drawable/bg_search_dark</item>
+        <item name="itemHighlight">@color/highlight_dark</item>
+        <item name="dividerColor">@color/divider_dark</item>
+    </style>
+    <style name="Theme.MinimalLauncher.Charcoal" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowBackground">#18191C</item>
+        <item name="android:colorBackground">#18191C</item>
+        <item name="android:statusBarColor">@color/transparent</item>
+        <item name="android:navigationBarColor">@color/transparent</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:windowLightNavigationBar">false</item>
+
+        <item name="launcherBackground">#18191C</item>
+        <item name="primaryTextColor">#E3E5E8</item>
+        <item name="secondaryTextColor">#8E9297</item>
+        <item name="searchBackground">@drawable/bg_search_charcoal</item>
+        <item name="itemHighlight">#26282D</item>
+        <item name="dividerColor">#282A2E</item>
+    </style>
+    <style name="Theme.MinimalLauncher.Cyber" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowBackground">#050508</item>
+        <item name="android:colorBackground">#050508</item>
+        <item name="android:statusBarColor">@color/transparent</item>
+        <item name="android:navigationBarColor">@color/transparent</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:windowLightNavigationBar">false</item>
+
+        <item name="launcherBackground">#050508</item>
+        <item name="primaryTextColor">#00F0FF</item>
+        <item name="secondaryTextColor">#008B99</item>
+        <item name="searchBackground">@drawable/bg_search_cyber</item>
+        <item name="itemHighlight">#0D1B2A</item>
+        <item name="dividerColor">#003344</item>
+    </style>
+    <style name="Theme.MinimalLauncher.Dark" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowBackground">@color/bg_dark</item>
+        <item name="android:colorBackground">@color/bg_dark</item>
+        <item name="android:statusBarColor">@color/transparent</item>
+        <item name="android:navigationBarColor">@color/transparent</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:windowLightNavigationBar">false</item>
+
+        <item name="launcherBackground">@color/bg_dark</item>
+        <item name="primaryTextColor">@color/text_primary_dark</item>
+        <item name="secondaryTextColor">@color/text_secondary_dark</item>
+        <item name="searchBackground">@drawable/bg_search_dark</item>
+        <item name="itemHighlight">@color/highlight_dark</item>
+        <item name="dividerColor">@color/divider_dark</item>
+    </style>
+    <style name="Theme.MinimalLauncher.Forest" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowBackground">#0B140E</item>
+        <item name="android:colorBackground">#0B140E</item>
+        <item name="android:statusBarColor">@color/transparent</item>
+        <item name="android:navigationBarColor">@color/transparent</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:windowLightNavigationBar">false</item>
+
+        <item name="launcherBackground">#0B140E</item>
+        <item name="primaryTextColor">#D4E7D7</item>
+        <item name="secondaryTextColor">#748C78</item>
+        <item name="searchBackground">@drawable/bg_search_forest</item>
+        <item name="itemHighlight">#15241A</item>
+        <item name="dividerColor">#1A2C20</item>
+    </style>
+    <style name="Theme.MinimalLauncher.Light" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowBackground">@color/bg_light</item>
+        <item name="android:colorBackground">@color/bg_light</item>
+        <item name="android:statusBarColor">@color/transparent</item>
+        <item name="android:navigationBarColor">@color/transparent</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:windowLightNavigationBar">true</item>
+
+        <item name="launcherBackground">@color/bg_light</item>
+        <item name="primaryTextColor">@color/text_primary_light</item>
+        <item name="secondaryTextColor">@color/text_secondary_light</item>
+        <item name="searchBackground">@drawable/bg_search_light</item>
+        <item name="itemHighlight">@color/highlight_light</item>
+        <item name="dividerColor">@color/divider_light</item>
+    </style>
+    <style name="Theme.MinimalLauncher.Sepia" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowBackground">#F4EFEA</item>
+        <item name="android:colorBackground">#F4EFEA</item>
+        <item name="android:statusBarColor">@color/transparent</item>
+        <item name="android:navigationBarColor">@color/transparent</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:windowLightNavigationBar">true</item>
+
+        <item name="launcherBackground">#F4EFEA</item>
+        <item name="primaryTextColor">#2D2621</item>
+        <item name="secondaryTextColor">#7A7067</item>
+        <item name="searchBackground">@drawable/bg_search_sepia</item>
+        <item name="itemHighlight">#E7DFD5</item>
+        <item name="dividerColor">#E0D7CB</item>
+    </style>
+</resources>

@@ -1,0 +1,381 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+3    package="com.psei.launcher"
+4    android:versionCode="1"
+5    android:versionName="1.0.0" >
+6
+7    <uses-sdk
+8        android:minSdkVersion="26"
+9        android:targetSdkVersion="34" />
+10
+11    <!-- Hard Constraint: NO android.permission.INTERNET -->
+12    <!-- Permission to expand the status bar / notification shade on swipe down -->
+13    <uses-permission android:name="android.permission.EXPAND_STATUS_BAR" />
+13-->E:\Coding\Launcher\app\src\main\AndroidManifest.xml:7:5-76
+13-->E:\Coding\Launcher\app\src\main\AndroidManifest.xml:7:22-73
+14
+15    <!-- Subtle haptic feedback on long press -->
+16    <uses-permission android:name="android.permission.VIBRATE" />
+16-->E:\Coding\Launcher\app\src\main\AndroidManifest.xml:10:5-66
+16-->E:\Coding\Launcher\app\src\main\AndroidManifest.xml:10:22-63
+17
+18    <!-- Offline Google Calendar Daily Events Widget -->
+19    <uses-permission android:name="android.permission.READ_CALENDAR" />
+19-->E:\Coding\Launcher\app\src\main\AndroidManifest.xml:13:5-72
+19-->E:\Coding\Launcher\app\src\main\AndroidManifest.xml:13:22-69
+20
+21    <!-- App Screen-Time Limits (Usage Stats) -->
+22    <uses-permission android:name="android.permission.PACKAGE_USAGE_STATS" />
+22-->E:\Coding\Launcher\app\src\main\AndroidManifest.xml:16:5-18:47
+22-->E:\Coding\Launcher\app\src\main\AndroidManifest.xml:17:9-62
+23
+24    <!--
+25        Android 11+ (API 30+) Package Visibility requirement.
+26        Using a focused <queries> block for LAUNCHER intents avoids needing the high-risk
+27        QUERY_ALL_PACKAGES permission while correctly discovering all user-facing launchable apps.
+28    -->
+29    <queries>
+29-->E:\Coding\Launcher\app\src\main\AndroidManifest.xml:25:5-30:15
+30        <intent>
+30-->E:\Coding\Launcher\app\src\main\AndroidManifest.xml:26:9-29:18
+31            <action android:name="android.intent.action.MAIN" />
+31-->E:\Coding\Launcher\app\src\main\AndroidManifest.xml:27:13-65
+31-->E:\Coding\Launcher\app\src\main\AndroidManifest.xml:27:21-62
+32
+33            <category android:name="android.intent.category.LAUNCHER" />
+33-->E:\Coding\Launcher\app\src\main\AndroidManifest.xml:28:13-73
+33-->E:\Coding\Launcher\app\src\main\AndroidManifest.xml:28:23-70
+34        </intent>
+35        <intent>
+35-->[com.android.billingclient:billing:7.1.1] C:\Users\PIYUSH\.gradle\caches\8.9\transforms\359c740640f0fa115a142ee1ae0eaf47\transformed\billing-7.1.1\AndroidManifest.xml:13:9-15:18
+36            <action android:name="com.android.vending.billing.InAppBillingService.BIND" />
+36-->[com.android.billingclient:billing:7.1.1] C:\Users\PIYUSH\.gradle\caches\8.9\transforms\359c740640f0fa115a142ee1ae0eaf47\transformed\billing-7.1.1\AndroidManifest.xml:14:13-91
+36-->[com.android.billingclient:billing:7.1.1] C:\Users\PIYUSH\.gradle\caches\8.9\transforms\359c740640f0fa115a142ee1ae0eaf47\transformed\billing-7.1.1\AndroidManifest.xml:14:21-88
+37        </intent>
+38        <intent>
+38-->[com.android.billingclient:billing:7.1.1] C:\Users\PIYUSH\.gradle\caches\8.9\transforms\359c740640f0fa115a142ee1ae0eaf47\transformed\billing-7.1.1\AndroidManifest.xml:16:9-18:18
+39            <action android:name="com.google.android.apps.play.billingtestcompanion.BillingOverrideService.BIND" />
+39-->[com.android.billingclient:billing:7.1.1] C:\Users\PIYUSH\.gradle\caches\8.9\transforms\359c740640f0fa115a142ee1ae0eaf47\transformed\billing-7.1.1\AndroidManifest.xml:17:13-116
+39-->[com.android.billingclient:billing:7.1.1] C:\Users\PIYUSH\.gradle\caches\8.9\transforms\359c740640f0fa115a142ee1ae0eaf47\transformed\billing-7.1.1\AndroidManifest.xml:17:21-113
+40        </intent>
+41    </queries>
+42
+43    <uses-permission android:name="com.android.vending.BILLING" />
+43-->[com.android.billingclient:billing-ktx:7.1.1] C:\Users\PIYUSH\.gradle\caches\8.9\transforms\4c6ee9b4a727d9aaadd86b97d811eb80\transformed\billing-ktx-7.1.1\AndroidManifest.xml:9:5-67
+43-->[com.android.billingclient:billing-ktx:7.1.1] C:\Users\PIYUSH\.gradle\caches\8.9\transforms\4c6ee9b4a727d9aaadd86b97d811eb80\transformed\billing-ktx-7.1.1\AndroidManifest.xml:9:22-64
+44
+45    <permission
+45-->[androidx.core:core:1.12.0] C:\Users\PIYUSH\.gradle\caches\8.9\transforms\b2adead3c965649ab169fcf445a5dcfe\transformed\core-1.12.0\AndroidManifest.xml:22:5-24:47
+46        android:name="com.psei.launcher.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
+46-->[androidx.core:core:1.12.0] C:\Users\PIYUSH\.gradle\caches\8.9\transforms\b2adead3c965649ab169fcf445a5dcfe\transformed\core-1.12.0\AndroidManifest.xml:23:9-81
+47        android:protectionLevel="signature" />
+47-->[androidx.core:core:1.12.0] C:\Users\PIYUSH\.gradle\caches\8.9\transforms\b2adead3c965649ab169fcf445a5dcfe\transformed\core-1.12.0\AndroidManifest.xml:24:9-44
+48
+49    <uses-permission android:name="com.psei.launcher.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" /> <!-- Although the *SdkVersion is captured in gradle build files, this is required for non gradle builds -->
+49-->[androidx.core:core:1.12.0] C:\Users\PIYUSH\.gradle\caches\8.9\transforms\b2adead3c965649ab169fcf445a5dcfe\transformed\core-1.12.0\AndroidManifest.xml:26:5-97
+49-->[androidx.core:core:1.12.0] C:\Users\PIYUSH\.gradle\caches\8.9\transforms\b2adead3c965649ab169fcf445a5dcfe\transformed\core-1.12.0\AndroidManifest.xml:26:22-94
+50    <!-- <uses-sdk android:minSdkVersion="14"/> -->
+51    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+51-->[com.google.android.datatransport:transport-backend-cct:3.1.8] C:\Users\PIYUSH\.gradle\caches\8.9\transforms\cce6c17c1a107302271a90c8d0f593ce\transformed\transport-backend-cct-3.1.8\AndroidManifest.xml:24:5-79
+51-->[com.google.android.datatransport:transport-backend-cct:3.1.8] C:\Users\PIYUSH\.gradle\caches\8.9\transforms\cce6c17c1a107302271a90c8d0f593ce\transformed\transport-backend-cct-3.1.8\AndroidManifest.xml:24:22-76
+52    <uses-permission android:name="android.permission.INTERNET" />
+52-->[com.google.android.datatransport:transport-backend-cct:3.1.8] C:\Users\PIYUSH\.gradle\caches\8.9\transforms\cce6c17c1a107302271a90c8d0f593ce\transformed\transport-backend-cct-3.1.8\AndroidManifest.xml:25:5-67
+52-->[com.google.android.datatransport:transport-backend-cct:3.1.8] C:\Users\PIYUSH\.gradle\caches\8.9\transforms\cce6c17c1a107302271a90c8d0f593ce\transformed\transport-backend-cct-3.1.8\AndroidManifest.xml:25:22-64
+53
+54    <application
+54-->E:\Coding\Launcher\app\src\main\AndroidManifest.xml:32:5-147:19
+55        android:name="com.psei.launcher.MinimalLauncherApp"
+55-->E:\Coding\Launcher\app\src\main\AndroidManifest.xml:33:9-43
+56        android:allowBackup="true"
+56-->E:\Coding\Launcher\app\src\main\AndroidManifest.xml:34:9-35
+57        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+57-->[androidx.core:core:1.12.0] C:\Users\PIYUSH\.gradle\caches\8.9\transforms\b2adead3c965649ab169fcf445a5dcfe\transformed\core-1.12.0\AndroidManifest.xml:28:18-86
+58        android:extractNativeLibs="false"
+59        android:icon="@mipmap/ic_launcher"
+59-->E:\Coding\Launcher\app\src\main\AndroidManifest.xml:35:9-43
+60        android:label="@string/app_name"
+60-->E:\Coding\Launcher\app\src\main\AndroidManifest.xml:37:9-41
+61        android:roundIcon="@mipmap/ic_launcher_round"
+61-->E:\Coding\Launcher\app\src\main\AndroidManifest.xml:36:9-54
+62        android:supportsRtl="true"
+62-->E:\Coding\Launcher\app\src\main\AndroidManifest.xml:38:9-35
+63        android:theme="@style/Theme.MinimalLauncher" >
+63-->E:\Coding\Launcher\app\src\main\AndroidManifest.xml:39:9-53
+64
+65        <!-- Main Home Launcher Activity (Registered with HOME + DEFAULT) -->
+66        <activity
+66-->E:\Coding\Launcher\app\src\main\AndroidManifest.xml:42:9-60:20
+67            android:name="com.psei.launcher.MainActivity"
+67-->E:\Coding\Launcher\app\src\main\AndroidManifest.xml:43:13-41
+68            android:clearTaskOnLaunch="true"
+68-->E:\Coding\Launcher\app\src\main\AndroidManifest.xml:44:13-45
+69            android:configChanges="keyboard|keyboardHidden|mcc|mnc|navigation|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
+69-->E:\Coding\Launcher\app\src\main\AndroidManifest.xml:45:13-141
+70            android:excludeFromRecents="true"
+70-->E:\Coding\Launcher\app\src\main\AndroidManifest.xml:46:13-46
+71            android:exported="true"
+71-->E:\Coding\Launcher\app\src\main\AndroidManifest.xml:47:13-36
+72            android:launchMode="singleTask"
+72-->E:\Coding\Launcher\app\src\main\AndroidManifest.xml:48:13-44
+73            android:resumeWhilePausing="true"
+73-->E:\Coding\Launcher\app\src\main\AndroidManifest.xml:49:13-46
+74            android:screenOrientation="portrait"
+74-->E:\Coding\Launcher\app\src\main\AndroidManifest.xml:50:13-49
+75            android:stateNotNeeded="true"
+75-->E:\Coding\Launcher\app\src\main\AndroidManifest.xml:51:13-42
+76            android:taskAffinity=""
+76-->E:\Coding\Launcher\app\src\main\AndroidManifest.xml:52:13-36
+77            android:windowSoftInputMode="adjustPan" >
+77-->E:\Coding\Launcher\app\src\main\AndroidManifest.xml:53:13-52
+78            <intent-filter>
+78-->E:\Coding\Launcher\app\src\main\AndroidManifest.xml:55:13-59:29
+79                <action android:name="android.intent.action.MAIN" />
+79-->E:\Coding\Launcher\app\src\main\AndroidManifest.xml:27:13-65
+79-->E:\Coding\Launcher\app\src\main\AndroidManifest.xml:27:21-62
+80
+81                <category android:name="android.intent.category.HOME" />
+81-->E:\Coding\Launcher\app\src\main\AndroidManifest.xml:57:17-73
+81-->E:\Coding\Launcher\app\src\main\AndroidManifest.xml:57:27-70
+82                <category android:name="android.intent.category.DEFAULT" />
+82-->E:\Coding\Launcher\app\src\main\AndroidManifest.xml:58:17-76
+82-->E:\Coding\Launcher\app\src\main\AndroidManifest.xml:58:27-73
+83            </intent-filter>
+84        </activity>
+85
+86        <!--
+87            Normal App Entry Activity (Registered ONLY with LAUNCHER).
+88            This guarantees that OEM launchers (like vivo stock launcher) will display
+89            "P Launcher" with its icon in the phone's app drawer and home screen.
+90        -->
+91        <activity
+91-->E:\Coding\Launcher\app\src\main\AndroidManifest.xml:67:9-80:20
+92            android:name="com.psei.launcher.LauncherActivity"
+92-->E:\Coding\Launcher\app\src\main\AndroidManifest.xml:68:13-45
+93            android:excludeFromRecents="true"
+93-->E:\Coding\Launcher\app\src\main\AndroidManifest.xml:69:13-46
+94            android:exported="true"
+94-->E:\Coding\Launcher\app\src\main\AndroidManifest.xml:70:13-36
+95            android:icon="@mipmap/ic_launcher"
+95-->E:\Coding\Launcher\app\src\main\AndroidManifest.xml:71:13-47
+96            android:label="@string/app_name"
+96-->E:\Coding\Launcher\app\src\main\AndroidManifest.xml:72:13-45
+97            android:noHistory="true"
+97-->E:\Coding\Launcher\app\src\main\AndroidManifest.xml:73:13-37
+98            android:roundIcon="@mipmap/ic_launcher_round"
+98-->E:\Coding\Launcher\app\src\main\AndroidManifest.xml:74:13-58
+99            android:theme="@android:style/Theme.NoDisplay" >
+99-->E:\Coding\Launcher\app\src\main\AndroidManifest.xml:75:13-59
+100            <intent-filter>
+100-->E:\Coding\Launcher\app\src\main\AndroidManifest.xml:76:13-79:29
+101                <action android:name="android.intent.action.MAIN" />
+101-->E:\Coding\Launcher\app\src\main\AndroidManifest.xml:27:13-65
+101-->E:\Coding\Launcher\app\src\main\AndroidManifest.xml:27:21-62
+102
+103                <category android:name="android.intent.category.LAUNCHER" />
+103-->E:\Coding\Launcher\app\src\main\AndroidManifest.xml:28:13-73
+103-->E:\Coding\Launcher\app\src\main\AndroidManifest.xml:28:23-70
+104            </intent-filter>
+105        </activity>
+106
+107        <!-- Settings Screen (Text-only, lightweight) -->
+108        <activity
+108-->E:\Coding\Launcher\app\src\main\AndroidManifest.xml:83:9-88:56
+109            android:name="com.psei.launcher.SettingsActivity"
+109-->E:\Coding\Launcher\app\src\main\AndroidManifest.xml:84:13-45
+110            android:exported="false"
+110-->E:\Coding\Launcher\app\src\main\AndroidManifest.xml:85:13-37
+111            android:label="@string/title_settings"
+111-->E:\Coding\Launcher\app\src\main\AndroidManifest.xml:86:13-51
+112            android:screenOrientation="portrait" />
+112-->E:\Coding\Launcher\app\src\main\AndroidManifest.xml:87:13-49
+113
+114        <!-- Hidden Apps Management Screen -->
+115        <activity
+115-->E:\Coding\Launcher\app\src\main\AndroidManifest.xml:91:9-96:56
+116            android:name="com.psei.launcher.HiddenAppsActivity"
+116-->E:\Coding\Launcher\app\src\main\AndroidManifest.xml:92:13-47
+117            android:exported="false"
+117-->E:\Coding\Launcher\app\src\main\AndroidManifest.xml:93:13-37
+118            android:label="@string/title_hidden_apps"
+118-->E:\Coding\Launcher\app\src\main\AndroidManifest.xml:94:13-54
+119            android:screenOrientation="portrait" />
+119-->E:\Coding\Launcher\app\src\main\AndroidManifest.xml:95:13-49
+120
+121        <!--
+122            Lock Screen Accessibility Service (Preferred modern lock method).
+123            Uses GLOBAL_ACTION_LOCK_SCREEN on Android 9+ (API 28+).
+124            Crucially, this does NOT invalidate biometric/fingerprint unlock on Funtouch OS.
+125        -->
+126        <service
+126-->E:\Coding\Launcher\app\src\main\AndroidManifest.xml:103:9-113:19
+127            android:name="com.psei.launcher.service.LockAccessibilityService"
+127-->E:\Coding\Launcher\app\src\main\AndroidManifest.xml:104:13-61
+128            android:exported="true"
+128-->E:\Coding\Launcher\app\src\main\AndroidManifest.xml:105:13-36
+129            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE" >
+129-->E:\Coding\Launcher\app\src\main\AndroidManifest.xml:106:13-79
+130            <intent-filter>
+130-->E:\Coding\Launcher\app\src\main\AndroidManifest.xml:107:13-109:29
+131                <action android:name="android.accessibilityservice.AccessibilityService" />
+131-->E:\Coding\Launcher\app\src\main\AndroidManifest.xml:108:17-92
+131-->E:\Coding\Launcher\app\src\main\AndroidManifest.xml:108:25-89
+132            </intent-filter>
+133
+134            <meta-data
+134-->E:\Coding\Launcher\app\src\main\AndroidManifest.xml:110:13-112:72
+135                android:name="android.accessibilityservice"
+135-->E:\Coding\Launcher\app\src\main\AndroidManifest.xml:111:17-60
+136                android:resource="@xml/accessibility_service_config" />
+136-->E:\Coding\Launcher\app\src\main\AndroidManifest.xml:112:17-69
+137        </service>
+138
+139        <!--
+140            Duolingo Notification Listener Service (Optional auto-sync).
+141            Reads Duolingo streak notifications to update streak number and completion status automatically.
+142        -->
+143        <service
+143-->E:\Coding\Launcher\app\src\main\AndroidManifest.xml:119:9-127:19
+144            android:name="com.psei.launcher.service.DuolingoNotificationListener"
+144-->E:\Coding\Launcher\app\src\main\AndroidManifest.xml:120:13-65
+145            android:exported="true"
+145-->E:\Coding\Launcher\app\src\main\AndroidManifest.xml:121:13-36
+146            android:label="P-Sei Duolingo Sync"
+146-->E:\Coding\Launcher\app\src\main\AndroidManifest.xml:122:13-48
+147            android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE" >
+147-->E:\Coding\Launcher\app\src\main\AndroidManifest.xml:123:13-87
+148            <intent-filter>
+148-->E:\Coding\Launcher\app\src\main\AndroidManifest.xml:124:13-126:29
+149                <action android:name="android.service.notification.NotificationListenerService" />
+149-->E:\Coding\Launcher\app\src\main\AndroidManifest.xml:125:17-99
+149-->E:\Coding\Launcher\app\src\main\AndroidManifest.xml:125:25-96
+150            </intent-filter>
+151        </service>
+152
+153        <!--
+154            Alternative Device Admin Receiver for legacy lockNow().
+155            Allows users who prefer Device Admin over Accessibility to lock screen.
+156        -->
+157        <receiver
+157-->E:\Coding\Launcher\app\src\main\AndroidManifest.xml:133:9-145:20
+158            android:name="com.psei.launcher.service.LauncherAdminReceiver"
+158-->E:\Coding\Launcher\app\src\main\AndroidManifest.xml:134:13-58
+159            android:description="@string/admin_receiver_description"
+159-->E:\Coding\Launcher\app\src\main\AndroidManifest.xml:135:13-69
+160            android:exported="true"
+160-->E:\Coding\Launcher\app\src\main\AndroidManifest.xml:136:13-36
+161            android:label="@string/admin_receiver_label"
+161-->E:\Coding\Launcher\app\src\main\AndroidManifest.xml:137:13-57
+162            android:permission="android.permission.BIND_DEVICE_ADMIN" >
+162-->E:\Coding\Launcher\app\src\main\AndroidManifest.xml:138:13-70
+163            <meta-data
+163-->E:\Coding\Launcher\app\src\main\AndroidManifest.xml:139:13-141:63
+164                android:name="android.app.device_admin"
+164-->E:\Coding\Launcher\app\src\main\AndroidManifest.xml:140:17-56
+165                android:resource="@xml/device_admin_sample" />
+165-->E:\Coding\Launcher\app\src\main\AndroidManifest.xml:141:17-60
+166
+167            <intent-filter>
+167-->E:\Coding\Launcher\app\src\main\AndroidManifest.xml:142:13-144:29
+168                <action android:name="android.app.action.DEVICE_ADMIN_ENABLED" />
+168-->E:\Coding\Launcher\app\src\main\AndroidManifest.xml:143:17-82
+168-->E:\Coding\Launcher\app\src\main\AndroidManifest.xml:143:25-79
+169            </intent-filter>
+170        </receiver>
+171
+172        <meta-data
+172-->[com.android.billingclient:billing:7.1.1] C:\Users\PIYUSH\.gradle\caches\8.9\transforms\359c740640f0fa115a142ee1ae0eaf47\transformed\billing-7.1.1\AndroidManifest.xml:22:9-24:37
+173            android:name="com.google.android.play.billingclient.version"
+173-->[com.android.billingclient:billing:7.1.1] C:\Users\PIYUSH\.gradle\caches\8.9\transforms\359c740640f0fa115a142ee1ae0eaf47\transformed\billing-7.1.1\AndroidManifest.xml:23:13-73
+174            android:value="7.1.1" />
+174-->[com.android.billingclient:billing:7.1.1] C:\Users\PIYUSH\.gradle\caches\8.9\transforms\359c740640f0fa115a142ee1ae0eaf47\transformed\billing-7.1.1\AndroidManifest.xml:24:13-34
+175
+176        <activity
+176-->[com.android.billingclient:billing:7.1.1] C:\Users\PIYUSH\.gradle\caches\8.9\transforms\359c740640f0fa115a142ee1ae0eaf47\transformed\billing-7.1.1\AndroidManifest.xml:26:9-30:75
+177            android:name="com.android.billingclient.api.ProxyBillingActivity"
+177-->[com.android.billingclient:billing:7.1.1] C:\Users\PIYUSH\.gradle\caches\8.9\transforms\359c740640f0fa115a142ee1ae0eaf47\transformed\billing-7.1.1\AndroidManifest.xml:27:13-78
+178            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+178-->[com.android.billingclient:billing:7.1.1] C:\Users\PIYUSH\.gradle\caches\8.9\transforms\359c740640f0fa115a142ee1ae0eaf47\transformed\billing-7.1.1\AndroidManifest.xml:28:13-96
+179            android:exported="false"
+179-->[com.android.billingclient:billing:7.1.1] C:\Users\PIYUSH\.gradle\caches\8.9\transforms\359c740640f0fa115a142ee1ae0eaf47\transformed\billing-7.1.1\AndroidManifest.xml:29:13-37
+180            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+180-->[com.android.billingclient:billing:7.1.1] C:\Users\PIYUSH\.gradle\caches\8.9\transforms\359c740640f0fa115a142ee1ae0eaf47\transformed\billing-7.1.1\AndroidManifest.xml:30:13-72
+181        <activity
+181-->[com.android.billingclient:billing:7.1.1] C:\Users\PIYUSH\.gradle\caches\8.9\transforms\359c740640f0fa115a142ee1ae0eaf47\transformed\billing-7.1.1\AndroidManifest.xml:31:9-35:75
+182            android:name="com.android.billingclient.api.ProxyBillingActivityV2"
+182-->[com.android.billingclient:billing:7.1.1] C:\Users\PIYUSH\.gradle\caches\8.9\transforms\359c740640f0fa115a142ee1ae0eaf47\transformed\billing-7.1.1\AndroidManifest.xml:32:13-80
+183            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+183-->[com.android.billingclient:billing:7.1.1] C:\Users\PIYUSH\.gradle\caches\8.9\transforms\359c740640f0fa115a142ee1ae0eaf47\transformed\billing-7.1.1\AndroidManifest.xml:33:13-96
+184            android:exported="false"
+184-->[com.android.billingclient:billing:7.1.1] C:\Users\PIYUSH\.gradle\caches\8.9\transforms\359c740640f0fa115a142ee1ae0eaf47\transformed\billing-7.1.1\AndroidManifest.xml:34:13-37
+185            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+185-->[com.android.billingclient:billing:7.1.1] C:\Users\PIYUSH\.gradle\caches\8.9\transforms\359c740640f0fa115a142ee1ae0eaf47\transformed\billing-7.1.1\AndroidManifest.xml:35:13-72
+186        <activity
+186-->[com.google.android.gms:play-services-base:18.5.0] C:\Users\PIYUSH\.gradle\caches\8.9\transforms\79038ce8ff428b9492368b4cbf2fe73a\transformed\play-services-base-18.5.0\AndroidManifest.xml:5:9-173
+187            android:name="com.google.android.gms.common.api.GoogleApiActivity"
+187-->[com.google.android.gms:play-services-base:18.5.0] C:\Users\PIYUSH\.gradle\caches\8.9\transforms\79038ce8ff428b9492368b4cbf2fe73a\transformed\play-services-base-18.5.0\AndroidManifest.xml:5:19-85
+188            android:exported="false"
+188-->[com.google.android.gms:play-services-base:18.5.0] C:\Users\PIYUSH\.gradle\caches\8.9\transforms\79038ce8ff428b9492368b4cbf2fe73a\transformed\play-services-base-18.5.0\AndroidManifest.xml:5:146-170
+189            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+189-->[com.google.android.gms:play-services-base:18.5.0] C:\Users\PIYUSH\.gradle\caches\8.9\transforms\79038ce8ff428b9492368b4cbf2fe73a\transformed\play-services-base-18.5.0\AndroidManifest.xml:5:86-145
+190
+191        <meta-data
+191-->[com.google.android.gms:play-services-basement:18.4.0] C:\Users\PIYUSH\.gradle\caches\8.9\transforms\8236351a01a5e94257d084ecc4285139\transformed\play-services-basement-18.4.0\AndroidManifest.xml:6:9-122
+192            android:name="com.google.android.gms.version"
+192-->[com.google.android.gms:play-services-basement:18.4.0] C:\Users\PIYUSH\.gradle\caches\8.9\transforms\8236351a01a5e94257d084ecc4285139\transformed\play-services-basement-18.4.0\AndroidManifest.xml:6:20-65
+193            android:value="@integer/google_play_services_version" />
+193-->[com.google.android.gms:play-services-basement:18.4.0] C:\Users\PIYUSH\.gradle\caches\8.9\transforms\8236351a01a5e94257d084ecc4285139\transformed\play-services-basement-18.4.0\AndroidManifest.xml:6:66-119
+194
+195        <provider
+195-->[androidx.emoji2:emoji2:1.2.0] C:\Users\PIYUSH\.gradle\caches\8.9\transforms\9e9c674b632de5e139bc5906d051fe70\transformed\emoji2-1.2.0\AndroidManifest.xml:24:9-32:20
+196            android:name="androidx.startup.InitializationProvider"
+196-->[androidx.emoji2:emoji2:1.2.0] C:\Users\PIYUSH\.gradle\caches\8.9\transforms\9e9c674b632de5e139bc5906d051fe70\transformed\emoji2-1.2.0\AndroidManifest.xml:25:13-67
+197            android:authorities="com.psei.launcher.androidx-startup"
+197-->[androidx.emoji2:emoji2:1.2.0] C:\Users\PIYUSH\.gradle\caches\8.9\transforms\9e9c674b632de5e139bc5906d051fe70\transformed\emoji2-1.2.0\AndroidManifest.xml:26:13-68
+198            android:exported="false" >
+198-->[androidx.emoji2:emoji2:1.2.0] C:\Users\PIYUSH\.gradle\caches\8.9\transforms\9e9c674b632de5e139bc5906d051fe70\transformed\emoji2-1.2.0\AndroidManifest.xml:27:13-37
+199            <meta-data
+199-->[androidx.emoji2:emoji2:1.2.0] C:\Users\PIYUSH\.gradle\caches\8.9\transforms\9e9c674b632de5e139bc5906d051fe70\transformed\emoji2-1.2.0\AndroidManifest.xml:29:13-31:52
+200                android:name="androidx.emoji2.text.EmojiCompatInitializer"
+200-->[androidx.emoji2:emoji2:1.2.0] C:\Users\PIYUSH\.gradle\caches\8.9\transforms\9e9c674b632de5e139bc5906d051fe70\transformed\emoji2-1.2.0\AndroidManifest.xml:30:17-75
+201                android:value="androidx.startup" />
+201-->[androidx.emoji2:emoji2:1.2.0] C:\Users\PIYUSH\.gradle\caches\8.9\transforms\9e9c674b632de5e139bc5906d051fe70\transformed\emoji2-1.2.0\AndroidManifest.xml:31:17-49
+202            <meta-data
+202-->[androidx.lifecycle:lifecycle-process:2.4.1] C:\Users\PIYUSH\.gradle\caches\8.9\transforms\52ed8d67b53872301ce5933a5501c7ba\transformed\lifecycle-process-2.4.1\AndroidManifest.xml:31:13-33:52
+203                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
+203-->[androidx.lifecycle:lifecycle-process:2.4.1] C:\Users\PIYUSH\.gradle\caches\8.9\transforms\52ed8d67b53872301ce5933a5501c7ba\transformed\lifecycle-process-2.4.1\AndroidManifest.xml:32:17-78
+204                android:value="androidx.startup" />
+204-->[androidx.lifecycle:lifecycle-process:2.4.1] C:\Users\PIYUSH\.gradle\caches\8.9\transforms\52ed8d67b53872301ce5933a5501c7ba\transformed\lifecycle-process-2.4.1\AndroidManifest.xml:33:17-49
+205        </provider>
+206
+207        <service
+207-->[com.google.android.datatransport:transport-backend-cct:3.1.8] C:\Users\PIYUSH\.gradle\caches\8.9\transforms\cce6c17c1a107302271a90c8d0f593ce\transformed\transport-backend-cct-3.1.8\AndroidManifest.xml:28:9-34:19
+208            android:name="com.google.android.datatransport.runtime.backends.TransportBackendDiscovery"
+208-->[com.google.android.datatransport:transport-backend-cct:3.1.8] C:\Users\PIYUSH\.gradle\caches\8.9\transforms\cce6c17c1a107302271a90c8d0f593ce\transformed\transport-backend-cct-3.1.8\AndroidManifest.xml:29:13-103
+209            android:exported="false" >
+209-->[com.google.android.datatransport:transport-backend-cct:3.1.8] C:\Users\PIYUSH\.gradle\caches\8.9\transforms\cce6c17c1a107302271a90c8d0f593ce\transformed\transport-backend-cct-3.1.8\AndroidManifest.xml:30:13-37
+210            <meta-data
+210-->[com.google.android.datatransport:transport-backend-cct:3.1.8] C:\Users\PIYUSH\.gradle\caches\8.9\transforms\cce6c17c1a107302271a90c8d0f593ce\transformed\transport-backend-cct-3.1.8\AndroidManifest.xml:31:13-33:39
+211                android:name="backend:com.google.android.datatransport.cct.CctBackendFactory"
+211-->[com.google.android.datatransport:transport-backend-cct:3.1.8] C:\Users\PIYUSH\.gradle\caches\8.9\transforms\cce6c17c1a107302271a90c8d0f593ce\transformed\transport-backend-cct-3.1.8\AndroidManifest.xml:32:17-94
+212                android:value="cct" />
+212-->[com.google.android.datatransport:transport-backend-cct:3.1.8] C:\Users\PIYUSH\.gradle\caches\8.9\transforms\cce6c17c1a107302271a90c8d0f593ce\transformed\transport-backend-cct-3.1.8\AndroidManifest.xml:33:17-36
+213        </service>
+214        <service
+214-->[com.google.android.datatransport:transport-runtime:3.1.8] C:\Users\PIYUSH\.gradle\caches\8.9\transforms\7ee4ed9aa2dcb8f1802f1f82a08da8e3\transformed\transport-runtime-3.1.8\AndroidManifest.xml:26:9-30:19
+215            android:name="com.google.android.datatransport.runtime.scheduling.jobscheduling.JobInfoSchedulerService"
+215-->[com.google.android.datatransport:transport-runtime:3.1.8] C:\Users\PIYUSH\.gradle\caches\8.9\transforms\7ee4ed9aa2dcb8f1802f1f82a08da8e3\transformed\transport-runtime-3.1.8\AndroidManifest.xml:27:13-117
+216            android:exported="false"
+216-->[com.google.android.datatransport:transport-runtime:3.1.8] C:\Users\PIYUSH\.gradle\caches\8.9\transforms\7ee4ed9aa2dcb8f1802f1f82a08da8e3\transformed\transport-runtime-3.1.8\AndroidManifest.xml:28:13-37
+217            android:permission="android.permission.BIND_JOB_SERVICE" >
+217-->[com.google.android.datatransport:transport-runtime:3.1.8] C:\Users\PIYUSH\.gradle\caches\8.9\transforms\7ee4ed9aa2dcb8f1802f1f82a08da8e3\transformed\transport-runtime-3.1.8\AndroidManifest.xml:29:13-69
+218        </service>
+219
+220        <receiver
+220-->[com.google.android.datatransport:transport-runtime:3.1.8] C:\Users\PIYUSH\.gradle\caches\8.9\transforms\7ee4ed9aa2dcb8f1802f1f82a08da8e3\transformed\transport-runtime-3.1.8\AndroidManifest.xml:32:9-34:40
+221            android:name="com.google.android.datatransport.runtime.scheduling.jobscheduling.AlarmManagerSchedulerBroadcastReceiver"
+221-->[com.google.android.datatransport:transport-runtime:3.1.8] C:\Users\PIYUSH\.gradle\caches\8.9\transforms\7ee4ed9aa2dcb8f1802f1f82a08da8e3\transformed\transport-runtime-3.1.8\AndroidManifest.xml:33:13-132
+222            android:exported="false" />
+222-->[com.google.android.datatransport:transport-runtime:3.1.8] C:\Users\PIYUSH\.gradle\caches\8.9\transforms\7ee4ed9aa2dcb8f1802f1f82a08da8e3\transformed\transport-runtime-3.1.8\AndroidManifest.xml:34:13-37
+223    </application>
+224
+225</manifest>

@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Base application theme -->
+    <style name="Theme.MinimalLauncher" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowBackground">@color/bg_dark</item>
+        <item name="android:colorBackground">@color/bg_dark</item>
+        <item name="android:statusBarColor">@color/transparent</item>
+        <item name="android:navigationBarColor">@color/transparent</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:windowLightNavigationBar">false</item>
+
+        <!-- Custom semantic attributes -->
+        <item name="launcherBackground">@color/bg_dark</item>
+        <item name="primaryTextColor">@color/text_primary_dark</item>
+        <item name="secondaryTextColor">@color/text_secondary_dark</item>
+        <item name="searchBackground">@drawable/bg_search_dark</item>
+        <item name="itemHighlight">@color/highlight_dark</item>
+        <item name="dividerColor">@color/divider_dark</item>
+    </style>
+
+    <!-- Pure AMOLED Black Theme -->
+    <style name="Theme.MinimalLauncher.Dark" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowBackground">@color/bg_dark</item>
+        <item name="android:colorBackground">@color/bg_dark</item>
+        <item name="android:statusBarColor">@color/transparent</item>
+        <item name="android:navigationBarColor">@color/transparent</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:windowLightNavigationBar">false</item>
+
+        <item name="launcherBackground">@color/bg_dark</item>
+        <item name="primaryTextColor">@color/text_primary_dark</item>
+        <item name="secondaryTextColor">@color/text_secondary_dark</item>
+        <item name="searchBackground">@drawable/bg_search_dark</item>
+        <item name="itemHighlight">@color/highlight_dark</item>
+        <item name="dividerColor">@color/divider_dark</item>
+    </style>
+
+    <!-- Clean Light Theme -->
+    <style name="Theme.MinimalLauncher.Light" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowBackground">@color/bg_light</item>
+        <item name="android:colorBackground">@color/bg_light</item>
+        <item name="android:statusBarColor">@color/transparent</item>
+        <item name="android:navigationBarColor">@color/transparent</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:windowLightNavigationBar">true</item>
+
+        <item name="launcherBackground">@color/bg_light</item>
+        <item name="primaryTextColor">@color/text_primary_light</item>
+        <item name="secondaryTextColor">@color/text_secondary_light</item>
+        <item name="searchBackground">@drawable/bg_search_light</item>
+        <item name="itemHighlight">@color/highlight_light</item>
+        <item name="dividerColor">@color/divider_light</item>
+    </style>
+
+    <!-- PRO: Warm Paper / Sepia Theme -->
+    <style name="Theme.MinimalLauncher.Sepia" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowBackground">#F4EFEA</item>
+        <item name="android:colorBackground">#F4EFEA</item>
+        <item name="android:statusBarColor">@color/transparent</item>
+        <item name="android:navigationBarColor">@color/transparent</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:windowLightNavigationBar">true</item>
+
+        <item name="launcherBackground">#F4EFEA</item>
+        <item name="primaryTextColor">#2D2621</item>
+        <item name="secondaryTextColor">#7A7067</item>
+        <item name="searchBackground">@drawable/bg_search_sepia</item>
+        <item name="itemHighlight">#E7DFD5</item>
+        <item name="dividerColor">#E0D7CB</item>
+    </style>
+
+    <!-- PRO: Forest Night Theme -->
+    <style name="Theme.MinimalLauncher.Forest" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowBackground">#0B140E</item>
+        <item name="android:colorBackground">#0B140E</item>
+        <item name="android:statusBarColor">@color/transparent</item>
+        <item name="android:navigationBarColor">@color/transparent</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:windowLightNavigationBar">false</item>
+
+        <item name="launcherBackground">#0B140E</item>
+        <item name="primaryTextColor">#D4E7D7</item>
+        <item name="secondaryTextColor">#748C78</item>
+        <item name="searchBackground">@drawable/bg_search_forest</item>
+        <item name="itemHighlight">#15241A</item>
+        <item name="dividerColor">#1A2C20</item>
+    </style>
+
+    <!-- PRO: Charcoal Slate Theme -->
+    <style name="Theme.MinimalLauncher.Charcoal" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowBackground">#18191C</item>
+        <item name="android:colorBackground">#18191C</item>
+        <item name="android:statusBarColor">@color/transparent</item>
+        <item name="android:navigationBarColor">@color/transparent</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:windowLightNavigationBar">false</item>
+
+        <item name="launcherBackground">#18191C</item>
+        <item name="primaryTextColor">#E3E5E8</item>
+        <item name="secondaryTextColor">#8E9297</item>
+        <item name="searchBackground">@drawable/bg_search_charcoal</item>
+        <item name="itemHighlight">#26282D</item>
+        <item name="dividerColor">#282A2E</item>
+    </style>
+
+    <!-- PRO: Cyberpunk Midnight Theme -->
+    <style name="Theme.MinimalLauncher.Cyber" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowBackground">#050508</item>
+        <item name="android:colorBackground">#050508</item>
+        <item name="android:statusBarColor">@color/transparent</item>
+        <item name="android:navigationBarColor">@color/transparent</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:windowLightNavigationBar">false</item>
+
+        <item name="launcherBackground">#050508</item>
+        <item name="primaryTextColor">#00F0FF</item>
+        <item name="secondaryTextColor">#008B99</item>
+        <item name="searchBackground">@drawable/bg_search_cyber</item>
+        <item name="itemHighlight">#0D1B2A</item>
+        <item name="dividerColor">#003344</item>
+    </style>
+</resources>

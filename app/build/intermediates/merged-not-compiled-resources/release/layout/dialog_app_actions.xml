@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?attr/launcherBackground"
+    android:orientation="vertical"
+    android:paddingStart="20dp"
+    android:paddingTop="20dp"
+    android:paddingEnd="20dp"
+    android:paddingBottom="24dp">
+
+    <TextView
+        android:id="@+id/tvActionAppTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:paddingBottom="16dp"
+        android:textColor="?attr/primaryTextColor"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginBottom="8dp"
+        android:background="?attr/dividerColor" />
+
+    <TextView
+        android:id="@+id/actionRename"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?android:attr/selectableItemBackground"
+        android:paddingTop="14dp"
+        android:paddingBottom="14dp"
+        android:text="@string/action_rename"
+        android:textColor="?attr/primaryTextColor"
+        android:textSize="17sp" />
+
+    <TextView
+        android:id="@+id/actionMindfulDelay"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?android:attr/selectableItemBackground"
+        android:paddingTop="14dp"
+        android:paddingBottom="14dp"
+        android:text="Mindful Delay (Pause &amp; Breathe) 🧘"
+        android:textColor="?attr/primaryTextColor"
+        android:textSize="17sp" />
+
+    <TextView
+        android:id="@+id/actionScreenTimeLimit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?android:attr/selectableItemBackground"
+        android:paddingTop="14dp"
+        android:paddingBottom="14dp"
+        android:text="Daily Screen-Time Limit ⏳"
+        android:textColor="?attr/primaryTextColor"
+        android:textSize="17sp" />
+
+    <TextView
+        android:id="@+id/actionHide"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?android:attr/selectableItemBackground"
+        android:paddingTop="14dp"
+        android:paddingBottom="14dp"
+        android:text="@string/action_hide"
+        android:textColor="?attr/primaryTextColor"
+        android:textSize="17sp" />
+
+    <TextView
+        android:id="@+id/actionInfo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?android:attr/selectableItemBackground"
+        android:paddingTop="14dp"
+        android:paddingBottom="14dp"
+        android:text="@string/action_info"
+        android:textColor="?attr/primaryTextColor"
+        android:textSize="17sp" />
+
+    <TextView
+        android:id="@+id/actionUninstall"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?android:attr/selectableItemBackground"
+        android:paddingTop="14dp"
+        android:paddingBottom="14dp"
+        android:text="@string/action_uninstall"
+        android:textColor="#FF5555"
+        android:textSize="17sp" />
+
+</LinearLayout>

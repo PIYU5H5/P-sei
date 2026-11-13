@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="launcherBackground" format="color" />
+    <attr name="primaryTextColor" format="color" />
+    <attr name="secondaryTextColor" format="color" />
+    <attr name="searchBackground" format="reference|color" />
+    <attr name="itemHighlight" format="reference|color" />
+    <attr name="dividerColor" format="color" />
+</resources>
+

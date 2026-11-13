@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.psei.launcher"
+    android:versionCode="1"
+    android:versionName="1.0.0" >
+
+    <uses-sdk
+        android:minSdkVersion="26"
+        android:targetSdkVersion="34" />
+
+    <!-- Hard Constraint: NO android.permission.INTERNET -->
+    <!-- Permission to expand the status bar / notification shade on swipe down -->
+    <uses-permission android:name="android.permission.EXPAND_STATUS_BAR" />
+
+    <!-- Subtle haptic feedback on long press -->
+    <uses-permission android:name="android.permission.VIBRATE" />
+
+    <!-- Offline Google Calendar Daily Events Widget -->
+    <uses-permission android:name="android.permission.READ_CALENDAR" />
+
+    <!-- App Screen-Time Limits (Usage Stats) -->
+    <uses-permission android:name="android.permission.PACKAGE_USAGE_STATS" />
+
+    <!--
+        Android 11+ (API 30+) Package Visibility requirement.
+        Using a focused <queries> block for LAUNCHER intents avoids needing the high-risk
+        QUERY_ALL_PACKAGES permission while correctly discovering all user-facing launchable apps.
+    -->
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.MAIN" />
+
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent>
+        <intent>
+            <action android:name="com.android.vending.billing.InAppBillingService.BIND" />
+        </intent>
+        <intent>
+            <action android:name="com.google.android.apps.play.billingtestcompanion.BillingOverrideService.BIND" />
+        </intent>
+    </queries>
+
+    <uses-permission android:name="com.android.vending.BILLING" />
+
+    <permission
+        android:name="com.psei.launcher.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
+        android:protectionLevel="signature" />
+
+    <uses-permission android:name="com.psei.launcher.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" /> <!-- Although the *SdkVersion is captured in gradle build files, this is required for non gradle builds -->
+    <!-- <uses-sdk android:minSdkVersion="14"/> -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <application
+        android:name="com.psei.launcher.MinimalLauncherApp"
+        android:allowBackup="true"
+        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+        android:extractNativeLibs="false"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.MinimalLauncher" >
+
+        <!-- Main Home Launcher Activity (Registered with HOME + DEFAULT) -->
+        <activity
+            android:name="com.psei.launcher.MainActivity"
+            android:clearTaskOnLaunch="true"
+            android:configChanges="keyboard|keyboardHidden|mcc|mnc|navigation|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
+            android:excludeFromRecents="true"
+            android:exported="true"
+            android:launchMode="singleTask"
+            android:resumeWhilePausing="true"
+            android:screenOrientation="portrait"
+            android:stateNotNeeded="true"
+            android:taskAffinity=""
+            android:windowSoftInputMode="adjustPan" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.HOME" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <!--
+            Normal App Entry Activity (Registered ONLY with LAUNCHER).
+            This guarantees that OEM launchers (like vivo stock launcher) will display
+            "P Launcher" with its icon in the phone's app drawer and home screen.
+        -->
+        <activity
+            android:name="com.psei.launcher.LauncherActivity"
+            android:excludeFromRecents="true"
+            android:exported="true"
+            android:icon="@mipmap/ic_launcher"
+            android:label="@string/app_name"
+            android:noHistory="true"
+            android:roundIcon="@mipmap/ic_launcher_round"
+            android:theme="@android:style/Theme.NoDisplay" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- Settings Screen (Text-only, lightweight) -->
+        <activity
+            android:name="com.psei.launcher.SettingsActivity"
+            android:exported="false"
+            android:label="@string/title_settings"
+            android:screenOrientation="portrait" />
+
+        <!-- Hidden Apps Management Screen -->
+        <activity
+            android:name="com.psei.launcher.HiddenAppsActivity"
+            android:exported="false"
+            android:label="@string/title_hidden_apps"
+            android:screenOrientation="portrait" />
+
+        <!--
+            Lock Screen Accessibility Service (Preferred modern lock method).
+            Uses GLOBAL_ACTION_LOCK_SCREEN on Android 9+ (API 28+).
+            Crucially, this does NOT invalidate biometric/fingerprint unlock on Funtouch OS.
+        -->
+        <service
+            android:name="com.psei.launcher.service.LockAccessibilityService"
+            android:exported="true"
+            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE" >
+            <intent-filter>
+                <action android:name="android.accessibilityservice.AccessibilityService" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.accessibilityservice"
+                android:resource="@xml/accessibility_service_config" />
+        </service>
+
+        <!--
+            Duolingo Notification Listener Service (Optional auto-sync).
+            Reads Duolingo streak notifications to update streak number and completion status automatically.
+        -->
+        <service
+            android:name="com.psei.launcher.service.DuolingoNotificationListener"
+            android:exported="true"
+            android:label="P-Sei Duolingo Sync"
+            android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE" >
+            <intent-filter>
+                <action android:name="android.service.notification.NotificationListenerService" />
+            </intent-filter>
+        </service>
+
+        <!--
+            Alternative Device Admin Receiver for legacy lockNow().
+            Allows users who prefer Device Admin over Accessibility to lock screen.
+        -->
+        <receiver
+            android:name="com.psei.launcher.service.LauncherAdminReceiver"
+            android:description="@string/admin_receiver_description"
+            android:exported="true"
+            android:label="@string/admin_receiver_label"
+            android:permission="android.permission.BIND_DEVICE_ADMIN" >
+            <meta-data
+                android:name="android.app.device_admin"
+                android:resource="@xml/device_admin_sample" />
+
+            <intent-filter>
+                <action android:name="android.app.action.DEVICE_ADMIN_ENABLED" />
+            </intent-filter>
+        </receiver>
+
+        <meta-data
+            android:name="com.google.android.play.billingclient.version"
+            android:value="7.1.1" />
+
+        <activity
+            android:name="com.android.billingclient.api.ProxyBillingActivity"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:exported="false"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+        <activity
+            android:name="com.android.billingclient.api.ProxyBillingActivityV2"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:exported="false"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+        <activity
+            android:name="com.google.android.gms.common.api.GoogleApiActivity"
+            android:exported="false"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+
+        <provider
+            android:name="androidx.startup.InitializationProvider"
+            android:authorities="com.psei.launcher.androidx-startup"
+            android:exported="false" >
+            <meta-data
+                android:name="androidx.emoji2.text.EmojiCompatInitializer"
+                android:value="androidx.startup" />
+            <meta-data
+                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
+                android:value="androidx.startup" />
+        </provider>
+
+        <service
+            android:name="com.google.android.datatransport.runtime.backends.TransportBackendDiscovery"
+            android:exported="false" >
+            <meta-data
+                android:name="backend:com.google.android.datatransport.cct.CctBackendFactory"
+                android:value="cct" />
+        </service>
+        <service
+            android:name="com.google.android.datatransport.runtime.scheduling.jobscheduling.JobInfoSchedulerService"
+            android:exported="false"
+            android:permission="android.permission.BIND_JOB_SERVICE" >
+        </service>
+
+        <receiver
+            android:name="com.google.android.datatransport.runtime.scheduling.jobscheduling.AlarmManagerSchedulerBroadcastReceiver"
+            android:exported="false" />
+    </application>
+
+</manifest>

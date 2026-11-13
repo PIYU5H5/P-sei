@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">P-Sei</string>
+    <string name="title_settings">Settings</string>
+    <string name="title_hidden_apps">Hidden Apps</string>
+    <string name="no_hidden_apps">No hidden apps.</string>
+    <string name="unhide">Unhide</string>
+    
+    <!-- Accessibility and Device Admin -->
+    <string name="accessibility_service_desc">Enables double-tap to lock screen without requiring PIN instead of fingerprint unlock, and enables swiping down to view notifications for P-Sei.</string>
+    <string name="admin_receiver_label">P-Sei Screen Lock</string>
+    <string name="admin_receiver_description">Allows P-Sei to lock the screen on double tap.</string>
+    
+    <!-- Home screen and slots -->
+    <string name="slot_empty">(Empty)</string>
+    <string name="reassign_slot">Assign Slot</string>
+    <string name="clear_slot">Clear Slot</string>
+    <string name="default_phone_name">Phone</string>
+    <string name="default_camera_name">Camera</string>
+    
+    <!-- Drawer and Search -->
+    <string name="search_hint">Search apps…</string>
+    <string name="no_apps_found">No apps found</string>
+    
+    <!-- App Context Menu -->
+    <string name="action_rename">Rename</string>
+    <string name="action_hide">Hide from list</string>
+    <string name="action_info">App info</string>
+    <string name="action_uninstall">Uninstall</string>
+    <string name="rename_dialog_title">Rename App</string>
+    <string name="rename_hint">Enter new display name</string>
+    <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
+    <string name="reset_default">Reset</string>
+    <string name="app_hidden_toast">App hidden. Manage in Settings.</string>
+    
+    <!-- Settings Screen items -->
+    <string name="pref_category_general">General</string>
+    <string name="pref_default_launcher">Set as Default Launcher</string>
+    <string name="pref_default_launcher_summary">Open system settings to select P-Sei</string>
+    <string name="pref_home_slots_count">Home screen apps count</string>
+    <string name="pref_home_slots_count_summary">Currently showing %d apps</string>
+    <string name="pref_theme">Theme</string>
+    <string name="pref_theme_dark">Dark (AMOLED pure black)</string>
+    <string name="pref_theme_light">Light</string>
+    <string name="pref_theme_system">System default</string>
+    <string name="pref_show_wallpaper">Show System Wallpaper</string>
+    <string name="pref_show_wallpaper_summary">Displays your device wallpaper under the launcher</string>
+    <string name="pref_text_size">Text Size</string>
+    <string name="pref_text_size_small">Small</string>
+    <string name="pref_text_size_medium">Medium (Default)</string>
+    <string name="pref_text_size_large">Large</string>
+    
+    <string name="pref_category_drawer">App Drawer</string>
+    <string name="pref_auto_keyboard">Auto-open Keyboard</string>
+    <string name="pref_auto_keyboard_summary">Focus search box and show keyboard upon opening drawer</string>
+    <string name="pref_auto_launch">Auto-launch Single Result</string>
+    <string name="pref_auto_launch_summary">Launch app immediately when search narrows to 1 result</string>
+    <string name="pref_manage_hidden">Manage Hidden Apps</string>
+    <string name="pref_manage_hidden_summary">%d apps currently hidden</string>
+    
+    <string name="pref_category_gestures">Gestures &amp; Shortcuts</string>
+    <string name="pref_lock_method">Double-tap to Lock Screen</string>
+    <string name="pref_lock_method_summary">Choose Accessibility Service (preserves fingerprint) or Device Admin</string>
+    <string name="pref_shortcut_bottom_left">Bottom-Left Shortcut</string>
+    <string name="pref_shortcut_bottom_right">Bottom-Right Shortcut</string>
+    <string name="pref_shortcut_swipe_left">Swipe Left Shortcut</string>
+    <string name="pref_shortcut_swipe_right">Swipe Right Shortcut</string>
+    
+    <string name="pref_category_system">vivo / Funtouch OS Help</string>
+    <string name="pref_funtouch_help">Funtouch OS Stability Guide</string>
+    <string name="pref_funtouch_help_summary">Tips to prevent Funtouch OS from killing or resetting P-Sei</string>
+    
+    <string name="none_assigned">None</string>
+    <string name="permission_required">Permission required</string>
+    <string name="accessibility_prompt">Please enable "P-Sei Screen Lock" in Accessibility Settings.</string>
+    <string name="device_admin_prompt">Please activate Device Admin to allow screen locking.</string>
+
+    <!-- Calendar Widget Strings -->
+    <string name="pref_category_widgets">Widgets</string>
+    <string name="pref_show_calendar">Show Google Calendar Events</string>
+    <string name="pref_show_calendar_summary">Displays today\'s events below the date</string>
+    <string name="connect_calendar">+ Connect Google Calendar</string>
+    <string name="no_events_today">No events today</string>
+    <string name="all_day">All day</string>
+    <string name="calendar_permission_denied">Calendar permission is required to display your events</string>
+
+    <!-- Duolingo Streak Widget Strings -->
+    <string name="pref_show_duolingo">Show Duolingo Streak Widget</string>
+    <string name="pref_show_duolingo_summary">Displays your streak count and status flame next to the date</string>
+    <string name="duolingo_streak_count">Streak Count</string>
+    <string name="duolingo_practiced_today">Practiced Today</string>
+    <string name="duolingo_practiced_desc">Flame turns red when practiced; grey when at risk</string>
+    <string name="duolingo_dialog_title">Duolingo Streak</string>
+    <string name="duolingo_dialog_subtitle">Track your daily language streak</string>
+    <string name="open_duolingo">Open Duolingo</string>
+    <string name="duolingo_not_installed">Duolingo app is not installed</string>
+    <string name="pref_duolingo_auto_sync">Auto-sync with Notifications</string>
+    <string name="pref_duolingo_auto_sync_summary">Automatically update streak count from Duolingo notifications</string>
+
+    <!-- Deep Lockout (Monk Mode) Strings -->
+    <string name="pref_lockout_title">Deep Lockout (Monk Mode) ⭐</string>
+    <string name="pref_lockout_summary">Lock distraction-free focus mode with only phone calls allowed</string>
+    <string name="lockout_monk_mode">MONK MODE</string>
+    <string name="lockout_focus">FOCUS</string>
+    <string name="lockout_message">All apps are locked.\nStep away from your screen and breathe.</string>
+    <string name="lockout_phone_calls">Phone Calls  📞</string>
+    <string name="lockout_emergency_exit">Emergency Exit</string>
+</resources>
+

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.MinimalLauncher" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowBackground">@color/bg_dark</item>
+        <item name="android:colorBackground">@color/bg_dark</item>
+        <item name="android:statusBarColor">@color/transparent</item>
+        <item name="android:navigationBarColor">@color/transparent</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:windowLightNavigationBar">false</item>
+
+        <item name="launcherBackground">@color/bg_dark</item>
+        <item name="primaryTextColor">@color/text_primary_dark</item>
+        <item name="secondaryTextColor">@color/text_secondary_dark</item>
+        <item name="searchBackground">@drawable/bg_search_dark</item>
+        <item name="itemHighlight">@color/highlight_dark</item>
+        <item name="dividerColor">@color/divider_dark</item>
+    </style>
+</resources>

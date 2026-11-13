@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- Hard Constraint: NO android.permission.INTERNET -->
+    <!-- Permission to expand the status bar / notification shade on swipe down -->
+    <uses-permission android:name="android.permission.EXPAND_STATUS_BAR" />
+
+    <!-- Subtle haptic feedback on long press -->
+    <uses-permission android:name="android.permission.VIBRATE" />
+
+    <!-- Offline Google Calendar Daily Events Widget -->
+    <uses-permission android:name="android.permission.READ_CALENDAR" />
+
+    <!-- App Screen-Time Limits (Usage Stats) -->
+    <uses-permission
+        android:name="android.permission.PACKAGE_USAGE_STATS"
+        tools:ignore="ProtectedPermissions" />
+
+    <!--
+        Android 11+ (API 30+) Package Visibility requirement.
+        Using a focused <queries> block for LAUNCHER intents avoids needing the high-risk
+        QUERY_ALL_PACKAGES permission while correctly discovering all user-facing launchable apps.
+    -->
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.MAIN" />
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent>
+    </queries>
+
+    <application
+        android:name=".MinimalLauncherApp"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.MinimalLauncher">
+
+        <!-- Main Home Launcher Activity (Registered with HOME + DEFAULT) -->
+        <activity
+            android:name=".MainActivity"
+            android:clearTaskOnLaunch="true"
+            android:configChanges="keyboard|keyboardHidden|mcc|mnc|navigation|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
+            android:excludeFromRecents="true"
+            android:exported="true"
+            android:launchMode="singleTask"
+            android:resumeWhilePausing="true"
+            android:screenOrientation="portrait"
+            android:stateNotNeeded="true"
+            android:taskAffinity=""
+            android:windowSoftInputMode="adjustPan"
+            tools:ignore="LockedOrientationActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.HOME" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <!--
+            Normal App Entry Activity (Registered ONLY with LAUNCHER).
+            This guarantees that OEM launchers (like vivo stock launcher) will display
+            "P Launcher" with its icon in the phone's app drawer and home screen.
+        -->
+        <activity
+            android:name=".LauncherActivity"
+            android:excludeFromRecents="true"
+            android:exported="true"
+            android:icon="@mipmap/ic_launcher"
+            android:label="@string/app_name"
+            android:noHistory="true"
+            android:roundIcon="@mipmap/ic_launcher_round"
+            android:theme="@android:style/Theme.NoDisplay">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- Settings Screen (Text-only, lightweight) -->
+        <activity
+            android:name=".SettingsActivity"
+            android:exported="false"
+            android:label="@string/title_settings"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
+
+        <!-- Hidden Apps Management Screen -->
+        <activity
+            android:name=".HiddenAppsActivity"
+            android:exported="false"
+            android:label="@string/title_hidden_apps"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
+
+        <!--
+            Lock Screen Accessibility Service (Preferred modern lock method).
+            Uses GLOBAL_ACTION_LOCK_SCREEN on Android 9+ (API 28+).
+            Crucially, this does NOT invalidate biometric/fingerprint unlock on Funtouch OS.
+        -->
+        <service
+            android:name=".service.LockAccessibilityService"
+            android:exported="true"
+            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
+            <intent-filter>
+                <action android:name="android.accessibilityservice.AccessibilityService" />
+            </intent-filter>
+            <meta-data
+                android:name="android.accessibilityservice"
+                android:resource="@xml/accessibility_service_config" />
+        </service>
+
+        <!--
+            Duolingo Notification Listener Service (Optional auto-sync).
+            Reads Duolingo streak notifications to update streak number and completion status automatically.
+        -->
+        <service
+            android:name=".service.DuolingoNotificationListener"
+            android:exported="true"
+            android:label="P-Sei Duolingo Sync"
+            android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE">
+            <intent-filter>
+                <action android:name="android.service.notification.NotificationListenerService" />
+            </intent-filter>
+        </service>
+
+        <!--
+            Alternative Device Admin Receiver for legacy lockNow().
+            Allows users who prefer Device Admin over Accessibility to lock screen.
+        -->
+        <receiver
+            android:name=".service.LauncherAdminReceiver"
+            android:description="@string/admin_receiver_description"
+            android:exported="true"
+            android:label="@string/admin_receiver_label"
+            android:permission="android.permission.BIND_DEVICE_ADMIN">
+            <meta-data
+                android:name="android.app.device_admin"
+                android:resource="@xml/device_admin_sample" />
+            <intent-filter>
+                <action android:name="android.app.action.DEVICE_ADMIN_ENABLED" />
+            </intent-filter>
+        </receiver>
+
+    </application>
+
+</manifest>

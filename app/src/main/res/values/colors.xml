@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Dark Mode Colors (Default: pure AMOLED black) -->
+    <color name="bg_dark">#000000</color>
+    <color name="text_primary_dark">#FFFFFF</color>
+    <color name="text_secondary_dark">#999999</color>
+    <color name="divider_dark">#222222</color>
+    <color name="search_bg_dark">#181818</color>
+    <color name="highlight_dark">#2A2A2A</color>
+
+    <!-- Light Mode Colors -->
+    <color name="bg_light">#FFFFFF</color>
+    <color name="text_primary_light">#111111</color>
+    <color name="text_secondary_light">#666666</color>
+    <color name="divider_light">#EEEEEE</color>
+    <color name="search_bg_light">#F0F0F0</color>
+    <color name="highlight_light">#E0E0E0</color>
+
+    <!-- Generic transparent -->
+    <color name="transparent">#00000000</color>
+</resources>
+

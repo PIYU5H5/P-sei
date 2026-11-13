@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:paddingTop="3dp"
+    android:paddingBottom="3dp">
+
+    <TextView
+        android:id="@+id/tvEventTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:minWidth="64dp"
+        android:textColor="?attr/secondaryTextColor"
+        android:textSize="13sp"
+        tools:text="10:00 AM" />
+
+    <TextView
+        android:id="@+id/tvEventBullet"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingStart="4dp"
+        android:paddingEnd="8dp"
+        android:text="•"
+        android:textColor="?attr/secondaryTextColor"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/tvEventTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textColor="?attr/primaryTextColor"
+        android:textSize="15sp"
+        tools:text="Google Calendar Event" />
+
+</LinearLayout>
+

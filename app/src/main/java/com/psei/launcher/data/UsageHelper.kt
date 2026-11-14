@@ -61,7 +61,7 @@ object UsageHelper {
 
     /**
      * Returns total foreground time spent on the specified app today (strictly since local midnight) in minutes.
-     * Computes exact milliseconds using UsageEvents activity transitions to match system Digital Wellbeing / Jovi.
+     * Queries native UsageStatsManager aggregated daily intervals to match system Digital Wellbeing / Jovi exactly.
      */
     fun getTodayUsageMinutes(context: Context, packageName: String): Int {
         val usageStatsManager = context.getSystemService(Context.USAGE_STATS_SERVICE) as? UsageStatsManager ?: return 0
@@ -73,75 +73,38 @@ object UsageHelper {
         }
         val startOfDay = calendar.timeInMillis
         val now = System.currentTimeMillis()
+        if (now <= startOfDay) return 0
 
-        // Query starting from 2 hours before midnight to capture any session crossing midnight
-        val queryStart = startOfDay - (2 * 3600_000L)
-
-        val events = try {
-            usageStatsManager.queryEvents(queryStart, now)
+        // 1. Primary: queryAndAggregateUsageStats combines the intervals between startOfDay and now
+        try {
+            val aggregated = usageStatsManager.queryAndAggregateUsageStats(startOfDay, now)
+            val stats = aggregated[packageName]
+            if (stats != null && stats.totalTimeInForeground > 0L) {
+                return (stats.totalTimeInForeground / 60_000L).toInt()
+            }
         } catch (e: Exception) {
-            null
-        } ?: return 0
-
-        var totalMillis = 0L
-        var sessionStart = 0L
-        var resumedCount = 0
-
-        val event = UsageEvents.Event()
-        while (events.hasNextEvent()) {
-            events.getNextEvent(event)
-            val eventType = event.eventType
-            val eventPkg = event.packageName
-            val eventTime = event.timeStamp
-
-            if (eventPkg == packageName) {
-                if (eventType == UsageEvents.Event.ACTIVITY_RESUMED) {
-                    if (sessionStart == 0L) {
-                        sessionStart = eventTime
-                    }
-                    resumedCount++
-                } else if (eventType == UsageEvents.Event.ACTIVITY_PAUSED) {
-                    resumedCount = maxOf(0, resumedCount - 1)
-                    if (resumedCount == 0 && sessionStart > 0L) {
-                        val effectiveStart = maxOf(sessionStart, startOfDay)
-                        val effectiveEnd = minOf(eventTime, now)
-                        if (effectiveEnd > effectiveStart) {
-                            totalMillis += (effectiveEnd - effectiveStart)
-                        }
-                        sessionStart = 0L
-                    }
-                }
-            } else {
-                // Another app came into foreground or screen turned off -> close target session
-                if (eventType == UsageEvents.Event.ACTIVITY_RESUMED && sessionStart > 0L) {
-                    val effectiveStart = maxOf(sessionStart, startOfDay)
-                    val effectiveEnd = minOf(eventTime, now)
-                    if (effectiveEnd > effectiveStart) {
-                        totalMillis += (effectiveEnd - effectiveStart)
-                    }
-                    sessionStart = 0L
-                    resumedCount = 0
-                } else if (eventType == UsageEvents.Event.SCREEN_NON_INTERACTIVE && sessionStart > 0L) {
-                    val effectiveStart = maxOf(sessionStart, startOfDay)
-                    val effectiveEnd = minOf(eventTime, now)
-                    if (effectiveEnd > effectiveStart) {
-                        totalMillis += (effectiveEnd - effectiveStart)
-                    }
-                    sessionStart = 0L
-                    resumedCount = 0
-                }
-            }
+            // Fallback
         }
 
-        // If the app is currently in the foreground right now:
-        if (sessionStart > 0L) {
-            val effectiveStart = maxOf(sessionStart, startOfDay)
-            if (now > effectiveStart) {
-                totalMillis += (now - effectiveStart)
+        // 2. Secondary fallback: queryUsageStats(INTERVAL_DAILY, startOfDay, now)
+        try {
+            val statsList = usageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_DAILY, startOfDay, now)
+            if (!statsList.isNullOrEmpty()) {
+                var totalMillis = 0L
+                for (s in statsList) {
+                    if (s.packageName == packageName && s.lastTimeUsed >= startOfDay) {
+                        totalMillis += s.totalTimeInForeground
+                    }
+                }
+                if (totalMillis > 0L) {
+                    return (totalMillis / 60_000L).toInt()
+                }
             }
+        } catch (e: Exception) {
+            // Fallback
         }
 
-        return (totalMillis / 60_000L).toInt()
+        return 0
     }
 }
 

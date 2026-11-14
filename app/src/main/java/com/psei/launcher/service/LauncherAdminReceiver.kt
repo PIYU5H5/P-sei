@@ -36,7 +36,7 @@ class LauncherAdminReceiver : DeviceAdminReceiver() {
                 putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, getComponentName(context))
                 putExtra(
                     DevicePolicyManager.EXTRA_ADD_EXPLANATION,
-                    "Allows Minimal Launcher to lock the screen upon double-tapping empty space."
+                    "Allows P-Sei to lock the screen upon double-tapping empty space."
                 )
                 addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             }

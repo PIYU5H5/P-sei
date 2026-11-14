@@ -38,15 +38,9 @@ class LockAccessibilityService : AccessibilityService() {
         if (!prefs.isLockoutActive) return
 
         if (!isPackageAllowedDuringLockout(pkg)) {
-            if (pkg == "com.android.systemui") {
-                // User pulled down notification panel / quick settings while unlocked!
-                // Collapse notification shade immediately
-                performGlobalAction(GLOBAL_ACTION_BACK)
-            } else {
-                // Unauthorized app (e.g. Gmail) opened from notification!
-                // Immediately kick back to Home Lockout screen
-                performGlobalAction(GLOBAL_ACTION_HOME)
-            }
+            // Unauthorized app (e.g. Gmail) opened from notification during lockout:
+            // Safely return to Home Lockout screen without interfering with System UI or Power Menu
+            performGlobalAction(GLOBAL_ACTION_HOME)
         }
     }
 
@@ -60,8 +54,9 @@ class LockAccessibilityService : AccessibilityService() {
         // 2. Launcher itself
         if (pkg == packageName) return true
 
-        // 3. System core / telecom / phone dialer / in-call UI
+        // 3. System core / telecom / phone dialer / in-call UI / system UI (power menu, lockscreen, volume)
         val knownAllowed = setOf(
+            "com.android.systemui",
             "com.android.phone",
             "com.android.server.telecom",
             "com.android.incallui",
@@ -123,7 +118,30 @@ class LockAccessibilityService : AccessibilityService() {
 
         fun collapseNotificationShade(): Boolean {
             val service = instance?.get() ?: return false
-            return service.performGlobalAction(GLOBAL_ACTION_BACK)
+            return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                // Official action on Android 12+ (API 31+)
+                service.performGlobalAction(GLOBAL_ACTION_DISMISS_NOTIFICATION_SHADE)
+            } else {
+                // Do NOT use GLOBAL_ACTION_BACK as it cancels user dialogs (Power Menu, Emergency exit)
+                false
+            }
+        }
+
+        /**
+         * Programmatically disables this Accessibility Service so Google Pay and Indian UPI
+         * banking apps run immediately without security blocks.
+         */
+        fun disableService(): Boolean {
+            val service = instance?.get() ?: return false
+            return try {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    service.disableSelf()
+                }
+                instance = null
+                true
+            } catch (e: Exception) {
+                false
+            }
         }
 
         fun setLockoutModeActive(active: Boolean) {

@@ -167,7 +167,7 @@ class Prefs private constructor(context: Context) {
         set(value) = sp.edit().putString(KEY_SHORTCUT_SWIPE_RIGHT, value).apply()
 
     var lockMethod: String
-        get() = sp.getString(KEY_LOCK_METHOD, LOCK_METHOD_ACCESSIBILITY) ?: LOCK_METHOD_ACCESSIBILITY
+        get() = sp.getString(KEY_LOCK_METHOD, LOCK_METHOD_DEVICE_ADMIN) ?: LOCK_METHOD_DEVICE_ADMIN
         set(value) = sp.edit().putString(KEY_LOCK_METHOD, value).apply()
 
     var showCalendarWidget: Boolean

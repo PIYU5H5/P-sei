@@ -175,6 +175,8 @@ class MainActivity : AppCompatActivity(), AppRepository.OnAppsChangedListener {
         }
     }
 
+    private var isLaunchingAllowedActivityDuringLockout = false
+
     override fun onStart() {
         super.onStart()
         // Connect to AppRepository; registers LauncherApps.Callback and delivers cached apps
@@ -186,7 +188,7 @@ class MainActivity : AppCompatActivity(), AppRepository.OnAppsChangedListener {
         // Disconnect listener to avoid leaks
         appRepo.onStop(this)
 
-        if (prefs.isLockoutActive && !isFinishing) {
+        if (prefs.isLockoutActive && !isFinishing && !isLaunchingAllowedActivityDuringLockout) {
             val reopenIntent = Intent(this, MainActivity::class.java).apply {
                 addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_REORDER_TO_FRONT or Intent.FLAG_ACTIVITY_SINGLE_TOP)
             }
@@ -196,6 +198,7 @@ class MainActivity : AppCompatActivity(), AppRepository.OnAppsChangedListener {
 
     override fun onResume() {
         super.onResume()
+        isLaunchingAllowedActivityDuringLockout = false
         if (prefs.theme != currentAppliedTheme) {
             recreate()
             return
@@ -229,9 +232,8 @@ class MainActivity : AppCompatActivity(), AppRepository.OnAppsChangedListener {
 
     override fun onWindowFocusChanged(hasFocus: Boolean) {
         super.onWindowFocusChanged(hasFocus)
-        if (!hasFocus && prefs.isLockoutActive) {
-            collapseNotificationPanel()
-        }
+        // Intentionally no-op on focus loss to ensure system Power Menu (Restart/Power off),
+        // incoming calls, and in-app emergency exit dialogs are NEVER forcibly dismissed.
     }
 
     override fun onPause() {
@@ -812,10 +814,13 @@ class MainActivity : AppCompatActivity(), AppRepository.OnAppsChangedListener {
 
         binding.btnLockoutPhone.setOnClickListener {
             try {
-                val dialIntent = Intent(Intent.ACTION_DIAL)
-                dialIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                isLaunchingAllowedActivityDuringLockout = true
+                val dialIntent = Intent(Intent.ACTION_DIAL).apply {
+                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                }
                 startActivity(dialIntent)
             } catch (e: Exception) {
+                isLaunchingAllowedActivityDuringLockout = false
                 Toast.makeText(this, "Could not open dialer", Toast.LENGTH_SHORT).show()
             }
         }
@@ -831,6 +836,15 @@ class MainActivity : AppCompatActivity(), AppRepository.OnAppsChangedListener {
                 }
                 .setNegativeButton("Keep Focusing", null)
                 .show()
+        }
+
+        // Guaranteed escape hatch: long-press emergency exit to exit immediately
+        binding.btnLockoutEmergencyExit.setOnLongClickListener {
+            vibrateTick()
+            prefs.stopLockout()
+            checkLockoutState()
+            Toast.makeText(this, "Emergency Exit: Focus session ended.", Toast.LENGTH_SHORT).show()
+            true
         }
     }
 
@@ -864,30 +878,10 @@ class MainActivity : AppCompatActivity(), AppRepository.OnAppsChangedListener {
     }
 
     private fun collapseNotificationPanel() {
-        LockAccessibilityService.collapseNotificationShade()
         collapseNotificationPanelFast()
-
-        binding.root.postDelayed({
-            if (prefs.isLockoutActive) {
-                LockAccessibilityService.collapseNotificationShade()
-                collapseNotificationPanelFast()
-            }
-        }, 60)
-        binding.root.postDelayed({
-            if (prefs.isLockoutActive) {
-                LockAccessibilityService.collapseNotificationShade()
-                collapseNotificationPanelFast()
-            }
-        }, 180)
     }
 
     private fun collapseNotificationPanelFast() {
-        try {
-            @Suppress("DEPRECATION")
-            val closeIntent = Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS)
-            sendBroadcast(closeIntent)
-        } catch (e: Exception) {}
-
         try {
             val statusBarService = getSystemService("statusbar")
             val statusBarManager = Class.forName("android.app.StatusBarManager")

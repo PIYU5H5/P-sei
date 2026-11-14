@@ -334,6 +334,21 @@ class SettingsActivity : AppCompatActivity() {
             showLockMethodDialog()
         }
 
+        binding.btnDisableAccessibility.setOnClickListener {
+            val disabled = LockAccessibilityService.disableService()
+            prefs.lockMethod = Prefs.LOCK_METHOD_DEVICE_ADMIN
+            if (!LauncherAdminReceiver.isActive(this)) {
+                LauncherAdminReceiver.requestAdmin(this)
+            }
+            if (disabled) {
+                Toast.makeText(this, "Accessibility disabled. Google Pay is now safe to use! 💳", Toast.LENGTH_LONG).show()
+            } else {
+                Toast.makeText(this, "Please turn off P-Sei in Accessibility settings to unblock Google Pay.", Toast.LENGTH_LONG).show()
+                LockAccessibilityService.openSettings(this)
+            }
+            updateUiState()
+        }
+
         // Bottom Left Shortcut
         binding.rowShortcutBottomLeft.setOnClickListener {
             openShortcutPicker(isBottomLeft = true)
@@ -436,10 +451,17 @@ class SettingsActivity : AppCompatActivity() {
             binding.tvLockoutSummary.text = getString(R.string.pref_lockout_summary)
         }
 
+        val isAccessibilityActive = LockAccessibilityService.isServiceRunning
+        binding.cardAccessibilityWarning.isVisible = isAccessibilityActive
+
         binding.tvLockMethodSummary.text = if (prefs.lockMethod == Prefs.LOCK_METHOD_DEVICE_ADMIN) {
-            "Device Administrator"
+            "Device Administrator (Recommended • Google Pay Safe)"
         } else {
-            "Accessibility Service (Preserves Fingerprint)"
+            if (isAccessibilityActive) {
+                "Accessibility Service (⚠️ Active • Blocks Google Pay)"
+            } else {
+                "Accessibility Service (⚠️ Incompatible with Google Pay)"
+            }
         }
 
         // Shortcuts
@@ -822,26 +844,41 @@ class SettingsActivity : AppCompatActivity() {
 
     private fun showLockMethodDialog() {
         val options = arrayOf(
-            "Accessibility Service (Recommended, maintains Fingerprint unlock)",
-            "Device Administrator (Standard lockNow, requires PIN on unlock)"
+            "Device Administrator (Recommended • Google Pay & Banking Safe)",
+            "Accessibility Service (⚠️ Incompatible with Google Pay & UPI)"
         )
-        val currentIndex = if (prefs.lockMethod == Prefs.LOCK_METHOD_DEVICE_ADMIN) 1 else 0
+        val currentIndex = if (prefs.lockMethod == Prefs.LOCK_METHOD_DEVICE_ADMIN) 0 else 1
 
         AlertDialog.Builder(this)
             .setTitle(R.string.pref_lock_method)
             .setSingleChoiceItems(options, currentIndex) { dialog, which ->
                 if (which == 0) {
-                    prefs.lockMethod = Prefs.LOCK_METHOD_ACCESSIBILITY
-                    if (!LockAccessibilityService.isServiceRunning) {
-                        Toast.makeText(this, R.string.accessibility_prompt, Toast.LENGTH_LONG).show()
-                        LockAccessibilityService.openSettings(this)
-                    }
-                } else {
                     prefs.lockMethod = Prefs.LOCK_METHOD_DEVICE_ADMIN
+                    if (LockAccessibilityService.isServiceRunning) {
+                        LockAccessibilityService.disableService()
+                    }
                     if (!LauncherAdminReceiver.isActive(this)) {
                         Toast.makeText(this, R.string.device_admin_prompt, Toast.LENGTH_LONG).show()
                         LauncherAdminReceiver.requestAdmin(this)
                     }
+                    updateUiState()
+                } else {
+                    AlertDialog.Builder(this)
+                        .setTitle("⚠️ Google Pay & UPI Notice")
+                        .setMessage("Enabling Accessibility Service may cause Google Pay, PhonePe, and other UPI banking apps in India to block payments for security.\n\nDo you still want to enable Accessibility?")
+                        .setPositiveButton("Enable Anyway") { _, _ ->
+                            prefs.lockMethod = Prefs.LOCK_METHOD_ACCESSIBILITY
+                            if (!LockAccessibilityService.isServiceRunning) {
+                                Toast.makeText(this, R.string.accessibility_prompt, Toast.LENGTH_LONG).show()
+                                LockAccessibilityService.openSettings(this)
+                            }
+                            updateUiState()
+                        }
+                        .setNegativeButton("Cancel") { _, _ ->
+                            prefs.lockMethod = Prefs.LOCK_METHOD_DEVICE_ADMIN
+                            updateUiState()
+                        }
+                        .show()
                 }
                 updateUiState()
                 dialog.dismiss()

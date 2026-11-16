@@ -85,6 +85,13 @@ class MainActivity : AppCompatActivity(), AppRepository.OnAppsChangedListener {
     private var activeDialog: Dialog? = null
     private var duolingoLaunchTime: Long = 0L
     private var lastCalendarQueryTime: Long = 0L
+    private var calendarObserver: android.database.ContentObserver? = null
+
+    private val timeDateReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            loadTodayCalendarEvents(force = true)
+        }
+    }
 
     private val duolingoReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
@@ -96,7 +103,8 @@ class MainActivity : AppCompatActivity(), AppRepository.OnAppsChangedListener {
         ActivityResultContracts.RequestPermission()
     ) { isGranted ->
         if (isGranted) {
-            loadTodayCalendarEvents()
+            registerCalendarObserver()
+            loadTodayCalendarEvents(force = true)
         } else {
             Toast.makeText(this, R.string.calendar_permission_denied, Toast.LENGTH_SHORT).show()
         }
@@ -173,6 +181,18 @@ class MainActivity : AppCompatActivity(), AppRepository.OnAppsChangedListener {
         } catch (e: Exception) {
             // Ignored
         }
+
+        try {
+            val timeFilter = IntentFilter().apply {
+                addAction(Intent.ACTION_TIME_TICK)
+                addAction(Intent.ACTION_TIME_CHANGED)
+                addAction(Intent.ACTION_DATE_CHANGED)
+                addAction(Intent.ACTION_TIMEZONE_CHANGED)
+            }
+            registerReceiver(timeDateReceiver, timeFilter)
+        } catch (e: Exception) {
+            // Ignored
+        }
     }
 
     private var isLaunchingAllowedActivityDuringLockout = false
@@ -227,7 +247,7 @@ class MainActivity : AppCompatActivity(), AppRepository.OnAppsChangedListener {
         updateShortcutsText()
         updateTextSizes()
         renderDuolingoWidget()
-        loadTodayCalendarEvents()
+        loadTodayCalendarEvents(force = true)
     }
 
     override fun onWindowFocusChanged(hasFocus: Boolean) {
@@ -438,6 +458,9 @@ class MainActivity : AppCompatActivity(), AppRepository.OnAppsChangedListener {
     // =========================================================================
 
     private fun setupCalendarWidget() {
+        binding.clockDate.setOnClickListener {
+            openGoogleCalendarApp()
+        }
         binding.btnConnectCalendar.setOnClickListener {
             if (!prefs.isProUser) {
                 showProShowcaseDialog("Google Calendar daily events widget is a P-Sei Pro feature.")
@@ -452,10 +475,44 @@ class MainActivity : AppCompatActivity(), AppRepository.OnAppsChangedListener {
             }
             openGoogleCalendarApp()
         }
-        loadTodayCalendarEvents()
+        registerCalendarObserver()
+        loadTodayCalendarEvents(force = true)
     }
 
-    private fun loadTodayCalendarEvents() {
+    private fun registerCalendarObserver() {
+        if (calendarObserver != null) return
+        val hasPermission = ContextCompat.checkSelfPermission(
+            this,
+            Manifest.permission.READ_CALENDAR
+        ) == PackageManager.PERMISSION_GRANTED
+        if (!hasPermission) return
+
+        calendarObserver = object : android.database.ContentObserver(android.os.Handler(android.os.Looper.getMainLooper())) {
+            override fun onChange(selfChange: Boolean) {
+                loadTodayCalendarEvents(force = true)
+            }
+        }
+        try {
+            contentResolver.registerContentObserver(
+                CalendarContract.Events.CONTENT_URI,
+                true,
+                calendarObserver!!
+            )
+        } catch (e: Exception) {
+            // Defensive
+        }
+    }
+
+    private fun unregisterCalendarObserver() {
+        calendarObserver?.let {
+            try {
+                contentResolver.unregisterContentObserver(it)
+            } catch (e: Exception) {}
+            calendarObserver = null
+        }
+    }
+
+    private fun loadTodayCalendarEvents(force: Boolean = false) {
         if (!prefs.isProUser || !prefs.showCalendarWidget) {
             binding.layoutCalendarContainer.isVisible = false
             return
@@ -477,7 +534,7 @@ class MainActivity : AppCompatActivity(), AppRepository.OnAppsChangedListener {
         binding.btnConnectCalendar.isVisible = false
 
         val now = System.currentTimeMillis()
-        if (now - lastCalendarQueryTime < 60_000L && binding.layoutCalendarEvents.childCount > 0) {
+        if (!force && (now - lastCalendarQueryTime < 3_000L)) {
             return
         }
         lastCalendarQueryTime = now
@@ -495,11 +552,10 @@ class MainActivity : AppCompatActivity(), AppRepository.OnAppsChangedListener {
 
     private fun renderCalendarEvents(events: List<CalendarEventModel>) {
         binding.layoutCalendarEvents.removeAllViews()
+        // If there are no events today, keep the widget completely empty (no "No events today" clutter)
+        binding.tvNoEvents.isVisible = false
 
-        if (events.isEmpty()) {
-            binding.tvNoEvents.isVisible = true
-        } else {
-            binding.tvNoEvents.isVisible = false
+        if (events.isNotEmpty()) {
             val inflater = LayoutInflater.from(this)
             val maxDisplay = 4
             val displayEvents = events.take(maxDisplay)
@@ -793,6 +849,12 @@ class MainActivity : AppCompatActivity(), AppRepository.OnAppsChangedListener {
         } catch (e: Exception) {
             // Ignored
         }
+        try {
+            unregisterReceiver(timeDateReceiver)
+        } catch (e: Exception) {
+            // Ignored
+        }
+        unregisterCalendarObserver()
     }
 
     // =========================================================================
@@ -1132,7 +1194,7 @@ class MainActivity : AppCompatActivity(), AppRepository.OnAppsChangedListener {
                 renderHomeSlots()
                 updateTextSizes()
                 renderDuolingoWidget()
-                loadTodayCalendarEvents()
+                loadTodayCalendarEvents(force = true)
                 Toast.makeText(this@MainActivity, "Welcome to P-Sei Pro! ⭐ Enjoy intentional living.", Toast.LENGTH_LONG).show()
             }
 
@@ -1164,7 +1226,7 @@ class MainActivity : AppCompatActivity(), AppRepository.OnAppsChangedListener {
                 renderHomeSlots()
                 updateTextSizes()
                 renderDuolingoWidget()
-                loadTodayCalendarEvents()
+                loadTodayCalendarEvents(force = true)
                 if (isPro) {
                     Toast.makeText(this, "Pro purchase restored! 🎉", Toast.LENGTH_SHORT).show()
                 } else {

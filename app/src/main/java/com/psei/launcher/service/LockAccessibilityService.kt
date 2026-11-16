@@ -56,6 +56,7 @@ class LockAccessibilityService : AccessibilityService() {
 
         // 3. System core / telecom / phone dialer / in-call UI / system UI (power menu, lockscreen, volume)
         val knownAllowed = setOf(
+            "android",
             "com.android.systemui",
             "com.android.phone",
             "com.android.server.telecom",

@@ -87,6 +87,19 @@ class MainActivity : AppCompatActivity(), AppRepository.OnAppsChangedListener {
     private var lastCalendarQueryTime: Long = 0L
     private var calendarObserver: android.database.ContentObserver? = null
 
+    // UI state trackers to prevent unnecessary layout passes and IPC churn on gesture transitions
+    private var lastAppliedSlotCount: Int = -1
+    private var lastAppliedTextSize: String? = null
+    private var lastAppliedShortcutLeft: String? = null
+    private var lastAppliedShortcutRight: String? = null
+    private var lastAppliedShowDuolingo: Boolean? = null
+    private var lastAppliedDuolingoStreak: Int = -1
+    private var lastAppliedDuolingoPracticed: Boolean? = null
+    private var lastAppliedShowCalendar: Boolean? = null
+    private var lastAppliedIsPro: Boolean? = null
+    private var lastKnownLockoutActive: Boolean? = null
+    private var lastAppliedHiddenPackagesHash: Int = -1
+
     private val timeDateReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
             loadTodayCalendarEvents(force = true)
@@ -152,6 +165,8 @@ class MainActivity : AppCompatActivity(), AppRepository.OnAppsChangedListener {
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
         appRepo = AppRepository.getInstance(this)
+        // Connect to AppRepository once per Activity lifetime; delivers cached apps immediately
+        appRepo.onStart(this)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -199,14 +214,12 @@ class MainActivity : AppCompatActivity(), AppRepository.OnAppsChangedListener {
 
     override fun onStart() {
         super.onStart()
-        // Connect to AppRepository; registers LauncherApps.Callback and delivers cached apps
-        appRepo.onStart(this)
+        // AppRepository listener is kept alive across Activity lifecycle (onCreate/onDestroy)
+        // to completely eliminate DiffUtil and layout passes during recent apps gesture transitions.
     }
 
     override fun onStop() {
         super.onStop()
-        // Disconnect listener to avoid leaks
-        appRepo.onStop(this)
 
         if (prefs.isLockoutActive && !isFinishing && !isLaunchingAllowedActivityDuringLockout) {
             val reopenIntent = Intent(this, MainActivity::class.java).apply {
@@ -242,12 +255,52 @@ class MainActivity : AppCompatActivity(), AppRepository.OnAppsChangedListener {
             }
         }
 
-        // Refresh UI state in case user changed settings
-        renderHomeSlots()
-        updateShortcutsText()
-        updateTextSizes()
-        renderDuolingoWidget()
-        loadTodayCalendarEvents(force = true)
+        // Only refresh UI elements if settings or underlying state actually changed,
+        // preventing main-thread layout thrashing during gesture navigation.
+        val currentSlotCount = prefs.homeSlotsCount
+        val currentTextSize = prefs.textSize
+        val currentShortcutLeft = prefs.shortcutBottomLeft
+        val currentShortcutRight = prefs.shortcutBottomRight
+        val currentShowDuolingo = prefs.showDuolingoWidget
+        val currentShowCalendar = prefs.showCalendarWidget
+        val currentIsPro = prefs.isProUser
+        val currentHiddenHash = prefs.hiddenPackages.hashCode()
+
+        val slotsChanged = (currentSlotCount != lastAppliedSlotCount)
+        val textChanged = (currentTextSize != lastAppliedTextSize)
+        val shortcutsChanged = (currentShortcutLeft != lastAppliedShortcutLeft) || (currentShortcutRight != lastAppliedShortcutRight)
+        val duolingoChanged = (currentShowDuolingo != lastAppliedShowDuolingo) ||
+                (currentIsPro != lastAppliedIsPro) ||
+                (prefs.duolingoStreak != lastAppliedDuolingoStreak) ||
+                (prefs.isDuolingoPracticedToday != lastAppliedDuolingoPracticed)
+        val calendarVisibilityChanged = (currentShowCalendar != lastAppliedShowCalendar) || (currentIsPro != lastAppliedIsPro)
+        val hiddenAppsChanged = (currentHiddenHash != lastAppliedHiddenPackagesHash)
+
+        if (hiddenAppsChanged) {
+            lastAppliedHiddenPackagesHash = currentHiddenHash
+            val hiddenKeys = prefs.hiddenPackages
+            val visibleApps = appRepo.getCachedApps().filterNot { hiddenKeys.contains(it.componentKey) }
+            drawerAdapter.submitList(visibleApps, binding.etSearch.text?.toString().orEmpty())
+        }
+
+        if (slotsChanged || textChanged) {
+            renderHomeSlots()
+            updateTextSizes()
+        }
+
+        if (shortcutsChanged) {
+            updateShortcutsText()
+        }
+
+        if (duolingoChanged) {
+            renderDuolingoWidget()
+        }
+
+        lastAppliedShowCalendar = currentShowCalendar
+        lastAppliedIsPro = currentIsPro
+
+        // Soft check: debounced query prevents ContentResolver churn on every gesture
+        loadTodayCalendarEvents(force = calendarVisibilityChanged)
     }
 
     override fun onWindowFocusChanged(hasFocus: Boolean) {
@@ -408,6 +461,8 @@ class MainActivity : AppCompatActivity(), AppRepository.OnAppsChangedListener {
     }
 
     private fun updateShortcutsText() {
+        lastAppliedShortcutLeft = prefs.shortcutBottomLeft
+        lastAppliedShortcutRight = prefs.shortcutBottomRight
         // Bottom-left
         val leftKey = prefs.shortcutBottomLeft
         binding.btnBottomLeft.text = if (leftKey == Prefs.SPECIAL_SHORTCUT_PHONE) {
@@ -432,6 +487,7 @@ class MainActivity : AppCompatActivity(), AppRepository.OnAppsChangedListener {
     }
 
     private fun updateTextSizes() {
+        lastAppliedTextSize = prefs.textSize
         val (slotSize, drawerSize) = when (prefs.textSize) {
             Prefs.TEXT_SIZE_SMALL -> Pair(22f, 17f)
             Prefs.TEXT_SIZE_LARGE -> Pair(30f, 23f)
@@ -534,7 +590,7 @@ class MainActivity : AppCompatActivity(), AppRepository.OnAppsChangedListener {
         binding.btnConnectCalendar.isVisible = false
 
         val now = System.currentTimeMillis()
-        if (!force && (now - lastCalendarQueryTime < 3_000L)) {
+        if (!force && (now - lastCalendarQueryTime < 120_000L)) {
             return
         }
         lastCalendarQueryTime = now
@@ -634,6 +690,11 @@ class MainActivity : AppCompatActivity(), AppRepository.OnAppsChangedListener {
     }
 
     private fun renderDuolingoWidget() {
+        lastAppliedShowDuolingo = prefs.showDuolingoWidget
+        lastAppliedIsPro = prefs.isProUser
+        lastAppliedDuolingoStreak = prefs.duolingoStreak
+        lastAppliedDuolingoPracticed = prefs.isDuolingoPracticedToday
+
         if (!prefs.isProUser || !prefs.showDuolingoWidget) {
             binding.layoutDuolingoWidget.isVisible = false
             return
@@ -723,6 +784,8 @@ class MainActivity : AppCompatActivity(), AppRepository.OnAppsChangedListener {
      * Renders 0 to 10 home screen app slots vertically centered.
      */
     private fun renderHomeSlots() {
+        lastAppliedSlotCount = prefs.homeSlotsCount
+        lastAppliedTextSize = prefs.textSize
         val container = binding.slotsContainer
         val slotCount = prefs.homeSlotsCount
         if (slotCount == 0) {
@@ -841,6 +904,7 @@ class MainActivity : AppCompatActivity(), AppRepository.OnAppsChangedListener {
 
     override fun onDestroy() {
         super.onDestroy()
+        appRepo.onStop(this)
         mindfulTimer?.cancel()
         mindfulTimer = null
         stopLockoutTimer()
@@ -911,7 +975,12 @@ class MainActivity : AppCompatActivity(), AppRepository.OnAppsChangedListener {
     }
 
     private fun checkLockoutState() {
-        if (prefs.isLockoutActive) {
+        val isActive = prefs.isLockoutActive
+        if (isActive == lastKnownLockoutActive && !isActive) {
+            return
+        }
+        lastKnownLockoutActive = isActive
+        if (isActive) {
             LockAccessibilityService.setLockoutModeActive(true)
             binding.layoutLockoutMode.isVisible = true
             binding.homeContainer.isVisible = false

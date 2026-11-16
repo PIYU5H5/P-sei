@@ -2,6 +2,8 @@ package com.psei.launcher.data
 
 import android.content.Context
 import android.content.SharedPreferences
+import org.json.JSONArray
+import org.json.JSONObject
 
 /**
  * Lightweight, zero-dependency SharedPreferences wrapper for launcher configuration.
@@ -57,6 +59,7 @@ class Prefs private constructor(context: Context) {
         private const val KEY_DAILY_INTENT_TEXT = "pref_daily_intent_text"
         private const val KEY_DAILY_INTENT_COMPLETED = "pref_daily_intent_completed"
         private const val KEY_DAILY_INTENT_DATE = "pref_daily_intent_date"
+        private const val KEY_DAILY_FOCUS_ITEMS = "pref_daily_focus_items_json"
 
         // Daily Screen-Time Glance
         private const val KEY_SHOW_SCREEN_TIME_GLANCE = "pref_show_screen_time_glance"
@@ -205,36 +208,132 @@ class Prefs private constructor(context: Context) {
         }
 
     // =========================================================================
-    // DAILY INTENT & SCREEN-TIME GLANCE
+    // DAILY FOCUS INTENT & SCREEN-TIME GLANCE (UP TO 3 ITEMS)
     // =========================================================================
 
     var showDailyIntent: Boolean
         get() = sp.getBoolean(KEY_SHOW_DAILY_INTENT, true)
         set(value) = sp.edit().putBoolean(KEY_SHOW_DAILY_INTENT, value).apply()
 
-    var dailyIntentText: String?
-        get() {
-            val savedDate = dailyIntentDate
-            val today = getTodayDateString()
-            // If the saved date is not today and the intent was completed yesterday, reset for fresh start
-            if (savedDate != null && savedDate != today && isDailyIntentCompleted) {
-                sp.edit().remove(KEY_DAILY_INTENT_TEXT)
-                    .putBoolean(KEY_DAILY_INTENT_COMPLETED, false)
-                    .putString(KEY_DAILY_INTENT_DATE, today)
-                    .apply()
-                return null
+    fun getDailyFocusItems(): List<DailyFocusItem> {
+        val savedDate = dailyIntentDate
+        val today = getTodayDateString()
+        val rawJson = sp.getString(KEY_DAILY_FOCUS_ITEMS, null)
+
+        val items = mutableListOf<DailyFocusItem>()
+        if (!rawJson.isNullOrBlank()) {
+            try {
+                val jsonArray = JSONArray(rawJson)
+                for (i in 0 until jsonArray.length()) {
+                    val obj = jsonArray.getJSONObject(i)
+                    val id = obj.optString("id", java.util.UUID.randomUUID().toString())
+                    val text = obj.optString("text", "")
+                    val isCompleted = obj.optBoolean("done", false)
+                    if (text.isNotBlank()) {
+                        items.add(DailyFocusItem(id = id, text = text, isCompleted = isCompleted))
+                    }
+                }
+            } catch (e: Exception) {
+                // Ignore parse errors
             }
-            return sp.getString(KEY_DAILY_INTENT_TEXT, null)
+        } else {
+            // Migration from single legacy dailyIntentText
+            val legacyText = sp.getString(KEY_DAILY_INTENT_TEXT, null)
+            if (!legacyText.isNullOrBlank()) {
+                val legacyDone = sp.getBoolean(KEY_DAILY_INTENT_COMPLETED, false)
+                val legacyItem = DailyFocusItem(text = legacyText, isCompleted = legacyDone)
+                items.add(legacyItem)
+                saveDailyFocusItems(items)
+            }
         }
+
+        // Overnight reset check
+        if (savedDate != null && savedDate != today) {
+            // Carry forward only uncompleted items; if all were finished yesterday, start fresh
+            val uncompleted = items.filter { !it.isCompleted }.take(3).toMutableList()
+            saveDailyFocusItems(uncompleted)
+            dailyIntentDate = today
+            return uncompleted
+        }
+
+        return items.take(3)
+    }
+
+    fun saveDailyFocusItems(items: List<DailyFocusItem>) {
+        val jsonArray = JSONArray()
+        for (item in items.take(3)) {
+            if (item.text.isNotBlank()) {
+                val obj = JSONObject().apply {
+                    put("id", item.id)
+                    put("text", item.text.trim())
+                    put("done", item.isCompleted)
+                }
+                jsonArray.put(obj)
+            }
+        }
+        sp.edit()
+            .putString(KEY_DAILY_FOCUS_ITEMS, jsonArray.toString())
+            .putString(KEY_DAILY_INTENT_DATE, getTodayDateString())
+            .apply()
+    }
+
+    fun toggleDailyFocusItem(index: Int): Boolean {
+        val current = getDailyFocusItems().toMutableList()
+        if (index in current.indices) {
+            val item = current[index]
+            current[index] = item.copy(isCompleted = !item.isCompleted)
+            saveDailyFocusItems(current)
+            return current[index].isCompleted
+        }
+        return false
+    }
+
+    fun deleteDailyFocusItem(index: Int) {
+        val current = getDailyFocusItems().toMutableList()
+        if (index in current.indices) {
+            current.removeAt(index)
+            saveDailyFocusItems(current)
+        }
+    }
+
+    fun clearDailyFocusItems() {
+        sp.edit()
+            .remove(KEY_DAILY_FOCUS_ITEMS)
+            .remove(KEY_DAILY_INTENT_TEXT)
+            .remove(KEY_DAILY_INTENT_COMPLETED)
+            .putString(KEY_DAILY_INTENT_DATE, getTodayDateString())
+            .apply()
+    }
+
+    // Backward-compatible properties for legacy checks
+    var dailyIntentText: String?
+        get() = getDailyFocusItems().firstOrNull()?.text
         set(value) {
-            sp.edit().putString(KEY_DAILY_INTENT_TEXT, value)
-                .putString(KEY_DAILY_INTENT_DATE, getTodayDateString())
-                .apply()
+            val current = getDailyFocusItems().toMutableList()
+            if (value.isNullOrBlank()) {
+                if (current.isNotEmpty()) {
+                    current.removeAt(0)
+                    saveDailyFocusItems(current)
+                }
+            } else {
+                if (current.isNotEmpty()) {
+                    current[0] = current[0].copy(text = value)
+                } else {
+                    current.add(DailyFocusItem(text = value))
+                }
+                saveDailyFocusItems(current)
+            }
         }
 
     var isDailyIntentCompleted: Boolean
-        get() = sp.getBoolean(KEY_DAILY_INTENT_COMPLETED, false)
-        set(value) = sp.edit().putBoolean(KEY_DAILY_INTENT_COMPLETED, value).apply()
+        get() = getDailyFocusItems().firstOrNull()?.isCompleted ?: false
+        set(value) {
+            val current = getDailyFocusItems().toMutableList()
+            if (current.isNotEmpty()) {
+                current[0] = current[0].copy(isCompleted = value)
+                saveDailyFocusItems(current)
+            }
+        }
 
     var dailyIntentDate: String?
         get() = sp.getString(KEY_DAILY_INTENT_DATE, null)

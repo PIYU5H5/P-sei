@@ -46,6 +46,7 @@ import com.psei.launcher.data.AppModel
 import com.psei.launcher.data.AppRepository
 import com.psei.launcher.data.CalendarEventModel
 import com.psei.launcher.data.CalendarRepository
+import com.psei.launcher.data.DailyFocusItem
 import com.psei.launcher.data.UsageHelper
 import android.os.CountDownTimer
 import com.psei.launcher.data.Prefs
@@ -59,6 +60,7 @@ import com.psei.launcher.databinding.DialogKansoProBinding
 import com.psei.launcher.databinding.DialogMindfulDelayBinding
 import com.psei.launcher.databinding.DialogRenameBinding
 import com.psei.launcher.databinding.ItemCalendarEventBinding
+import com.psei.launcher.databinding.ItemDailyFocusBinding
 import com.psei.launcher.databinding.ItemHomeSlotBinding
 import com.psei.launcher.service.DuolingoNotificationListener
 import com.psei.launcher.service.LauncherAdminReceiver
@@ -103,6 +105,7 @@ class MainActivity : AppCompatActivity(), AppRepository.OnAppsChangedListener {
     private var lastAppliedShowDailyIntent: Boolean? = null
     private var lastAppliedDailyIntentText: String? = null
     private var lastAppliedDailyIntentCompleted: Boolean? = null
+    private var lastAppliedDailyFocusHash: Int = -1
     private var lastAppliedShowScreenTime: Boolean? = null
 
     private val timeDateReceiver = object : BroadcastReceiver() {
@@ -258,8 +261,7 @@ class MainActivity : AppCompatActivity(), AppRepository.OnAppsChangedListener {
         val currentIsPro = prefs.isProUser
         val currentHiddenHash = prefs.hiddenPackages.hashCode()
         val currentShowDailyIntent = prefs.showDailyIntent
-        val currentDailyIntentText = prefs.dailyIntentText
-        val currentDailyIntentCompleted = prefs.isDailyIntentCompleted
+        val currentDailyFocusHash = prefs.getDailyFocusItems().hashCode()
         val currentShowScreenTime = prefs.showScreenTimeGlance
 
         val slotsChanged = (currentSlotCount != lastAppliedSlotCount)
@@ -272,8 +274,7 @@ class MainActivity : AppCompatActivity(), AppRepository.OnAppsChangedListener {
         val calendarVisibilityChanged = (currentShowCalendar != lastAppliedShowCalendar) || (currentIsPro != lastAppliedIsPro)
         val hiddenAppsChanged = (currentHiddenHash != lastAppliedHiddenPackagesHash)
         val dailyIntentChanged = (currentShowDailyIntent != lastAppliedShowDailyIntent) ||
-                (currentDailyIntentText != lastAppliedDailyIntentText) ||
-                (currentDailyIntentCompleted != lastAppliedDailyIntentCompleted)
+                (currentDailyFocusHash != lastAppliedDailyFocusHash)
         val screenTimeVisibilityChanged = (currentShowScreenTime != lastAppliedShowScreenTime)
 
         if (hiddenAppsChanged) {
@@ -777,40 +778,20 @@ class MainActivity : AppCompatActivity(), AppRepository.OnAppsChangedListener {
     }
 
     // =========================================================================
-    // DAILY FOCUS / INTENTION SCRATCHPAD
+    // DAILY FOCUS INTENT & SCRATCHPAD (UP TO 3 ITEMS)
     // =========================================================================
 
     private fun setupDailyIntent() {
-        binding.layoutDailyIntent.setOnClickListener {
+        binding.layoutDailyIntentEmpty.setOnClickListener {
             showDailyIntentDialog()
-        }
-        binding.layoutDailyIntent.setOnLongClickListener {
-            vibrateTick()
-            showDailyIntentActionMenu()
-            true
-        }
-        binding.btnDailyIntentCheck.setOnClickListener {
-            vibrateTick()
-            if (prefs.isDailyIntentCompleted) {
-                // If already completed, reset/clear
-                prefs.dailyIntentText = null
-                prefs.isDailyIntentCompleted = false
-                renderDailyIntent()
-                Toast.makeText(this, "Focus cleared for today.", Toast.LENGTH_SHORT).show()
-            } else {
-                // Mark completed
-                prefs.isDailyIntentCompleted = true
-                renderDailyIntent()
-                Toast.makeText(this, getString(R.string.daily_intent_completed), Toast.LENGTH_SHORT).show()
-            }
         }
         renderDailyIntent()
     }
 
     private fun renderDailyIntent() {
         lastAppliedShowDailyIntent = prefs.showDailyIntent
-        lastAppliedDailyIntentText = prefs.dailyIntentText
-        lastAppliedDailyIntentCompleted = prefs.isDailyIntentCompleted
+        val items = prefs.getDailyFocusItems()
+        lastAppliedDailyFocusHash = items.hashCode()
 
         if (!prefs.showDailyIntent) {
             binding.layoutDailyIntent.isVisible = false
@@ -818,28 +799,49 @@ class MainActivity : AppCompatActivity(), AppRepository.OnAppsChangedListener {
         }
         binding.layoutDailyIntent.isVisible = true
 
-        val text = prefs.dailyIntentText
-        val isCompleted = prefs.isDailyIntentCompleted
+        binding.layoutDailyIntentItems.removeAllViews()
 
-        if (text.isNullOrBlank()) {
-            binding.tvDailyIntentIcon.text = "🎯"
-            binding.tvDailyIntent.text = getString(R.string.daily_intent_placeholder)
-            binding.tvDailyIntent.alpha = 0.45f
-            binding.tvDailyIntent.paintFlags = binding.tvDailyIntent.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
-            binding.btnDailyIntentCheck.isVisible = false
+        if (items.isEmpty()) {
+            binding.layoutDailyIntentEmpty.isVisible = true
         } else {
-            binding.tvDailyIntent.text = text
-            binding.btnDailyIntentCheck.isVisible = true
-            if (isCompleted) {
-                binding.tvDailyIntentIcon.text = "✅"
-                binding.tvDailyIntent.alpha = 0.45f
-                binding.tvDailyIntent.paintFlags = binding.tvDailyIntent.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
-                binding.btnDailyIntentCheck.text = getString(R.string.daily_intent_reset)
-            } else {
-                binding.tvDailyIntentIcon.text = "🎯"
-                binding.tvDailyIntent.alpha = 1.0f
-                binding.tvDailyIntent.paintFlags = binding.tvDailyIntent.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
-                binding.btnDailyIntentCheck.text = getString(R.string.daily_intent_done)
+            binding.layoutDailyIntentEmpty.isVisible = false
+
+            for ((index, item) in items.withIndex()) {
+                val itemBinding = ItemDailyFocusBinding.inflate(layoutInflater, binding.layoutDailyIntentItems, true)
+
+                itemBinding.tvFocusText.text = item.text
+                if (item.isCompleted) {
+                    itemBinding.tvFocusIcon.text = "✅"
+                    itemBinding.tvFocusText.alpha = 0.45f
+                    itemBinding.tvFocusText.paintFlags = itemBinding.tvFocusText.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
+                    itemBinding.btnFocusDone.text = getString(R.string.daily_intent_reset)
+                } else {
+                    itemBinding.tvFocusIcon.text = "🎯"
+                    itemBinding.tvFocusText.alpha = 1.0f
+                    itemBinding.tvFocusText.paintFlags = itemBinding.tvFocusText.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
+                    itemBinding.btnFocusDone.text = getString(R.string.daily_intent_done)
+                }
+
+                // Tapping any item opens the multi-focus dialog (with option to add up to 3)
+                itemBinding.rowDailyFocus.setOnClickListener {
+                    showDailyIntentDialog()
+                }
+
+                // Long-pressing gives a quick item menu
+                itemBinding.rowDailyFocus.setOnLongClickListener {
+                    vibrateTick()
+                    showSingleFocusActionMenu(index, item)
+                    true
+                }
+
+                // Check button toggles completion with haptic feedback
+                itemBinding.btnFocusDone.setOnClickListener {
+                    vibrateTick()
+                    val nowDone = prefs.toggleDailyFocusItem(index)
+                    renderDailyIntent()
+                    val msg = if (nowDone) getString(R.string.daily_intent_completed) else "Focus reset for today."
+                    Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
+                }
             }
         }
     }
@@ -854,35 +856,142 @@ class MainActivity : AppCompatActivity(), AppRepository.OnAppsChangedListener {
             ViewGroup.LayoutParams.WRAP_CONTENT
         )
 
-        val currentText = prefs.dailyIntentText.orEmpty()
-        dialogBinding.etDailyIntent.setText(currentText)
-        if (currentText.isNotEmpty()) {
-            dialogBinding.etDailyIntent.setSelection(currentText.length)
-            dialogBinding.btnClearDailyIntent.isVisible = true
-        } else {
-            dialogBinding.btnClearDailyIntent.isVisible = false
+        val currentItems = prefs.getDailyFocusItems().toMutableList()
+
+        fun updateDialogRows() {
+            val count = when {
+                dialogBinding.layoutIntentRow3.isVisible -> 3
+                dialogBinding.layoutIntentRow2.isVisible -> 2
+                else -> 1
+            }
+
+            dialogBinding.btnRemoveIntent1.isVisible = (count > 1)
+            dialogBinding.btnRemoveIntent2.isVisible = (count >= 2)
+            dialogBinding.btnRemoveIntent3.isVisible = (count == 3)
+
+            if (count < 3) {
+                dialogBinding.btnAddFocusItem.isVisible = true
+                dialogBinding.btnAddFocusItem.text = getString(R.string.daily_intent_add_more, count)
+            } else {
+                dialogBinding.btnAddFocusItem.isVisible = false
+            }
+
+            val hasAnyText = dialogBinding.etDailyIntent1.text.isNotBlank() ||
+                    dialogBinding.etDailyIntent2.text.isNotBlank() ||
+                    dialogBinding.etDailyIntent3.text.isNotBlank()
+            dialogBinding.btnClearDailyIntent.isVisible = hasAnyText || currentItems.isNotEmpty()
         }
 
+        // Prepopulate fields
+        if (currentItems.isNotEmpty()) {
+            dialogBinding.etDailyIntent1.setText(currentItems[0].text)
+            if (currentItems.size >= 2) {
+                dialogBinding.layoutIntentRow2.isVisible = true
+                dialogBinding.etDailyIntent2.setText(currentItems[1].text)
+            } else {
+                dialogBinding.layoutIntentRow2.isVisible = false
+            }
+            if (currentItems.size >= 3) {
+                dialogBinding.layoutIntentRow3.isVisible = true
+                dialogBinding.etDailyIntent3.setText(currentItems[2].text)
+            } else {
+                dialogBinding.layoutIntentRow3.isVisible = false
+            }
+        } else {
+            dialogBinding.etDailyIntent1.setText("")
+            dialogBinding.layoutIntentRow2.isVisible = false
+            dialogBinding.layoutIntentRow3.isVisible = false
+        }
+
+        updateDialogRows()
+
+        // "+ Add another focus (X/3)" button
+        dialogBinding.btnAddFocusItem.setOnClickListener {
+            vibrateTick()
+            if (!dialogBinding.layoutIntentRow2.isVisible) {
+                dialogBinding.layoutIntentRow2.isVisible = true
+                updateDialogRows()
+                dialogBinding.etDailyIntent2.requestFocus()
+                val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+                imm?.showSoftInput(dialogBinding.etDailyIntent2, InputMethodManager.SHOW_IMPLICIT)
+            } else if (!dialogBinding.layoutIntentRow3.isVisible) {
+                dialogBinding.layoutIntentRow3.isVisible = true
+                updateDialogRows()
+                dialogBinding.etDailyIntent3.requestFocus()
+                val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+                imm?.showSoftInput(dialogBinding.etDailyIntent3, InputMethodManager.SHOW_IMPLICIT)
+            }
+        }
+
+        // Remove button 1
+        dialogBinding.btnRemoveIntent1.setOnClickListener {
+            vibrateTick()
+            if (dialogBinding.layoutIntentRow2.isVisible && dialogBinding.layoutIntentRow3.isVisible) {
+                dialogBinding.etDailyIntent1.setText(dialogBinding.etDailyIntent2.text)
+                dialogBinding.etDailyIntent2.setText(dialogBinding.etDailyIntent3.text)
+                dialogBinding.etDailyIntent3.setText("")
+                dialogBinding.layoutIntentRow3.isVisible = false
+            } else if (dialogBinding.layoutIntentRow2.isVisible) {
+                dialogBinding.etDailyIntent1.setText(dialogBinding.etDailyIntent2.text)
+                dialogBinding.etDailyIntent2.setText("")
+                dialogBinding.layoutIntentRow2.isVisible = false
+            } else {
+                dialogBinding.etDailyIntent1.setText("")
+            }
+            updateDialogRows()
+        }
+
+        // Remove button 2
+        dialogBinding.btnRemoveIntent2.setOnClickListener {
+            vibrateTick()
+            if (dialogBinding.layoutIntentRow3.isVisible) {
+                dialogBinding.etDailyIntent2.setText(dialogBinding.etDailyIntent3.text)
+                dialogBinding.etDailyIntent3.setText("")
+                dialogBinding.layoutIntentRow3.isVisible = false
+            } else {
+                dialogBinding.etDailyIntent2.setText("")
+                dialogBinding.layoutIntentRow2.isVisible = false
+            }
+            updateDialogRows()
+        }
+
+        // Remove button 3
+        dialogBinding.btnRemoveIntent3.setOnClickListener {
+            vibrateTick()
+            dialogBinding.etDailyIntent3.setText("")
+            dialogBinding.layoutIntentRow3.isVisible = false
+            updateDialogRows()
+        }
+
+        // Clear All
         dialogBinding.btnClearDailyIntent.setOnClickListener {
-            prefs.dailyIntentText = null
-            prefs.isDailyIntentCompleted = false
+            vibrateTick()
+            prefs.clearDailyFocusItems()
             renderDailyIntent()
             dialog.dismiss()
+            Toast.makeText(this, "All focus items cleared.", Toast.LENGTH_SHORT).show()
         }
 
+        // Cancel
         dialogBinding.btnCancelDailyIntent.setOnClickListener {
             dialog.dismiss()
         }
 
+        // Save
         dialogBinding.btnSaveDailyIntent.setOnClickListener {
-            val entered = dialogBinding.etDailyIntent.text.toString().trim()
-            if (entered.isNotEmpty()) {
-                prefs.dailyIntentText = entered
-                prefs.isDailyIntentCompleted = false
-            } else {
-                prefs.dailyIntentText = null
-                prefs.isDailyIntentCompleted = false
+            val t1 = dialogBinding.etDailyIntent1.text.toString().trim()
+            val t2 = if (dialogBinding.layoutIntentRow2.isVisible) dialogBinding.etDailyIntent2.text.toString().trim() else ""
+            val t3 = if (dialogBinding.layoutIntentRow3.isVisible) dialogBinding.etDailyIntent3.text.toString().trim() else ""
+
+            val updatedList = mutableListOf<DailyFocusItem>()
+            for (text in listOf(t1, t2, t3)) {
+                if (text.isNotBlank()) {
+                    val prevMatch = currentItems.firstOrNull { it.text.equals(text, ignoreCase = true) }
+                    updatedList.add(DailyFocusItem(text = text, isCompleted = prevMatch?.isCompleted ?: false))
+                }
             }
+
+            prefs.saveDailyFocusItems(updatedList)
             renderDailyIntent()
             dialog.dismiss()
         }
@@ -890,39 +999,46 @@ class MainActivity : AppCompatActivity(), AppRepository.OnAppsChangedListener {
         activeDialog = dialog
         dialog.show()
 
-        // Focus edit text and pop keyboard smoothly
-        dialogBinding.etDailyIntent.postDelayed({
-            dialogBinding.etDailyIntent.requestFocus()
+        // Focus appropriate field smoothly
+        dialogBinding.etDailyIntent1.postDelayed({
+            val target = when {
+                dialogBinding.etDailyIntent1.text.isBlank() -> dialogBinding.etDailyIntent1
+                dialogBinding.layoutIntentRow2.isVisible && dialogBinding.etDailyIntent2.text.isBlank() -> dialogBinding.etDailyIntent2
+                dialogBinding.layoutIntentRow3.isVisible && dialogBinding.etDailyIntent3.text.isBlank() -> dialogBinding.etDailyIntent3
+                else -> dialogBinding.etDailyIntent1
+            }
+            target.requestFocus()
             val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
-            imm?.showSoftInput(dialogBinding.etDailyIntent, InputMethodManager.SHOW_IMPLICIT)
+            imm?.showSoftInput(target, InputMethodManager.SHOW_IMPLICIT)
         }, 100)
     }
 
-    private fun showDailyIntentActionMenu() {
-        if (prefs.dailyIntentText.isNullOrBlank()) {
-            showDailyIntentDialog()
-            return
-        }
-
+    private fun showSingleFocusActionMenu(index: Int, item: DailyFocusItem) {
         val options = arrayOf(
             getString(R.string.daily_intent_action_edit),
-            if (prefs.isDailyIntentCompleted) "Mark as incomplete" else getString(R.string.daily_intent_done),
-            getString(R.string.daily_intent_clear)
+            if (item.isCompleted) "Mark as incomplete" else getString(R.string.daily_intent_done),
+            getString(R.string.daily_intent_delete_item),
+            getString(R.string.daily_intent_clear_all)
         )
 
         AlertDialog.Builder(this)
-            .setTitle(R.string.daily_intent_dialog_title)
+            .setTitle(item.text)
             .setItems(options) { _, which ->
                 when (which) {
                     0 -> showDailyIntentDialog()
                     1 -> {
-                        prefs.isDailyIntentCompleted = !prefs.isDailyIntentCompleted
+                        prefs.toggleDailyFocusItem(index)
                         renderDailyIntent()
                     }
                     2 -> {
-                        prefs.dailyIntentText = null
-                        prefs.isDailyIntentCompleted = false
+                        prefs.deleteDailyFocusItem(index)
                         renderDailyIntent()
+                        Toast.makeText(this, "Focus item deleted.", Toast.LENGTH_SHORT).show()
+                    }
+                    3 -> {
+                        prefs.clearDailyFocusItems()
+                        renderDailyIntent()
+                        Toast.makeText(this, "All focus items cleared.", Toast.LENGTH_SHORT).show()
                     }
                 }
             }

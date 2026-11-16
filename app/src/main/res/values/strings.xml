@@ -101,14 +101,19 @@
     <string name="pref_show_daily_intent_summary">Show your primary intention or goal on the home screen</string>
     <string name="daily_intent_placeholder">+ Set today\'s focus…</string>
     <string name="daily_intent_dialog_title">Today\'s Focus</string>
-    <string name="daily_intent_dialog_subtitle">Set your #1 priority or focus for today</string>
-    <string name="daily_intent_hint">e.g. Finish project presentation</string>
+    <string name="daily_intent_dialog_subtitle">Set up to 3 priority goals for today</string>
+    <string name="daily_intent_hint">Focus #1 (e.g. Finish project presentation)</string>
+    <string name="daily_intent_hint_2">Focus #2 (e.g. 30m workout / reading)</string>
+    <string name="daily_intent_hint_3">Focus #3 (e.g. Call family / inbox zero)</string>
+    <string name="daily_intent_add_more">+ Add another focus (%1$d/3)</string>
     <string name="daily_intent_done">✓ Done</string>
     <string name="daily_intent_completed">Focus completed! 🎉</string>
     <string name="daily_intent_clear">Clear</string>
+    <string name="daily_intent_clear_all">Clear all</string>
     <string name="daily_intent_reset">Reset</string>
     <string name="daily_intent_action_edit">Edit focus</string>
     <string name="daily_intent_action_toggle">Toggle completed</string>
+    <string name="daily_intent_delete_item">Delete this focus</string>
 
     <!-- Daily Screen-Time Glance Strings -->
     <string name="pref_show_screen_time_glance">Daily Screen-Time Glance</string>

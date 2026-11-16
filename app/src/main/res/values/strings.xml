@@ -96,15 +96,6 @@
     <string name="pref_duolingo_auto_sync">Auto-sync with Notifications</string>
     <string name="pref_duolingo_auto_sync_summary">Automatically update streak count from Duolingo notifications</string>
 
-    <!-- Deep Lockout (Monk Mode) Strings -->
-    <string name="pref_lockout_title">Deep Lockout (Monk Mode) ⭐</string>
-    <string name="pref_lockout_summary">Lock distraction-free focus mode with only phone calls allowed</string>
-    <string name="lockout_monk_mode">MONK MODE</string>
-    <string name="lockout_focus">FOCUS</string>
-    <string name="lockout_message">All apps are locked.\nStep away from your screen and breathe.</string>
-    <string name="lockout_phone_calls">Phone Calls  📞</string>
-    <string name="lockout_emergency_exit">Emergency Exit</string>
-
     <!-- Daily Intent / Focus Scratchpad Strings -->
     <string name="pref_show_daily_intent">Daily Focus / Intent</string>
     <string name="pref_show_daily_intent_summary">Show your primary intention or goal on the home screen</string>

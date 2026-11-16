@@ -99,7 +99,6 @@ class MainActivity : AppCompatActivity(), AppRepository.OnAppsChangedListener {
     private var lastAppliedDuolingoPracticed: Boolean? = null
     private var lastAppliedShowCalendar: Boolean? = null
     private var lastAppliedIsPro: Boolean? = null
-    private var lastKnownLockoutActive: Boolean? = null
     private var lastAppliedHiddenPackagesHash: Int = -1
     private var lastAppliedShowDailyIntent: Boolean? = null
     private var lastAppliedDailyIntentText: String? = null
@@ -135,9 +134,6 @@ class MainActivity : AppCompatActivity(), AppRepository.OnAppsChangedListener {
 
     private val onBackPressedCallback = object : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
-            if (prefs.isLockoutActive) {
-                return
-            }
             if (activeDialog?.isShowing == true) {
                 activeDialog?.dismiss()
                 activeDialog = null
@@ -196,7 +192,6 @@ class MainActivity : AppCompatActivity(), AppRepository.OnAppsChangedListener {
         setupDuolingoWidget()
         setupDailyIntent()
         setupScreenTimeGlance()
-        setupLockoutUi()
 
         try {
             val filter = IntentFilter(DuolingoNotificationListener.ACTION_DUOLINGO_UPDATED)
@@ -222,8 +217,6 @@ class MainActivity : AppCompatActivity(), AppRepository.OnAppsChangedListener {
         }
     }
 
-    private var isLaunchingAllowedActivityDuringLockout = false
-
     override fun onStart() {
         super.onStart()
         // AppRepository listener is kept alive across Activity lifecycle (onCreate/onDestroy)
@@ -232,25 +225,12 @@ class MainActivity : AppCompatActivity(), AppRepository.OnAppsChangedListener {
 
     override fun onStop() {
         super.onStop()
-
-        if (prefs.isLockoutActive && !isFinishing && !isLaunchingAllowedActivityDuringLockout) {
-            val reopenIntent = Intent(this, MainActivity::class.java).apply {
-                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_REORDER_TO_FRONT or Intent.FLAG_ACTIVITY_SINGLE_TOP)
-            }
-            startActivity(reopenIntent)
-        }
     }
 
     override fun onResume() {
         super.onResume()
-        isLaunchingAllowedActivityDuringLockout = false
         if (prefs.theme != currentAppliedTheme) {
             recreate()
-            return
-        }
-
-        checkLockoutState()
-        if (prefs.isLockoutActive) {
             return
         }
 
@@ -339,8 +319,6 @@ class MainActivity : AppCompatActivity(), AppRepository.OnAppsChangedListener {
 
     override fun onPause() {
         super.onPause()
-        lockoutTimer?.cancel()
-        lockoutTimer = null
     }
 
     override fun onNewIntent(intent: Intent?) {
@@ -348,10 +326,6 @@ class MainActivity : AppCompatActivity(), AppRepository.OnAppsChangedListener {
         // System Home gesture / button tapped: return immediately to home screen
         activeDialog?.dismiss()
         activeDialog = null
-        if (prefs.isLockoutActive) {
-            checkLockoutState()
-            return
-        }
         if (binding.drawerContainer.isVisible) {
             closeDrawer()
         }
@@ -371,12 +345,6 @@ class MainActivity : AppCompatActivity(), AppRepository.OnAppsChangedListener {
         InsetsUtils.applySystemWindowInsets(
             topView = binding.searchHeader,
             bottomView = binding.rvAppDrawer
-        )
-
-        // Lockout screen insets
-        InsetsUtils.applySystemWindowInsets(
-            topView = binding.tvLockoutSubhead,
-            bottomView = binding.btnLockoutEmergencyExit
         )
     }
 
@@ -1093,7 +1061,6 @@ class MainActivity : AppCompatActivity(), AppRepository.OnAppsChangedListener {
     }
 
     fun openDrawer() {
-        if (prefs.isLockoutActive) return
         if (binding.drawerContainer.isVisible) return
 
         binding.drawerContainer.alpha = 0f
@@ -1130,7 +1097,6 @@ class MainActivity : AppCompatActivity(), AppRepository.OnAppsChangedListener {
         appRepo.onStop(this)
         mindfulTimer?.cancel()
         mindfulTimer = null
-        stopLockoutTimer()
         try {
             unregisterReceiver(duolingoReceiver)
         } catch (e: Exception) {
@@ -1142,170 +1108,6 @@ class MainActivity : AppCompatActivity(), AppRepository.OnAppsChangedListener {
             // Ignored
         }
         unregisterCalendarObserver()
-    }
-
-    // =========================================================================
-    // PRO DEEP LOCKOUT (MONK MODE)
-    // =========================================================================
-
-    private var lockoutTimer: CountDownTimer? = null
-
-    @android.annotation.SuppressLint("ClickableViewAccessibility")
-    private fun setupLockoutUi() {
-        binding.layoutLockoutMode.setOnTouchListener { _, event ->
-            if (event.action == android.view.MotionEvent.ACTION_DOWN && event.rawY < 140) {
-                collapseNotificationPanel()
-                true
-            } else {
-                false
-            }
-        }
-
-        binding.btnLockoutPhone.setOnClickListener {
-            try {
-                isLaunchingAllowedActivityDuringLockout = true
-                val dialIntent = Intent(Intent.ACTION_DIAL).apply {
-                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                }
-                startActivity(dialIntent)
-            } catch (e: Exception) {
-                isLaunchingAllowedActivityDuringLockout = false
-                Toast.makeText(this, "Could not open dialer", Toast.LENGTH_SHORT).show()
-            }
-        }
-
-        binding.btnLockoutEmergencyExit.setOnClickListener {
-            AlertDialog.Builder(this)
-                .setTitle("Emergency Exit")
-                .setMessage("Do you need to end this focus session early?")
-                .setPositiveButton("End Session") { _, _ ->
-                    prefs.stopLockout()
-                    checkLockoutState()
-                    Toast.makeText(this, "Focus session ended.", Toast.LENGTH_SHORT).show()
-                }
-                .setNegativeButton("Keep Focusing", null)
-                .show()
-        }
-
-        // Guaranteed escape hatch: long-press emergency exit to exit immediately
-        binding.btnLockoutEmergencyExit.setOnLongClickListener {
-            vibrateTick()
-            prefs.stopLockout()
-            checkLockoutState()
-            Toast.makeText(this, "Emergency Exit: Focus session ended.", Toast.LENGTH_SHORT).show()
-            true
-        }
-    }
-
-    private fun checkLockoutState() {
-        val isActive = prefs.isLockoutActive
-        if (isActive == lastKnownLockoutActive && !isActive) {
-            return
-        }
-        lastKnownLockoutActive = isActive
-        if (isActive) {
-            LockAccessibilityService.setLockoutModeActive(true)
-            binding.layoutLockoutMode.isVisible = true
-            binding.homeContainer.isVisible = false
-            if (binding.drawerContainer.isVisible) {
-                binding.drawerContainer.isVisible = false
-            }
-            applyLockoutStatusBar(true)
-            startLockoutTimer()
-        } else {
-            LockAccessibilityService.setLockoutModeActive(false)
-            stopLockoutTimer()
-            applyLockoutStatusBar(false)
-            binding.layoutLockoutMode.isVisible = false
-            binding.homeContainer.isVisible = true
-        }
-    }
-
-    private fun applyLockoutStatusBar(hide: Boolean) {
-        val controller = WindowCompat.getInsetsController(window, window.decorView)
-        if (hide) {
-            controller.hide(WindowInsetsCompat.Type.statusBars())
-            controller.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-        } else {
-            controller.show(WindowInsetsCompat.Type.statusBars())
-        }
-    }
-
-    private fun collapseNotificationPanel() {
-        collapseNotificationPanelFast()
-    }
-
-    private fun collapseNotificationPanelFast() {
-        try {
-            val statusBarService = getSystemService("statusbar")
-            val statusBarManager = Class.forName("android.app.StatusBarManager")
-            val collapseMethod = statusBarManager.getMethod("collapsePanels")
-            collapseMethod.isAccessible = true
-            collapseMethod.invoke(statusBarService)
-        } catch (e: Exception) {
-            try {
-                val statusBarService = getSystemService("statusbar")
-                val statusBarManager = Class.forName("android.app.StatusBarManager")
-                val collapseMethod = statusBarManager.getMethod("collapse")
-                collapseMethod.isAccessible = true
-                collapseMethod.invoke(statusBarService)
-            } catch (e2: Exception) {}
-        }
-    }
-
-    private fun startLockoutTimer() {
-        lockoutTimer?.cancel()
-        val remainingMillis = prefs.getLockoutRemainingMillis()
-        if (remainingMillis <= 0L) {
-            prefs.stopLockout()
-            checkLockoutState()
-            return
-        }
-
-        updateLockoutDisplay(remainingMillis)
-
-        lockoutTimer = object : CountDownTimer(remainingMillis, 1000L) {
-            override fun onTick(millisUntilFinished: Long) {
-                updateLockoutDisplay(millisUntilFinished)
-            }
-
-            override fun onFinish() {
-                prefs.stopLockout()
-                checkLockoutState()
-                vibrateCelebration()
-                Toast.makeText(this@MainActivity, "Focus session complete! 🎉 Well done.", Toast.LENGTH_LONG).show()
-            }
-        }.start()
-    }
-
-    private fun stopLockoutTimer() {
-        lockoutTimer?.cancel()
-        lockoutTimer = null
-    }
-
-    private fun updateLockoutDisplay(millis: Long) {
-        val totalSeconds = (millis / 1000L).coerceAtLeast(0L)
-        val hours = totalSeconds / 3600
-        val minutes = (totalSeconds % 3600) / 60
-        val seconds = totalSeconds % 60
-        binding.tvLockoutCountdown.text = if (hours > 0) {
-            String.format(java.util.Locale.US, "%02d:%02d:%02d", hours, minutes, seconds)
-        } else {
-            String.format(java.util.Locale.US, "%02d:%02d", minutes, seconds)
-        }
-    }
-
-    private fun vibrateCelebration() {
-        try {
-            val vibrator = getSystemService(Context.VIBRATOR_SERVICE) as? Vibrator
-            if (vibrator != null && vibrator.hasVibrator()) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    vibrator.vibrate(VibrationEffect.createWaveform(longArrayOf(0, 100, 80, 150, 80, 200), -1))
-                } else {
-                    vibrator.vibrate(400)
-                }
-            }
-        } catch (e: Exception) {}
     }
 
     private var mindfulTimer: CountDownTimer? = null

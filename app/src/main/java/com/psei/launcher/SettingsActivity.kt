@@ -328,29 +328,6 @@ class SettingsActivity : AppCompatActivity() {
             }
         }
 
-        // Deep Lockout (Monk Mode) (Pro)
-        binding.rowLockoutMode.setOnClickListener {
-            if (!prefs.isProUser) {
-                showProShowcaseDialog("Deep Lockout (Monk Mode) is a P-Sei Pro feature.")
-                return@setOnClickListener
-            }
-            if (prefs.isLockoutActive) {
-                val remainingMins = (prefs.getLockoutRemainingMillis() / 60_000L) + 1
-                AlertDialog.Builder(this)
-                    .setTitle("Lockout Active")
-                    .setMessage("Deep Lockout is currently active with $remainingMins min remaining.\n\nDo you want to end this focus session?")
-                    .setPositiveButton("End Session") { _, _ ->
-                        prefs.stopLockout()
-                        updateUiState()
-                        Toast.makeText(this, "Focus session ended.", Toast.LENGTH_SHORT).show()
-                    }
-                    .setNegativeButton("Keep Focusing", null)
-                    .show()
-            } else {
-                showStartLockoutDialog()
-            }
-        }
-
         // Lock Method
         binding.rowLockMethod.setOnClickListener {
             showLockMethodDialog()
@@ -406,7 +383,7 @@ class SettingsActivity : AppCompatActivity() {
         } else {
             binding.tvProBadge.text = "FREE"
             binding.tvProBadge.setBackgroundColor(Color.parseColor("#444444"))
-            binding.tvProSubtitle.text = "Deep Lockout, Widgets, Mindful Delay, Screen Limits, Auto-Launch, Pro Themes & Biometrics"
+            binding.tvProSubtitle.text = "Widgets, Mindful Delay, Screen Limits, Auto-Launch, Pro Themes & Biometrics"
         }
 
         binding.tvHomeSlotsSummary.text = getString(R.string.pref_home_slots_count_summary, prefs.homeSlotsCount)
@@ -467,13 +444,6 @@ class SettingsActivity : AppCompatActivity() {
             "In-app daily usage caps with gentle lockouts"
         }
         binding.switchBiometricLock.isChecked = prefs.isBiometricLockEnabled
-
-        if (prefs.isLockoutActive) {
-            val remainingMins = (prefs.getLockoutRemainingMillis() / 60_000L) + 1
-            binding.tvLockoutSummary.text = "Active ($remainingMins min remaining) • Tap to cancel"
-        } else {
-            binding.tvLockoutSummary.text = getString(R.string.pref_lockout_summary)
-        }
 
         val isAccessibilityActive = LockAccessibilityService.isServiceRunning
         binding.cardAccessibilityWarning.isVisible = isAccessibilityActive
@@ -1184,88 +1154,6 @@ class SettingsActivity : AppCompatActivity() {
         }
 
         dialog.show()
-    }
-
-    // =========================================================================
-    // PRO DEEP LOCKOUT (MONK MODE)
-    // =========================================================================
-
-    private fun showStartLockoutDialog() {
-        val durations = arrayOf(
-            Pair("15 minutes (Quick Sprint)", 15),
-            Pair("30 minutes (Deep Focus)", 30),
-            Pair("45 minutes (Pomodoro Block)", 45),
-            Pair("60 minutes (1 Hour Monk Mode)", 60),
-            Pair("120 minutes (2 Hours Monastic Flow)", 120),
-            Pair("Custom minutes…", -1)
-        )
-
-        val labels = durations.map { it.first }.toTypedArray()
-
-        AlertDialog.Builder(this)
-            .setTitle("Start Deep Lockout")
-            .setItems(labels) { _, which ->
-                val duration = durations[which].second
-                if (duration == -1) {
-                    showCustomLockoutDurationDialog()
-                } else {
-                    confirmAndStartLockout(duration)
-                }
-            }
-            .setNegativeButton(R.string.cancel, null)
-            .show()
-    }
-
-    private fun showCustomLockoutDurationDialog() {
-        val input = android.widget.EditText(this).apply {
-            inputType = android.text.InputType.TYPE_CLASS_NUMBER
-            hint = "Minutes (e.g. 25)"
-            setPadding(48, 24, 48, 24)
-        }
-
-        AlertDialog.Builder(this)
-            .setTitle("Custom Focus Duration")
-            .setView(input)
-            .setPositiveButton("Start") { _, _ ->
-                val mins = input.text.toString().toIntOrNull()
-                if (mins != null && mins in 1..720) {
-                    confirmAndStartLockout(mins)
-                } else {
-                    Toast.makeText(this, "Please enter a duration between 1 and 720 minutes", Toast.LENGTH_SHORT).show()
-                }
-            }
-            .setNegativeButton(R.string.cancel, null)
-            .show()
-    }
-
-    private fun confirmAndStartLockout(minutes: Int) {
-        if (!LockAccessibilityService.isServiceRunning) {
-            AlertDialog.Builder(this)
-                .setTitle("Notification Shield")
-                .setMessage("To block the notification panel and external apps during Lockout, enable P-Sei under Accessibility Settings.")
-                .setPositiveButton("Enable in Settings") { _, _ ->
-                    LockAccessibilityService.openSettings(this)
-                }
-                .setNegativeButton("Start Lockout") { _, _ ->
-                    startLockoutConfirmed(minutes)
-                }
-                .show()
-        } else {
-            startLockoutConfirmed(minutes)
-        }
-    }
-
-    private fun startLockoutConfirmed(minutes: Int) {
-        AlertDialog.Builder(this)
-            .setTitle("Confirm Lockout")
-            .setMessage("Lock device for $minutes minutes?\n\nDuring Lockout, all apps, notifications, and settings are blocked. Only phone calls will be allowed until the timer expires.")
-            .setPositiveButton("Begin Focus") { _, _ ->
-                prefs.startLockout(minutes)
-                Toast.makeText(this, "Deep Lockout started. Stay focused! 🧘", Toast.LENGTH_SHORT).show()
-                finish() // Returns straight to MainActivity which activates the Lockout screen
-            }
-            .setNegativeButton(R.string.cancel, null)
-            .show()
     }
 
     private fun vibrateTick() {

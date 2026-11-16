@@ -68,7 +68,6 @@ class Prefs private constructor(context: Context) {
         private const val KEY_BIOMETRIC_LOCK = "pref_biometric_lock"
         private const val KEY_APP_LIMIT_PREFIX = "pref_app_limit_"
         private const val KEY_APP_SNOOZE_PREFIX = "pref_app_snooze_"
-        private const val KEY_LOCKOUT_END_TIME = "pref_lockout_end_time"
 
         const val SPECIAL_SHORTCUT_PHONE = "__DEFAULT_PHONE__"
         const val SPECIAL_SHORTCUT_CAMERA = "__DEFAULT_CAMERA__"
@@ -316,29 +315,6 @@ class Prefs private constructor(context: Context) {
     fun isAppSnoozed(packageName: String): Boolean {
         val snoozeUntil = sp.getLong(KEY_APP_SNOOZE_PREFIX + packageName, 0L)
         return System.currentTimeMillis() < snoozeUntil
-    }
-
-    // =========================================================================
-    // PRO DEEP LOCKOUT (MONK MODE)
-    // =========================================================================
-
-    var lockoutEndTime: Long
-        get() = sp.getLong(KEY_LOCKOUT_END_TIME, 0L)
-        set(value) = sp.edit().putLong(KEY_LOCKOUT_END_TIME, value).apply()
-
-    val isLockoutActive: Boolean
-        get() = lockoutEndTime > System.currentTimeMillis()
-
-    fun startLockout(durationMinutes: Int) {
-        lockoutEndTime = System.currentTimeMillis() + (durationMinutes * 60_000L)
-    }
-
-    fun stopLockout() {
-        lockoutEndTime = 0L
-    }
-
-    fun getLockoutRemainingMillis(): Long {
-        return (lockoutEndTime - System.currentTimeMillis()).coerceAtLeast(0L)
     }
 }
 

@@ -104,5 +104,25 @@
     <string name="lockout_message">All apps are locked.\nStep away from your screen and breathe.</string>
     <string name="lockout_phone_calls">Phone Calls  📞</string>
     <string name="lockout_emergency_exit">Emergency Exit</string>
+
+    <!-- Daily Intent / Focus Scratchpad Strings -->
+    <string name="pref_show_daily_intent">Daily Focus / Intent</string>
+    <string name="pref_show_daily_intent_summary">Show your primary intention or goal on the home screen</string>
+    <string name="daily_intent_placeholder">+ Set today\'s focus…</string>
+    <string name="daily_intent_dialog_title">Today\'s Focus</string>
+    <string name="daily_intent_dialog_subtitle">Set your #1 priority or focus for today</string>
+    <string name="daily_intent_hint">e.g. Finish project presentation</string>
+    <string name="daily_intent_done">✓ Done</string>
+    <string name="daily_intent_completed">Focus completed! 🎉</string>
+    <string name="daily_intent_clear">Clear</string>
+    <string name="daily_intent_reset">Reset</string>
+    <string name="daily_intent_action_edit">Edit focus</string>
+    <string name="daily_intent_action_toggle">Toggle completed</string>
+
+    <!-- Daily Screen-Time Glance Strings -->
+    <string name="pref_show_screen_time_glance">Daily Screen-Time Glance</string>
+    <string name="pref_show_screen_time_glance_summary">Displays total active screen time below the clock</string>
+    <string name="screen_time_tap_enable">Tap to show screen time</string>
+    <string name="screen_time_permission_toast">Please grant Usage Access to view daily screen time</string>
 </resources>
 

@@ -195,6 +195,28 @@ class SettingsActivity : AppCompatActivity() {
             }
         }
 
+        // Widgets: Daily Focus / Intent
+        binding.switchDailyIntent.setOnCheckedChangeListener { _, isChecked ->
+            prefs.showDailyIntent = isChecked
+            updateUiState()
+        }
+        binding.rowDailyIntent.setOnClickListener {
+            binding.switchDailyIntent.toggle()
+        }
+
+        // Widgets: Daily Screen-Time Glance
+        binding.switchScreenTimeGlance.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked && !UsageHelper.hasUsagePermission(this)) {
+                Toast.makeText(this, R.string.screen_time_permission_toast, Toast.LENGTH_LONG).show()
+                UsageHelper.openUsageAccessSettings(this)
+            }
+            prefs.showScreenTimeGlance = isChecked
+            updateUiState()
+        }
+        binding.rowScreenTimeGlance.setOnClickListener {
+            binding.switchScreenTimeGlance.toggle()
+        }
+
         // Auto Open Keyboard
         binding.switchAutoKeyboard.setOnCheckedChangeListener { _, isChecked ->
             prefs.autoOpenKeyboard = isChecked
@@ -418,6 +440,8 @@ class SettingsActivity : AppCompatActivity() {
         binding.switchDuolingoWidget.isChecked = prefs.isProUser && prefs.showDuolingoWidget
         val statusText = if (prefs.isDuolingoPracticedToday) "Practiced today (Streak safe)" else "Streak at risk (Not practiced today)"
         binding.tvDuolingoStreakSummary.text = "${prefs.duolingoStreak} days • $statusText"
+        binding.switchDailyIntent.isChecked = prefs.showDailyIntent
+        binding.switchScreenTimeGlance.isChecked = prefs.showScreenTimeGlance
 
         // Digital Detox (Pro) state
         binding.switchMindfulDelay.isChecked = prefs.isMindfulDelayEnabled

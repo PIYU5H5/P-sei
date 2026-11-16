@@ -52,6 +52,15 @@ class Prefs private constructor(context: Context) {
         private const val KEY_DUOLINGO_STREAK = "pref_duolingo_streak"
         private const val KEY_DUOLINGO_LAST_DATE = "pref_duolingo_last_date"
 
+        // Daily Focus / Intent
+        private const val KEY_SHOW_DAILY_INTENT = "pref_show_daily_intent"
+        private const val KEY_DAILY_INTENT_TEXT = "pref_daily_intent_text"
+        private const val KEY_DAILY_INTENT_COMPLETED = "pref_daily_intent_completed"
+        private const val KEY_DAILY_INTENT_DATE = "pref_daily_intent_date"
+
+        // Daily Screen-Time Glance
+        private const val KEY_SHOW_SCREEN_TIME_GLANCE = "pref_show_screen_time_glance"
+
         // Pro Digital Detox keys
         private const val KEY_MINDFUL_DELAY_ENABLED = "pref_mindful_delay_enabled"
         private const val KEY_MINDFUL_DELAY_SECONDS = "pref_mindful_delay_seconds"
@@ -195,6 +204,46 @@ class Prefs private constructor(context: Context) {
         set(value) {
             duolingoLastPracticeDate = if (value) getTodayDateString() else null
         }
+
+    // =========================================================================
+    // DAILY INTENT & SCREEN-TIME GLANCE
+    // =========================================================================
+
+    var showDailyIntent: Boolean
+        get() = sp.getBoolean(KEY_SHOW_DAILY_INTENT, true)
+        set(value) = sp.edit().putBoolean(KEY_SHOW_DAILY_INTENT, value).apply()
+
+    var dailyIntentText: String?
+        get() {
+            val savedDate = dailyIntentDate
+            val today = getTodayDateString()
+            // If the saved date is not today and the intent was completed yesterday, reset for fresh start
+            if (savedDate != null && savedDate != today && isDailyIntentCompleted) {
+                sp.edit().remove(KEY_DAILY_INTENT_TEXT)
+                    .putBoolean(KEY_DAILY_INTENT_COMPLETED, false)
+                    .putString(KEY_DAILY_INTENT_DATE, today)
+                    .apply()
+                return null
+            }
+            return sp.getString(KEY_DAILY_INTENT_TEXT, null)
+        }
+        set(value) {
+            sp.edit().putString(KEY_DAILY_INTENT_TEXT, value)
+                .putString(KEY_DAILY_INTENT_DATE, getTodayDateString())
+                .apply()
+        }
+
+    var isDailyIntentCompleted: Boolean
+        get() = sp.getBoolean(KEY_DAILY_INTENT_COMPLETED, false)
+        set(value) = sp.edit().putBoolean(KEY_DAILY_INTENT_COMPLETED, value).apply()
+
+    var dailyIntentDate: String?
+        get() = sp.getString(KEY_DAILY_INTENT_DATE, null)
+        set(value) = sp.edit().putString(KEY_DAILY_INTENT_DATE, value).apply()
+
+    var showScreenTimeGlance: Boolean
+        get() = sp.getBoolean(KEY_SHOW_SCREEN_TIME_GLANCE, true)
+        set(value) = sp.edit().putBoolean(KEY_SHOW_SCREEN_TIME_GLANCE, value).apply()
 
     // =========================================================================
     // PRO FEATURES: MINDFUL DELAY & BIOMETRIC LOCK

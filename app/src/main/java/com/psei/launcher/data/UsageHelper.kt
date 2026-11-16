@@ -106,6 +106,74 @@ object UsageHelper {
 
         return 0
     }
+
+    /**
+     * Returns the total active screen time spent across all user applications today
+     * (since midnight) in minutes. Returns -1 if usage permission is not granted.
+     */
+    fun getTotalScreenTimeTodayMinutes(context: Context): Int {
+        if (!hasUsagePermission(context)) return -1
+        val usageStatsManager = context.getSystemService(Context.USAGE_STATS_SERVICE) as? UsageStatsManager ?: return -1
+        val calendar = Calendar.getInstance().apply {
+            set(Calendar.HOUR_OF_DAY, 0)
+            set(Calendar.MINUTE, 0)
+            set(Calendar.SECOND, 0)
+            set(Calendar.MILLISECOND, 0)
+        }
+        val startOfDay = calendar.timeInMillis
+        val now = System.currentTimeMillis()
+        if (now <= startOfDay) return 0
+
+        var totalMillis = 0L
+        val launcherPkg = context.packageName
+
+        // 1. Primary: queryAndAggregateUsageStats
+        try {
+            val aggregated = usageStatsManager.queryAndAggregateUsageStats(startOfDay, now)
+            if (!aggregated.isNullOrEmpty()) {
+                for ((pkg, stats) in aggregated) {
+                    if (pkg == launcherPkg || pkg == "com.android.systemui" || pkg == "android") continue
+                    if (stats.totalTimeInForeground > 0L) {
+                        totalMillis += stats.totalTimeInForeground
+                    }
+                }
+            }
+        } catch (e: Exception) {
+            // Fallback
+        }
+
+        // 2. Secondary fallback: queryUsageStats
+        if (totalMillis == 0L) {
+            try {
+                val statsList = usageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_DAILY, startOfDay, now)
+                if (!statsList.isNullOrEmpty()) {
+                    for (s in statsList) {
+                        if (s.packageName == launcherPkg || s.packageName == "com.android.systemui" || s.packageName == "android") continue
+                        if (s.lastTimeUsed >= startOfDay && s.totalTimeInForeground > 0L) {
+                            totalMillis += s.totalTimeInForeground
+                        }
+                    }
+                }
+            } catch (e: Exception) {
+                // Defensive
+            }
+        }
+
+        return (totalMillis / 60_000L).toInt()
+    }
+
+    /**
+     * Formats screen time minutes into a clean, minimal string (e.g. "45m screen time today" or "2h 15m screen time today").
+     */
+    fun formatScreenTime(minutes: Int): String {
+        if (minutes < 0) return "Tap to show screen time"
+        if (minutes < 60) {
+            return "${minutes}m screen time today"
+        }
+        val hours = minutes / 60
+        val mins = minutes % 60
+        return "${hours}h ${mins}m screen time today"
+    }
 }
 
 

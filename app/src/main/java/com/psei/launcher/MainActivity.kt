@@ -10,6 +10,7 @@ import android.content.IntentFilter
 import android.content.pm.LauncherApps
 import android.content.pm.PackageManager
 import android.graphics.Color
+import android.graphics.Paint
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Build
@@ -51,6 +52,7 @@ import com.psei.launcher.data.Prefs
 import com.psei.launcher.databinding.ActivityMainBinding
 import com.psei.launcher.databinding.DialogAppActionsBinding
 import com.psei.launcher.databinding.DialogAppPickerBinding
+import com.psei.launcher.databinding.DialogDailyIntentBinding
 import com.psei.launcher.databinding.DialogDuolingoEditBinding
 import com.psei.launcher.databinding.DialogGentleLockoutBinding
 import com.psei.launcher.databinding.DialogKansoProBinding
@@ -99,10 +101,18 @@ class MainActivity : AppCompatActivity(), AppRepository.OnAppsChangedListener {
     private var lastAppliedIsPro: Boolean? = null
     private var lastKnownLockoutActive: Boolean? = null
     private var lastAppliedHiddenPackagesHash: Int = -1
+    private var lastAppliedShowDailyIntent: Boolean? = null
+    private var lastAppliedDailyIntentText: String? = null
+    private var lastAppliedDailyIntentCompleted: Boolean? = null
+    private var lastAppliedShowScreenTime: Boolean? = null
 
     private val timeDateReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
             loadTodayCalendarEvents(force = true)
+            renderScreenTimeGlance()
+            if (intent?.action == Intent.ACTION_DATE_CHANGED || intent?.action == Intent.ACTION_TIMEZONE_CHANGED) {
+                renderDailyIntent()
+            }
         }
     }
 
@@ -184,6 +194,8 @@ class MainActivity : AppCompatActivity(), AppRepository.OnAppsChangedListener {
         setupShortcuts()
         setupCalendarWidget()
         setupDuolingoWidget()
+        setupDailyIntent()
+        setupScreenTimeGlance()
         setupLockoutUi()
 
         try {
@@ -265,6 +277,10 @@ class MainActivity : AppCompatActivity(), AppRepository.OnAppsChangedListener {
         val currentShowCalendar = prefs.showCalendarWidget
         val currentIsPro = prefs.isProUser
         val currentHiddenHash = prefs.hiddenPackages.hashCode()
+        val currentShowDailyIntent = prefs.showDailyIntent
+        val currentDailyIntentText = prefs.dailyIntentText
+        val currentDailyIntentCompleted = prefs.isDailyIntentCompleted
+        val currentShowScreenTime = prefs.showScreenTimeGlance
 
         val slotsChanged = (currentSlotCount != lastAppliedSlotCount)
         val textChanged = (currentTextSize != lastAppliedTextSize)
@@ -275,6 +291,10 @@ class MainActivity : AppCompatActivity(), AppRepository.OnAppsChangedListener {
                 (prefs.isDuolingoPracticedToday != lastAppliedDuolingoPracticed)
         val calendarVisibilityChanged = (currentShowCalendar != lastAppliedShowCalendar) || (currentIsPro != lastAppliedIsPro)
         val hiddenAppsChanged = (currentHiddenHash != lastAppliedHiddenPackagesHash)
+        val dailyIntentChanged = (currentShowDailyIntent != lastAppliedShowDailyIntent) ||
+                (currentDailyIntentText != lastAppliedDailyIntentText) ||
+                (currentDailyIntentCompleted != lastAppliedDailyIntentCompleted)
+        val screenTimeVisibilityChanged = (currentShowScreenTime != lastAppliedShowScreenTime)
 
         if (hiddenAppsChanged) {
             lastAppliedHiddenPackagesHash = currentHiddenHash
@@ -294,6 +314,14 @@ class MainActivity : AppCompatActivity(), AppRepository.OnAppsChangedListener {
 
         if (duolingoChanged) {
             renderDuolingoWidget()
+        }
+
+        if (dailyIntentChanged) {
+            renderDailyIntent()
+        }
+
+        if (screenTimeVisibilityChanged || currentShowScreenTime) {
+            renderScreenTimeGlance()
         }
 
         lastAppliedShowCalendar = currentShowCalendar
@@ -778,6 +806,201 @@ class MainActivity : AppCompatActivity(), AppRepository.OnAppsChangedListener {
 
         activeDialog = dialog
         dialog.show()
+    }
+
+    // =========================================================================
+    // DAILY FOCUS / INTENTION SCRATCHPAD
+    // =========================================================================
+
+    private fun setupDailyIntent() {
+        binding.layoutDailyIntent.setOnClickListener {
+            showDailyIntentDialog()
+        }
+        binding.layoutDailyIntent.setOnLongClickListener {
+            vibrateTick()
+            showDailyIntentActionMenu()
+            true
+        }
+        binding.btnDailyIntentCheck.setOnClickListener {
+            vibrateTick()
+            if (prefs.isDailyIntentCompleted) {
+                // If already completed, reset/clear
+                prefs.dailyIntentText = null
+                prefs.isDailyIntentCompleted = false
+                renderDailyIntent()
+                Toast.makeText(this, "Focus cleared for today.", Toast.LENGTH_SHORT).show()
+            } else {
+                // Mark completed
+                prefs.isDailyIntentCompleted = true
+                renderDailyIntent()
+                Toast.makeText(this, getString(R.string.daily_intent_completed), Toast.LENGTH_SHORT).show()
+            }
+        }
+        renderDailyIntent()
+    }
+
+    private fun renderDailyIntent() {
+        lastAppliedShowDailyIntent = prefs.showDailyIntent
+        lastAppliedDailyIntentText = prefs.dailyIntentText
+        lastAppliedDailyIntentCompleted = prefs.isDailyIntentCompleted
+
+        if (!prefs.showDailyIntent) {
+            binding.layoutDailyIntent.isVisible = false
+            return
+        }
+        binding.layoutDailyIntent.isVisible = true
+
+        val text = prefs.dailyIntentText
+        val isCompleted = prefs.isDailyIntentCompleted
+
+        if (text.isNullOrBlank()) {
+            binding.tvDailyIntentIcon.text = "🎯"
+            binding.tvDailyIntent.text = getString(R.string.daily_intent_placeholder)
+            binding.tvDailyIntent.alpha = 0.45f
+            binding.tvDailyIntent.paintFlags = binding.tvDailyIntent.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
+            binding.btnDailyIntentCheck.isVisible = false
+        } else {
+            binding.tvDailyIntent.text = text
+            binding.btnDailyIntentCheck.isVisible = true
+            if (isCompleted) {
+                binding.tvDailyIntentIcon.text = "✅"
+                binding.tvDailyIntent.alpha = 0.45f
+                binding.tvDailyIntent.paintFlags = binding.tvDailyIntent.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
+                binding.btnDailyIntentCheck.text = getString(R.string.daily_intent_reset)
+            } else {
+                binding.tvDailyIntentIcon.text = "🎯"
+                binding.tvDailyIntent.alpha = 1.0f
+                binding.tvDailyIntent.paintFlags = binding.tvDailyIntent.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
+                binding.btnDailyIntentCheck.text = getString(R.string.daily_intent_done)
+            }
+        }
+    }
+
+    private fun showDailyIntentDialog() {
+        val dialog = Dialog(this)
+        val dialogBinding = DialogDailyIntentBinding.inflate(layoutInflater)
+        dialog.setContentView(dialogBinding.root)
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog.window?.setLayout(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT
+        )
+
+        val currentText = prefs.dailyIntentText.orEmpty()
+        dialogBinding.etDailyIntent.setText(currentText)
+        if (currentText.isNotEmpty()) {
+            dialogBinding.etDailyIntent.setSelection(currentText.length)
+            dialogBinding.btnClearDailyIntent.isVisible = true
+        } else {
+            dialogBinding.btnClearDailyIntent.isVisible = false
+        }
+
+        dialogBinding.btnClearDailyIntent.setOnClickListener {
+            prefs.dailyIntentText = null
+            prefs.isDailyIntentCompleted = false
+            renderDailyIntent()
+            dialog.dismiss()
+        }
+
+        dialogBinding.btnCancelDailyIntent.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        dialogBinding.btnSaveDailyIntent.setOnClickListener {
+            val entered = dialogBinding.etDailyIntent.text.toString().trim()
+            if (entered.isNotEmpty()) {
+                prefs.dailyIntentText = entered
+                prefs.isDailyIntentCompleted = false
+            } else {
+                prefs.dailyIntentText = null
+                prefs.isDailyIntentCompleted = false
+            }
+            renderDailyIntent()
+            dialog.dismiss()
+        }
+
+        activeDialog = dialog
+        dialog.show()
+
+        // Focus edit text and pop keyboard smoothly
+        dialogBinding.etDailyIntent.postDelayed({
+            dialogBinding.etDailyIntent.requestFocus()
+            val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+            imm?.showSoftInput(dialogBinding.etDailyIntent, InputMethodManager.SHOW_IMPLICIT)
+        }, 100)
+    }
+
+    private fun showDailyIntentActionMenu() {
+        if (prefs.dailyIntentText.isNullOrBlank()) {
+            showDailyIntentDialog()
+            return
+        }
+
+        val options = arrayOf(
+            getString(R.string.daily_intent_action_edit),
+            if (prefs.isDailyIntentCompleted) "Mark as incomplete" else getString(R.string.daily_intent_done),
+            getString(R.string.daily_intent_clear)
+        )
+
+        AlertDialog.Builder(this)
+            .setTitle(R.string.daily_intent_dialog_title)
+            .setItems(options) { _, which ->
+                when (which) {
+                    0 -> showDailyIntentDialog()
+                    1 -> {
+                        prefs.isDailyIntentCompleted = !prefs.isDailyIntentCompleted
+                        renderDailyIntent()
+                    }
+                    2 -> {
+                        prefs.dailyIntentText = null
+                        prefs.isDailyIntentCompleted = false
+                        renderDailyIntent()
+                    }
+                }
+            }
+            .show()
+    }
+
+    // =========================================================================
+    // LIVE DAILY SCREEN-TIME GLANCE
+    // =========================================================================
+
+    private fun setupScreenTimeGlance() {
+        binding.tvScreenTimeGlance.setOnClickListener {
+            if (!UsageHelper.hasUsagePermission(this)) {
+                Toast.makeText(this, R.string.screen_time_permission_toast, Toast.LENGTH_LONG).show()
+                UsageHelper.openUsageAccessSettings(this)
+            } else {
+                val currentText = binding.tvScreenTimeGlance.text.toString()
+                Toast.makeText(this, "Active screen time: $currentText", Toast.LENGTH_SHORT).show()
+            }
+        }
+        renderScreenTimeGlance()
+    }
+
+    private fun renderScreenTimeGlance() {
+        lastAppliedShowScreenTime = prefs.showScreenTimeGlance
+
+        if (!prefs.showScreenTimeGlance) {
+            binding.tvScreenTimeGlance.isVisible = false
+            return
+        }
+        binding.tvScreenTimeGlance.isVisible = true
+
+        if (!UsageHelper.hasUsagePermission(this)) {
+            binding.tvScreenTimeGlance.text = getString(R.string.screen_time_tap_enable)
+            return
+        }
+
+        // Query UsageStats off the main thread to ensure 0 frame drops
+        appRepo.executeInBackground {
+            val minutes = UsageHelper.getTotalScreenTimeTodayMinutes(this@MainActivity)
+            runOnUiThread {
+                if (!isFinishing && !isDestroyed && prefs.showScreenTimeGlance) {
+                    binding.tvScreenTimeGlance.text = UsageHelper.formatScreenTime(minutes)
+                }
+            }
+        }
     }
 
     /**

@@ -41,12 +41,6 @@ public final class ActivityMainBinding implements ViewBinding {
   public final TextView btnConnectCalendar;
 
   @NonNull
-  public final TextView btnLockoutEmergencyExit;
-
-  @NonNull
-  public final TextView btnLockoutPhone;
-
-  @NonNull
   public final TextView btnSettings;
 
   @NonNull
@@ -77,10 +71,16 @@ public final class ActivityMainBinding implements ViewBinding {
   public final LinearLayout layoutCalendarEvents;
 
   @NonNull
-  public final LinearLayout layoutDuolingoWidget;
+  public final LinearLayout layoutDailyIntent;
 
   @NonNull
-  public final LinearLayout layoutLockoutMode;
+  public final LinearLayout layoutDailyIntentEmpty;
+
+  @NonNull
+  public final LinearLayout layoutDailyIntentItems;
+
+  @NonNull
+  public final LinearLayout layoutDuolingoWidget;
 
   @NonNull
   public final FrameLayout rootLayout;
@@ -95,50 +95,44 @@ public final class ActivityMainBinding implements ViewBinding {
   public final LinearLayout slotsContainer;
 
   @NonNull
+  public final TextView tvDailyIntentEmptyIcon;
+
+  @NonNull
+  public final TextView tvDailyIntentEmptyText;
+
+  @NonNull
   public final TextView tvDuolingoStreak;
 
   @NonNull
   public final TextView tvEmptyApps;
 
   @NonNull
-  public final TextView tvLockoutCountdown;
-
-  @NonNull
-  public final TextView tvLockoutMessage;
-
-  @NonNull
-  public final TextView tvLockoutSubhead;
-
-  @NonNull
-  public final TextView tvLockoutTitle;
-
-  @NonNull
   public final TextView tvNoEvents;
+
+  @NonNull
+  public final TextView tvScreenTimeGlance;
 
   private ActivityMainBinding(@NonNull FrameLayout rootView,
       @NonNull LinearLayout bottomShortcutsContainer, @NonNull TextView btnBottomLeft,
       @NonNull TextView btnBottomRight, @NonNull TextView btnClearSearch,
-      @NonNull TextView btnConnectCalendar, @NonNull TextView btnLockoutEmergencyExit,
-      @NonNull TextView btnLockoutPhone, @NonNull TextView btnSettings,
+      @NonNull TextView btnConnectCalendar, @NonNull TextView btnSettings,
       @NonNull LinearLayout clockArea, @NonNull TextClock clockDate, @NonNull TextClock clockTime,
       @NonNull LinearLayout drawerContainer, @NonNull EditText etSearch,
       @NonNull RelativeLayout homeContainer, @NonNull ImageView ivDuolingoFlame,
       @NonNull LinearLayout layoutCalendarContainer, @NonNull LinearLayout layoutCalendarEvents,
-      @NonNull LinearLayout layoutDuolingoWidget, @NonNull LinearLayout layoutLockoutMode,
+      @NonNull LinearLayout layoutDailyIntent, @NonNull LinearLayout layoutDailyIntentEmpty,
+      @NonNull LinearLayout layoutDailyIntentItems, @NonNull LinearLayout layoutDuolingoWidget,
       @NonNull FrameLayout rootLayout, @NonNull RecyclerView rvAppDrawer,
       @NonNull LinearLayout searchHeader, @NonNull LinearLayout slotsContainer,
+      @NonNull TextView tvDailyIntentEmptyIcon, @NonNull TextView tvDailyIntentEmptyText,
       @NonNull TextView tvDuolingoStreak, @NonNull TextView tvEmptyApps,
-      @NonNull TextView tvLockoutCountdown, @NonNull TextView tvLockoutMessage,
-      @NonNull TextView tvLockoutSubhead, @NonNull TextView tvLockoutTitle,
-      @NonNull TextView tvNoEvents) {
+      @NonNull TextView tvNoEvents, @NonNull TextView tvScreenTimeGlance) {
     this.rootView = rootView;
     this.bottomShortcutsContainer = bottomShortcutsContainer;
     this.btnBottomLeft = btnBottomLeft;
     this.btnBottomRight = btnBottomRight;
     this.btnClearSearch = btnClearSearch;
     this.btnConnectCalendar = btnConnectCalendar;
-    this.btnLockoutEmergencyExit = btnLockoutEmergencyExit;
-    this.btnLockoutPhone = btnLockoutPhone;
     this.btnSettings = btnSettings;
     this.clockArea = clockArea;
     this.clockDate = clockDate;
@@ -149,19 +143,20 @@ public final class ActivityMainBinding implements ViewBinding {
     this.ivDuolingoFlame = ivDuolingoFlame;
     this.layoutCalendarContainer = layoutCalendarContainer;
     this.layoutCalendarEvents = layoutCalendarEvents;
+    this.layoutDailyIntent = layoutDailyIntent;
+    this.layoutDailyIntentEmpty = layoutDailyIntentEmpty;
+    this.layoutDailyIntentItems = layoutDailyIntentItems;
     this.layoutDuolingoWidget = layoutDuolingoWidget;
-    this.layoutLockoutMode = layoutLockoutMode;
     this.rootLayout = rootLayout;
     this.rvAppDrawer = rvAppDrawer;
     this.searchHeader = searchHeader;
     this.slotsContainer = slotsContainer;
+    this.tvDailyIntentEmptyIcon = tvDailyIntentEmptyIcon;
+    this.tvDailyIntentEmptyText = tvDailyIntentEmptyText;
     this.tvDuolingoStreak = tvDuolingoStreak;
     this.tvEmptyApps = tvEmptyApps;
-    this.tvLockoutCountdown = tvLockoutCountdown;
-    this.tvLockoutMessage = tvLockoutMessage;
-    this.tvLockoutSubhead = tvLockoutSubhead;
-    this.tvLockoutTitle = tvLockoutTitle;
     this.tvNoEvents = tvNoEvents;
+    this.tvScreenTimeGlance = tvScreenTimeGlance;
   }
 
   @Override
@@ -218,18 +213,6 @@ public final class ActivityMainBinding implements ViewBinding {
       id = R.id.btnConnectCalendar;
       TextView btnConnectCalendar = ViewBindings.findChildViewById(rootView, id);
       if (btnConnectCalendar == null) {
-        break missingId;
-      }
-
-      id = R.id.btnLockoutEmergencyExit;
-      TextView btnLockoutEmergencyExit = ViewBindings.findChildViewById(rootView, id);
-      if (btnLockoutEmergencyExit == null) {
-        break missingId;
-      }
-
-      id = R.id.btnLockoutPhone;
-      TextView btnLockoutPhone = ViewBindings.findChildViewById(rootView, id);
-      if (btnLockoutPhone == null) {
         break missingId;
       }
 
@@ -293,15 +276,27 @@ public final class ActivityMainBinding implements ViewBinding {
         break missingId;
       }
 
-      id = R.id.layoutDuolingoWidget;
-      LinearLayout layoutDuolingoWidget = ViewBindings.findChildViewById(rootView, id);
-      if (layoutDuolingoWidget == null) {
+      id = R.id.layoutDailyIntent;
+      LinearLayout layoutDailyIntent = ViewBindings.findChildViewById(rootView, id);
+      if (layoutDailyIntent == null) {
         break missingId;
       }
 
-      id = R.id.layoutLockoutMode;
-      LinearLayout layoutLockoutMode = ViewBindings.findChildViewById(rootView, id);
-      if (layoutLockoutMode == null) {
+      id = R.id.layoutDailyIntentEmpty;
+      LinearLayout layoutDailyIntentEmpty = ViewBindings.findChildViewById(rootView, id);
+      if (layoutDailyIntentEmpty == null) {
+        break missingId;
+      }
+
+      id = R.id.layoutDailyIntentItems;
+      LinearLayout layoutDailyIntentItems = ViewBindings.findChildViewById(rootView, id);
+      if (layoutDailyIntentItems == null) {
+        break missingId;
+      }
+
+      id = R.id.layoutDuolingoWidget;
+      LinearLayout layoutDuolingoWidget = ViewBindings.findChildViewById(rootView, id);
+      if (layoutDuolingoWidget == null) {
         break missingId;
       }
 
@@ -325,6 +320,18 @@ public final class ActivityMainBinding implements ViewBinding {
         break missingId;
       }
 
+      id = R.id.tvDailyIntentEmptyIcon;
+      TextView tvDailyIntentEmptyIcon = ViewBindings.findChildViewById(rootView, id);
+      if (tvDailyIntentEmptyIcon == null) {
+        break missingId;
+      }
+
+      id = R.id.tvDailyIntentEmptyText;
+      TextView tvDailyIntentEmptyText = ViewBindings.findChildViewById(rootView, id);
+      if (tvDailyIntentEmptyText == null) {
+        break missingId;
+      }
+
       id = R.id.tvDuolingoStreak;
       TextView tvDuolingoStreak = ViewBindings.findChildViewById(rootView, id);
       if (tvDuolingoStreak == null) {
@@ -337,43 +344,25 @@ public final class ActivityMainBinding implements ViewBinding {
         break missingId;
       }
 
-      id = R.id.tvLockoutCountdown;
-      TextView tvLockoutCountdown = ViewBindings.findChildViewById(rootView, id);
-      if (tvLockoutCountdown == null) {
-        break missingId;
-      }
-
-      id = R.id.tvLockoutMessage;
-      TextView tvLockoutMessage = ViewBindings.findChildViewById(rootView, id);
-      if (tvLockoutMessage == null) {
-        break missingId;
-      }
-
-      id = R.id.tvLockoutSubhead;
-      TextView tvLockoutSubhead = ViewBindings.findChildViewById(rootView, id);
-      if (tvLockoutSubhead == null) {
-        break missingId;
-      }
-
-      id = R.id.tvLockoutTitle;
-      TextView tvLockoutTitle = ViewBindings.findChildViewById(rootView, id);
-      if (tvLockoutTitle == null) {
-        break missingId;
-      }
-
       id = R.id.tvNoEvents;
       TextView tvNoEvents = ViewBindings.findChildViewById(rootView, id);
       if (tvNoEvents == null) {
         break missingId;
       }
 
+      id = R.id.tvScreenTimeGlance;
+      TextView tvScreenTimeGlance = ViewBindings.findChildViewById(rootView, id);
+      if (tvScreenTimeGlance == null) {
+        break missingId;
+      }
+
       return new ActivityMainBinding((FrameLayout) rootView, bottomShortcutsContainer,
-          btnBottomLeft, btnBottomRight, btnClearSearch, btnConnectCalendar,
-          btnLockoutEmergencyExit, btnLockoutPhone, btnSettings, clockArea, clockDate, clockTime,
-          drawerContainer, etSearch, homeContainer, ivDuolingoFlame, layoutCalendarContainer,
-          layoutCalendarEvents, layoutDuolingoWidget, layoutLockoutMode, rootLayout, rvAppDrawer,
-          searchHeader, slotsContainer, tvDuolingoStreak, tvEmptyApps, tvLockoutCountdown,
-          tvLockoutMessage, tvLockoutSubhead, tvLockoutTitle, tvNoEvents);
+          btnBottomLeft, btnBottomRight, btnClearSearch, btnConnectCalendar, btnSettings, clockArea,
+          clockDate, clockTime, drawerContainer, etSearch, homeContainer, ivDuolingoFlame,
+          layoutCalendarContainer, layoutCalendarEvents, layoutDailyIntent, layoutDailyIntentEmpty,
+          layoutDailyIntentItems, layoutDuolingoWidget, rootLayout, rvAppDrawer, searchHeader,
+          slotsContainer, tvDailyIntentEmptyIcon, tvDailyIntentEmptyText, tvDuolingoStreak,
+          tvEmptyApps, tvNoEvents, tvScreenTimeGlance);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));

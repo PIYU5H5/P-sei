@@ -1348,6 +1348,7 @@ androidx.appcompat.app.AlertDialog$Builder:
     public androidx.appcompat.app.AlertDialog$Builder setSingleChoiceItems(int,int,android.content.DialogInterface$OnClickListener)
     public androidx.appcompat.app.AlertDialog$Builder setSingleChoiceItems(android.database.Cursor,int,java.lang.String,android.content.DialogInterface$OnClickListener)
     public androidx.appcompat.app.AlertDialog$Builder setView(int)
+    public androidx.appcompat.app.AlertDialog$Builder setView(android.view.View)
     public androidx.appcompat.app.AlertDialog$Builder setView(android.view.View,int,int,int,int)
 androidx.appcompat.app.AlertDialog:
     static final int LAYOUT_HINT_NONE
@@ -4437,10 +4438,10 @@ androidx.core.view.PointerIconCompat
 androidx.core.view.ScaleGestureDetectorCompat$Api19Impl
 androidx.core.view.ScaleGestureDetectorCompat
 androidx.core.view.ScrollingView
-androidx.core.view.SoftwareKeyboardControllerCompat$Impl30:
-    void <init>(android.view.WindowInsetsController)
-androidx.core.view.SoftwareKeyboardControllerCompat:
-    void <init>(android.view.WindowInsetsController)
+androidx.core.view.SoftwareKeyboardControllerCompat$Impl20
+androidx.core.view.SoftwareKeyboardControllerCompat$Impl30
+androidx.core.view.SoftwareKeyboardControllerCompat$Impl
+androidx.core.view.SoftwareKeyboardControllerCompat
 androidx.core.view.VelocityTrackerCompat$Api34Impl
 androidx.core.view.VelocityTrackerCompat$VelocityTrackableMotionEventAxis
 androidx.core.view.VelocityTrackerCompat
@@ -4811,6 +4812,7 @@ androidx.core.view.WindowCompat:
     public static final int FEATURE_ACTION_BAR_OVERLAY
     public static final int FEATURE_ACTION_MODE_OVERLAY
     private void <init>()
+    public static androidx.core.view.WindowInsetsControllerCompat getInsetsController(android.view.Window,android.view.View)
     public static android.view.View requireViewById(android.view.Window,int)
 androidx.core.view.WindowInsetsAnimationCompat$BoundsCompat
 androidx.core.view.WindowInsetsAnimationCompat$Callback$DispatchMode
@@ -4879,6 +4881,7 @@ androidx.core.view.WindowInsetsCompat$Type:
     public static int ime()
     public static int mandatorySystemGestures()
     public static int navigationBars()
+    public static int statusBars()
     public static int systemGestures()
     public static int tappableElement()
 androidx.core.view.WindowInsetsCompat$TypeImpl30:
@@ -4901,56 +4904,14 @@ androidx.core.view.WindowInsetsCompat:
     public boolean isRound()
     public boolean isVisible(int)
     public androidx.core.view.WindowInsetsCompat replaceSystemWindowInsets(android.graphics.Rect)
-androidx.core.view.WindowInsetsControllerCompat$Impl20:
-    void addOnControllableInsetsChangedListener(androidx.core.view.WindowInsetsControllerCompat$OnControllableInsetsChangedListener)
-    void controlWindowInsetsAnimation(int,long,android.view.animation.Interpolator,android.os.CancellationSignal,androidx.core.view.WindowInsetsAnimationControlListenerCompat)
-    int getSystemBarsBehavior()
-    void removeOnControllableInsetsChangedListener(androidx.core.view.WindowInsetsControllerCompat$OnControllableInsetsChangedListener)
-    protected void setWindowFlag(int)
-androidx.core.view.WindowInsetsControllerCompat$Impl23:
-    public boolean isAppearanceLightStatusBars()
-    public void setAppearanceLightStatusBars(boolean)
-androidx.core.view.WindowInsetsControllerCompat$Impl26:
-    public boolean isAppearanceLightNavigationBars()
-    public void setAppearanceLightNavigationBars(boolean)
+androidx.core.view.WindowInsetsControllerCompat$Impl20
+androidx.core.view.WindowInsetsControllerCompat$Impl23
+androidx.core.view.WindowInsetsControllerCompat$Impl26
 androidx.core.view.WindowInsetsControllerCompat$Impl30$1
-androidx.core.view.WindowInsetsControllerCompat$Impl30:
-    void addOnControllableInsetsChangedListener(androidx.core.view.WindowInsetsControllerCompat$OnControllableInsetsChangedListener)
-    void controlWindowInsetsAnimation(int,long,android.view.animation.Interpolator,android.os.CancellationSignal,androidx.core.view.WindowInsetsAnimationControlListenerCompat)
-    int getSystemBarsBehavior()
-    public boolean isAppearanceLightNavigationBars()
-    public boolean isAppearanceLightStatusBars()
-    private synthetic void lambda$addOnControllableInsetsChangedListener$0(androidx.core.view.WindowInsetsControllerCompat$OnControllableInsetsChangedListener,android.view.WindowInsetsController,int)
-    void removeOnControllableInsetsChangedListener(androidx.core.view.WindowInsetsControllerCompat$OnControllableInsetsChangedListener)
-    public void setAppearanceLightNavigationBars(boolean)
-    public void setAppearanceLightStatusBars(boolean)
-    protected void setSystemUiFlag(int)
-    protected void unsetSystemUiFlag(int)
-androidx.core.view.WindowInsetsControllerCompat$Impl:
-    void addOnControllableInsetsChangedListener(androidx.core.view.WindowInsetsControllerCompat$OnControllableInsetsChangedListener)
-    void controlWindowInsetsAnimation(int,long,android.view.animation.Interpolator,android.os.CancellationSignal,androidx.core.view.WindowInsetsAnimationControlListenerCompat)
-    int getSystemBarsBehavior()
-    public boolean isAppearanceLightNavigationBars()
-    public boolean isAppearanceLightStatusBars()
-    void removeOnControllableInsetsChangedListener(androidx.core.view.WindowInsetsControllerCompat$OnControllableInsetsChangedListener)
-    public void setAppearanceLightNavigationBars(boolean)
-    public void setAppearanceLightStatusBars(boolean)
+androidx.core.view.WindowInsetsControllerCompat$Impl30
+androidx.core.view.WindowInsetsControllerCompat$Impl
 androidx.core.view.WindowInsetsControllerCompat$OnControllableInsetsChangedListener
-androidx.core.view.WindowInsetsControllerCompat:
-    public static final int BEHAVIOR_DEFAULT
-    public static final int BEHAVIOR_SHOW_BARS_BY_SWIPE
-    public static final int BEHAVIOR_SHOW_BARS_BY_TOUCH
-    public static final int BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-    private void <init>(android.view.WindowInsetsController)
-    public void addOnControllableInsetsChangedListener(androidx.core.view.WindowInsetsControllerCompat$OnControllableInsetsChangedListener)
-    public void controlWindowInsetsAnimation(int,long,android.view.animation.Interpolator,android.os.CancellationSignal,androidx.core.view.WindowInsetsAnimationControlListenerCompat)
-    public int getSystemBarsBehavior()
-    public boolean isAppearanceLightNavigationBars()
-    public boolean isAppearanceLightStatusBars()
-    public void removeOnControllableInsetsChangedListener(androidx.core.view.WindowInsetsControllerCompat$OnControllableInsetsChangedListener)
-    public void setAppearanceLightNavigationBars(boolean)
-    public void setAppearanceLightStatusBars(boolean)
-    public static androidx.core.view.WindowInsetsControllerCompat toWindowInsetsControllerCompat(android.view.WindowInsetsController)
+androidx.core.view.WindowInsetsControllerCompat
 androidx.core.view.accessibility.AccessibilityClickableSpanCompat:
     public static final java.lang.String SPAN_ID
 androidx.core.view.accessibility.AccessibilityEventCompat$Api16Impl
@@ -10087,6 +10048,9 @@ com.google.firebase.encoders.proto.ProtobufValueEncoderContext:
     public com.google.firebase.encoders.ValueEncoderContext add(long)
     public com.google.firebase.encoders.ValueEncoderContext add(byte[])
 com.psei.launcher.MainActivity:
+    private java.lang.Boolean lastAppliedDailyIntentCompleted
+    private java.lang.String lastAppliedDailyIntentText
+    static synthetic void loadTodayCalendarEvents$default(com.psei.launcher.MainActivity,boolean,int,java.lang.Object)
     public static synthetic void showProShowcaseDialog$default(com.psei.launcher.MainActivity,java.lang.String,int,java.lang.Object)
 com.psei.launcher.R$attr:
     public static int dividerColor
@@ -10114,6 +10078,7 @@ com.psei.launcher.R$id:
     public static int pathFlameInner
     public static int pathFlameOuter
     public static int rootLayout
+    public static int rowDailyFocus
     public static int settingsRoot
     public static int tvAppName
     private void <init>()
@@ -10132,16 +10097,19 @@ com.psei.launcher.R$string:
     public static int app_name
     public static int clear_slot
     public static int connect_calendar
+    public static int daily_intent_action_toggle
+    public static int daily_intent_clear
+    public static int daily_intent_dialog_subtitle
+    public static int daily_intent_dialog_title
+    public static int daily_intent_hint
+    public static int daily_intent_hint_2
+    public static int daily_intent_hint_3
+    public static int daily_intent_placeholder
     public static int duolingo_dialog_subtitle
     public static int duolingo_dialog_title
     public static int duolingo_practiced_desc
     public static int duolingo_practiced_today
     public static int duolingo_streak_count
-    public static int lockout_emergency_exit
-    public static int lockout_focus
-    public static int lockout_message
-    public static int lockout_monk_mode
-    public static int lockout_phone_calls
     public static int no_apps_found
     public static int no_events_today
     public static int no_hidden_apps
@@ -10162,12 +10130,15 @@ com.psei.launcher.R$string:
     public static int pref_duolingo_auto_sync_summary
     public static int pref_funtouch_help_summary
     public static int pref_lock_method_summary
-    public static int pref_lockout_title
     public static int pref_manage_hidden
     public static int pref_show_calendar
     public static int pref_show_calendar_summary
+    public static int pref_show_daily_intent
+    public static int pref_show_daily_intent_summary
     public static int pref_show_duolingo
     public static int pref_show_duolingo_summary
+    public static int pref_show_screen_time_glance
+    public static int pref_show_screen_time_glance_summary
     public static int pref_theme_light
     public static int pref_theme_system
     public static int rename_dialog_title
@@ -10200,9 +10171,13 @@ com.psei.launcher.data.CalendarEventModel:
     public final boolean component5()
     public final com.psei.launcher.data.CalendarEventModel copy(long,java.lang.String,long,long,boolean)
     public static synthetic com.psei.launcher.data.CalendarEventModel copy$default(com.psei.launcher.data.CalendarEventModel,long,java.lang.String,long,long,boolean,int,java.lang.Object)
-    public final long getEndMillis()
     public final long getId()
-    public final boolean isAllDay()
+com.psei.launcher.data.DailyFocusItem:
+    public final java.lang.String component1()
+    public final java.lang.String component2()
+    public final boolean component3()
+    public final void setCompleted(boolean)
+    public final void setText(java.lang.String)
 com.psei.launcher.data.Prefs:
     private static final java.lang.String KEY_APP_LIMIT_PREFIX
     private static final java.lang.String KEY_APP_SNOOZE_PREFIX
@@ -10210,12 +10185,15 @@ com.psei.launcher.data.Prefs:
     private static final java.lang.String KEY_AUTO_LAUNCH
     private static final java.lang.String KEY_BIOMETRIC_LOCK
     private static final java.lang.String KEY_CUSTOM_NAME_PREFIX
+    private static final java.lang.String KEY_DAILY_FOCUS_ITEMS
+    private static final java.lang.String KEY_DAILY_INTENT_COMPLETED
+    private static final java.lang.String KEY_DAILY_INTENT_DATE
+    private static final java.lang.String KEY_DAILY_INTENT_TEXT
     private static final java.lang.String KEY_DUOLINGO_LAST_DATE
     private static final java.lang.String KEY_DUOLINGO_STREAK
     private static final java.lang.String KEY_HIDDEN_PACKAGES
     private static final java.lang.String KEY_HOME_SLOTS_COUNT
     private static final java.lang.String KEY_IS_PRO_USER
-    private static final java.lang.String KEY_LOCKOUT_END_TIME
     private static final java.lang.String KEY_LOCK_METHOD
     private static final java.lang.String KEY_MINDFUL_DELAY_ENABLED
     private static final java.lang.String KEY_MINDFUL_DELAY_SECONDS
@@ -10225,7 +10203,9 @@ com.psei.launcher.data.Prefs:
     private static final java.lang.String KEY_SHORTCUT_SWIPE_LEFT
     private static final java.lang.String KEY_SHORTCUT_SWIPE_RIGHT
     private static final java.lang.String KEY_SHOW_CALENDAR_WIDGET
+    private static final java.lang.String KEY_SHOW_DAILY_INTENT
     private static final java.lang.String KEY_SHOW_DUOLINGO_WIDGET
+    private static final java.lang.String KEY_SHOW_SCREEN_TIME_GLANCE
     private static final java.lang.String KEY_SLOT_PREFIX
     private static final java.lang.String KEY_TEXT_SIZE
     private static final java.lang.String KEY_THEME
@@ -10244,6 +10224,10 @@ com.psei.launcher.data.Prefs:
     public static final java.lang.String THEME_LIGHT
     public static final java.lang.String THEME_SEPIA
     public static final java.lang.String THEME_SYSTEM
+    public final java.lang.String getDailyIntentText()
+    public final boolean isDailyIntentCompleted()
+    public final void setDailyIntentCompleted(boolean)
+    public final void setDailyIntentText(java.lang.String)
     public static synthetic void snoozeAppLimit$default(com.psei.launcher.data.Prefs,java.lang.String,int,int,java.lang.Object)
 com.psei.launcher.databinding.ActivityHiddenAppsBinding:
     public synthetic bridge android.view.View getRoot()
@@ -10254,6 +10238,8 @@ com.psei.launcher.databinding.ActivitySettingsBinding:
 com.psei.launcher.databinding.DialogAppActionsBinding:
     public synthetic bridge android.view.View getRoot()
 com.psei.launcher.databinding.DialogAppPickerBinding:
+    public synthetic bridge android.view.View getRoot()
+com.psei.launcher.databinding.DialogDailyIntentBinding:
     public synthetic bridge android.view.View getRoot()
 com.psei.launcher.databinding.DialogDuolingoEditBinding:
     public synthetic bridge android.view.View getRoot()
@@ -10271,6 +10257,9 @@ com.psei.launcher.databinding.ItemAppBinding:
     public synthetic bridge android.view.View getRoot()
 com.psei.launcher.databinding.ItemCalendarEventBinding:
     public synthetic bridge android.view.View getRoot()
+com.psei.launcher.databinding.ItemDailyFocusBinding:
+    public synthetic bridge android.view.View getRoot()
+    public android.widget.LinearLayout getRoot()
 com.psei.launcher.databinding.ItemHiddenAppBinding:
     public synthetic bridge android.view.View getRoot()
 com.psei.launcher.databinding.ItemHomeSlotBinding:
@@ -10279,7 +10268,6 @@ com.psei.launcher.service.DuolingoNotificationListener:
     public static final java.lang.String ACTION_DUOLINGO_UPDATED
     private static final java.lang.String DUOLINGO_PACKAGE
 com.psei.launcher.service.LockAccessibilityService$Companion:
-    public final boolean collapseNotificationShade()
     public final void openAccessibilitySettings(android.content.Context)
 javax.inject.Inject
 javax.inject.Named
@@ -12352,6 +12340,7 @@ kotlin.collections.ArraysKt___ArraysKt:
     public static final java.util.Collection toCollection(float[],java.util.Collection)
     public static final java.util.Collection toCollection(int[],java.util.Collection)
     public static final java.util.Collection toCollection(long[],java.util.Collection)
+    public static final java.util.Collection toCollection(java.lang.Object[],java.util.Collection)
     public static final java.util.Collection toCollection(short[],java.util.Collection)
     public static final java.util.Collection toCollection(boolean[],java.util.Collection)
     public static final double[] toDoubleArray(java.lang.Double[])
@@ -12400,6 +12389,7 @@ kotlin.collections.ArraysKt___ArraysKt:
     public static final java.util.Set toSet(float[])
     public static final java.util.Set toSet(int[])
     public static final java.util.Set toSet(long[])
+    public static final java.util.Set toSet(java.lang.Object[])
     public static final java.util.Set toSet(short[])
     public static final java.util.Set toSet(boolean[])
     public static final short[] toShortArray(java.lang.Short[])
@@ -13067,6 +13057,7 @@ kotlin.collections.SetsKt__SetsKt:
     public static final varargs java.util.Set mutableSetOf(java.lang.Object[])
     private static final java.util.Set orEmpty(java.util.Set)
     private static final java.util.Set setOf()
+    public static final varargs java.util.Set setOf(java.lang.Object[])
     public static final java.util.Set setOfNotNull(java.lang.Object)
     public static final varargs java.util.Set setOfNotNull(java.lang.Object[])
 kotlin.collections.SetsKt___SetsKt:
@@ -13138,14 +13129,11 @@ kotlin.comparisons.ComparisonsKt__ComparisonsKt:
     public void <init>()
     private static final java.util.Comparator compareBy(java.util.Comparator,kotlin.jvm.functions.Function1)
     private static final java.util.Comparator compareBy(kotlin.jvm.functions.Function1)
-    public static final varargs java.util.Comparator compareBy(kotlin.jvm.functions.Function1[])
-    private static final int compareBy$lambda$0$ComparisonsKt__ComparisonsKt(kotlin.jvm.functions.Function1[],java.lang.Object,java.lang.Object)
     private static final java.util.Comparator compareByDescending(java.util.Comparator,kotlin.jvm.functions.Function1)
     private static final java.util.Comparator compareByDescending(kotlin.jvm.functions.Function1)
     private static final int compareValuesBy(java.lang.Object,java.lang.Object,java.util.Comparator,kotlin.jvm.functions.Function1)
     private static final int compareValuesBy(java.lang.Object,java.lang.Object,kotlin.jvm.functions.Function1)
     public static final varargs int compareValuesBy(java.lang.Object,java.lang.Object,kotlin.jvm.functions.Function1[])
-    private static final int compareValuesByImpl$ComparisonsKt__ComparisonsKt(java.lang.Object,java.lang.Object,kotlin.jvm.functions.Function1[])
     public static final java.util.Comparator naturalOrder()
     private static final java.util.Comparator nullsFirst()
     public static final java.util.Comparator nullsFirst(java.util.Comparator)
@@ -14829,7 +14817,6 @@ kotlin.text.StringsKt__StringsJVMKt:
     public static synthetic byte[] encodeToByteArray$default(java.lang.String,int,int,boolean,int,java.lang.Object)
     public static final boolean endsWith(java.lang.String,java.lang.String,boolean)
     public static synthetic boolean endsWith$default(java.lang.String,java.lang.String,boolean,int,java.lang.Object)
-    public static final boolean equals(java.lang.String,java.lang.String,boolean)
     public static synthetic boolean equals$default(java.lang.String,java.lang.String,boolean,int,java.lang.Object)
     private static final varargs java.lang.String format(java.lang.String,java.util.Locale,java.lang.Object[])
     private static final varargs java.lang.String format(java.lang.String,java.lang.Object[])
@@ -16853,6 +16840,7 @@ androidx.appcompat.app.AlertController$AlertParams:
     public androidx.appcompat.app.AlertController$AlertParams$OnPrepareListViewListener mOnPrepareListViewListener
     public android.graphics.drawable.Drawable mPositiveButtonIcon
     public boolean mRecycleOnMeasure
+    public android.view.View mView
     public int mViewLayoutResId
     public int mViewSpacingBottom
     public int mViewSpacingLeft
@@ -16866,10 +16854,14 @@ androidx.appcompat.app.AlertController$RecycleListView:
 androidx.appcompat.app.AlertController:
     public int mButtonPanelLayoutHint
     public int mButtonPanelSideLayout
+    public android.view.View mView
+    public int mViewLayoutResId
     public int mViewSpacingBottom
     public int mViewSpacingLeft
     public int mViewSpacingRight
+    public boolean mViewSpacingSpecified
     public int mViewSpacingTop
+    public static boolean canTextInput(android.view.View)
     public static void centerButton(android.widget.Button)
     public static int getIconAttributeResId()
     public static android.widget.ListView getListView()
@@ -16900,12 +16892,12 @@ androidx.appcompat.app.AlertDialog$Builder:
     public static androidx.appcompat.app.AlertDialog$Builder setItems()
     public static androidx.appcompat.app.AlertDialog$Builder setMessage()
     public static androidx.appcompat.app.AlertDialog$Builder setMultiChoiceItems()
-    public final void setNegativeButton(java.lang.String,android.content.DialogInterface$OnClickListener)
+    public final void setNegativeButton(java.lang.String,com.psei.launcher.SettingsActivity$$InternalSyntheticLambda$3$5ec6ac7c7dc9a44b282e21e4ed497c577dc4c8c0d03ee6b53b77ebc2bb50d701$1)
     public static androidx.appcompat.app.AlertDialog$Builder setOnKeyListener()
+    public final void setPositiveButton(java.lang.String,android.content.DialogInterface$OnClickListener)
     public static androidx.appcompat.app.AlertDialog$Builder setSingleChoiceItems()
     public static androidx.appcompat.app.AlertDialog$Builder setTitle()
     public final void setTitle(int)
-    public static androidx.appcompat.app.AlertDialog$Builder setView()
 androidx.appcompat.app.AlertDialog:
     public static android.widget.ListView getListView()
     public static int getThemeResId(android.content.Context,int)
@@ -18652,14 +18644,6 @@ androidx.core.view.OnReceiveContentListener:
     public abstract androidx.core.view.ContentInfoCompat onReceiveContent(android.view.View,androidx.core.view.ContentInfoCompat)
 androidx.core.view.OneShotPreDrawListener:
     public final void removeListener()
-androidx.core.view.SoftwareKeyboardControllerCompat$Impl30:
-    public android.view.WindowInsetsController mWindowInsetsController
-androidx.core.view.SoftwareKeyboardControllerCompat$Impl:
-    public void hide()
-    public void show()
-androidx.core.view.SoftwareKeyboardControllerCompat:
-    public final void hide()
-    public final void show()
 androidx.core.view.TintableBackgroundView
 androidx.core.view.ViewCompat$1:
     public final java.lang.Boolean frameworkGet()
@@ -18797,16 +18781,6 @@ androidx.core.view.WindowInsetsCompat:
     public static void setRootViewData()
     public final void setRootWindowInsets(androidx.core.view.WindowInsetsCompat)
     public static void setStableInsets()
-androidx.core.view.WindowInsetsControllerCompat$Impl20:
-    public static void hideForType()
-    public static void showForType()
-    public static void unsetWindowFlag()
-androidx.core.view.WindowInsetsControllerCompat$Impl30:
-    public final androidx.core.view.WindowInsetsControllerCompat mCompatController
-    public final androidx.collection.SimpleArrayMap mListeners
-    public final androidx.core.view.SoftwareKeyboardControllerCompat mSoftwareKeyboardControllerCompat
-    public android.view.Window mWindow
-androidx.core.view.WindowInsetsControllerCompat
 androidx.core.view.accessibility.AccessibilityEventCompat
 androidx.core.view.accessibility.AccessibilityNodeInfoCompat$AccessibilityActionCompat$$InternalSyntheticThrowCCEIfNotNull$14$51a518e2562bdd83f1a37db6273eca8c40d29d82445ffc5c9314f2450daba410$0
 androidx.core.view.accessibility.AccessibilityNodeInfoCompat$AccessibilityActionCompat:
@@ -22850,6 +22824,8 @@ com.psei.launcher.MainActivity$openAppPickerForShortcut$pickerAdapter$1:
     public final void invoke()
 com.psei.launcher.MainActivity$openSlotReassignPicker$pickerAdapter$1:
     public final void invoke()
+com.psei.launcher.MainActivity$renderScreenTimeGlance$1:
+    public final void invoke$1()
 com.psei.launcher.MainActivity$setupGestures$gestureCallbacks$1:
     public static void onDoubleTap()
     public static void onSwipeDown()
@@ -22864,29 +22840,27 @@ com.psei.launcher.MainActivity$showProShowcaseDialog$5$1:
     public final void invoke$2()
 com.psei.launcher.MainActivity:
     public static void applyCustomTheme()
-    public static void collapseNotificationPanel()
-    public static void collapseNotificationPanelFast()
     public static void handleCustomShortcut()
     public static void handleDoubleTapLock()
     public static void handleSwipeDownNotifications()
     public static synthetic void openGoogleCalendarApp$default(com.psei.launcher.MainActivity)
     public static void renderCalendarEvents()
     public static void setupCalendarWidget()
+    public static void setupDailyIntent()
     public static void setupDuolingoWidget()
     public static void setupGestures()
     public static void setupInsets()
-    public static void setupLockoutUi()
     public static void setupRecyclerView()
+    public static void setupScreenTimeGlance()
     public static void setupSearch()
     public static void setupShortcuts()
     public static void showAppActionsDialog()
     public static void showGentleLockoutDialog()
     public static void showRenameDialog()
     public static void showSetLimitDialog()
+    public static void showSingleFocusActionMenu()
     public static void showUsageAccessPromptDialog()
-    public static void startLockoutTimer()
-    public final void stopLockoutTimer()
-    public static void vibrateCelebration()
+    public static void unregisterCalendarObserver()
 com.psei.launcher.MinimalLauncherApp:
     public static void applyThemeSetting()
 com.psei.launcher.R$attr
@@ -22913,7 +22887,6 @@ com.psei.launcher.SettingsActivity:
     public static void setupInsets$2()
     public static void setupListeners()
     public static void showAppLimitsManagerDialog()
-    public static void showCustomLockoutDurationDialog()
     public static void showDuolingoEditDialog$1()
     public static void showFuntouchHelpDialog()
     public static void showLockMethodDialog()
@@ -22922,7 +22895,6 @@ com.psei.launcher.SettingsActivity:
     public static void showSecretRedeemDialog()
     public static void showSetAppLimitDialog()
     public static void showSlotsCountDialog()
-    public static void showStartLockoutDialog()
     public static void showTextSizeDialog()
     public static void showThemeDialog()
     public static void showUsageAccessPromptDialog$1()
@@ -22938,7 +22910,7 @@ com.psei.launcher.data.AppRepository$OnAppsChangedListener:
     public abstract void onAppsLoaded(java.util.List)
 com.psei.launcher.data.AppRepository:
     public final android.os.HandlerThread callbackThread
-    public static void executeInBackground()
+    public final void executeInBackground(kotlin.jvm.functions.Function0)
     public static java.util.List getCachedApps()
     public static boolean isListIdentical()
     public static java.util.List loadAppsFromDisk()
@@ -22946,28 +22918,37 @@ com.psei.launcher.data.AppRepository:
     public final synchronized void onStart()
     public final synchronized void onStop()
 com.psei.launcher.data.CalendarEventModel:
+    public static long getEndMillis()
     public static java.lang.String getFormattedTime()
     public static long getStartMillis()
     public static java.lang.String getTitle()
+    public static boolean isAllDay()
+com.psei.launcher.data.CalendarRepository$getTodayEvents$2:
+    public final java.lang.Comparable invoke()
+com.psei.launcher.data.CalendarRepository$getTodayEvents$3:
+    public final java.lang.Comparable invoke()
 com.psei.launcher.data.CalendarRepository
+com.psei.launcher.data.DailyFocusItem:
+    public static com.psei.launcher.data.DailyFocusItem copy()
+    public static java.lang.String getId()
+    public static java.lang.String getText()
+    public static boolean isCompleted()
 com.psei.launcher.data.Prefs:
+    public static void deleteDailyFocusItem()
     public static java.util.Map getAllConfiguredLimits()
     public final boolean getAutoLaunchSingleResult()
     public final boolean getAutoOpenKeyboard()
+    public static java.lang.String getDailyIntentDate()
     public static java.lang.String getDuolingoLastPracticeDate()
     public static java.lang.String getHomeSlot()
-    public final int getHomeSlotsCount()
     public final java.lang.String getLockMethod()
-    public final long getLockoutEndTime()
-    public final long getLockoutRemainingMillis()
     public final int getMindfulDelaySeconds()
-    public final java.lang.String getShortcutBottomLeft()
-    public final java.lang.String getShortcutBottomRight()
     public final java.lang.String getShortcutSwipeLeft()
     public final java.lang.String getShortcutSwipeRight()
     public final boolean getShowCalendarWidget()
+    public final boolean getShowDailyIntent()
     public final boolean getShowDuolingoWidget()
-    public static java.lang.String getTodayDateString()
+    public final boolean getShowScreenTimeGlance()
     public static boolean isAppSnoozed()
     public final boolean isBiometricLockEnabled()
     public final boolean isMindfulDelayEnabled()
@@ -22976,33 +22957,37 @@ com.psei.launcher.data.Prefs:
     public static void setAutoOpenKeyboard()
     public static void setBiometricLockEnabled()
     public static void setCustomAppName()
+    public static void setDailyIntentDate()
     public static void setDuolingoLastPracticeDate()
     public static void setHiddenPackages()
     public static void setHomeSlotsCount()
-    public final void setLockoutEndTime(long)
     public static void setMindfulDelayEnabled()
     public static void setMindfulDelaySeconds()
     public final void setProUser()
     public final void setShortcutSwipeLeft(java.lang.String)
     public final void setShortcutSwipeRight(java.lang.String)
     public static void setShowCalendarWidget()
+    public static void setShowDailyIntent()
     public static void setShowDuolingoWidget()
+    public static void setShowScreenTimeGlance()
     public static void setTextSize()
     public static void setTheme()
     public static void setVipUser()
     public static void snoozeAppLimit()
-    public static void startLockout()
-    public final void stopLockout()
     public static boolean toggleMindfulApp()
-com.psei.launcher.data.UsageHelper
+com.psei.launcher.data.UsageHelper:
+    public static final com.psei.launcher.data.UsageHelper INSTANCE
+    static void <clinit>()
+    public static java.lang.String formatScreenTime()
+    public static int getTodayUsageMinutes()
+    public static int getTotalScreenTimeTodayMinutes()
 com.psei.launcher.databinding.ActivityHiddenAppsBinding:
     public final android.widget.LinearLayout hiddenAppsRoot
     public static android.widget.LinearLayout getRoot()
 com.psei.launcher.databinding.ActivityMainBinding:
-    public final android.widget.TextClock clockDate
     public final android.widget.TextClock clockTime
-    public final android.widget.TextView tvLockoutMessage
-    public final android.widget.TextView tvLockoutTitle
+    public final android.widget.TextView tvDailyIntentEmptyIcon
+    public final android.widget.TextView tvDailyIntentEmptyText
     public static android.widget.FrameLayout getRoot()
 com.psei.launcher.databinding.ActivitySettingsBinding:
     public final android.widget.LinearLayout settingsRoot
@@ -23010,6 +22995,11 @@ com.psei.launcher.databinding.ActivitySettingsBinding:
 com.psei.launcher.databinding.DialogAppActionsBinding:
     public static android.widget.LinearLayout getRoot()
 com.psei.launcher.databinding.DialogAppPickerBinding:
+    public static android.widget.LinearLayout getRoot()
+com.psei.launcher.databinding.DialogDailyIntentBinding:
+    public final android.widget.LinearLayout layoutIntentRow1
+    public final android.widget.TextView tvDailyIntentDialogSubtitle
+    public final android.widget.TextView tvDailyIntentDialogTitle
     public static android.widget.LinearLayout getRoot()
 com.psei.launcher.databinding.DialogDuolingoEditBinding:
     public final android.widget.TextView tvPracticedStatus
@@ -23030,6 +23020,8 @@ com.psei.launcher.databinding.ItemAppBinding:
 com.psei.launcher.databinding.ItemCalendarEventBinding:
     public final android.widget.TextView tvEventBullet
     public static android.widget.LinearLayout getRoot()
+com.psei.launcher.databinding.ItemDailyFocusBinding:
+    public final android.widget.LinearLayout rootView
 com.psei.launcher.databinding.ItemHiddenAppBinding:
     public static android.widget.LinearLayout getRoot()
 com.psei.launcher.databinding.ItemHomeSlotBinding:
@@ -23052,7 +23044,6 @@ com.psei.launcher.service.LockAccessibilityService$Companion:
 com.psei.launcher.service.LockAccessibilityService:
     public static final com.psei.launcher.service.LockAccessibilityService$Companion Companion
     static void <clinit>()
-    public static boolean isPackageAllowedDuringLockout()
 com.psei.launcher.ui.AppListAdapter$AppViewHolder:
     public final void bind()
 com.psei.launcher.ui.AppListAdapter:
@@ -23107,13 +23098,13 @@ kotlin.collections.ArraysKt___ArraysJvmKt:
 kotlin.collections.ArraysKt___ArraysKt
 kotlin.collections.ArraysUtilJVM
 kotlin.collections.CollectionsKt:
-    public static final java.util.ArrayList toMutableList(java.util.Collection)
     public static final java.util.List toMutableList(java.lang.Iterable)
     public static java.util.Set toMutableSet(java.util.Set)
 kotlin.collections.CollectionsKt__CollectionsKt:
     public static java.util.List emptyList()
-    public static varargs java.util.List listOf(java.lang.Object[])
     public static final java.util.List optimizeReadOnlyList(java.util.List)
+kotlin.collections.CollectionsKt__MutableCollectionsJVMKt:
+    public static void sortWith(java.util.List,java.util.Comparator)
 kotlin.collections.CollectionsKt___CollectionsKt$asSequence$$inlined$Sequence$1
 kotlin.collections.CollectionsKt___CollectionsKt
 kotlin.collections.EmptyIterator:
@@ -23260,10 +23251,8 @@ kotlin.ranges.IntRange$Companion
 kotlin.ranges.IntRange:
     public static final kotlin.ranges.IntRange$Companion Companion
     public static final kotlin.ranges.IntRange EMPTY
-    public final boolean contains(int)
+    public static boolean contains()
     public static java.lang.Integer getStart()
-kotlin.ranges.RangesKt:
-    public static long coerceAtLeast(long)
 kotlin.ranges.RangesKt___RangesKt
 kotlin.sequences.SequenceBuilderIterator:
     public static java.lang.Object nextNotReady()

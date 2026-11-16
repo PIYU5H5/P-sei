@@ -30,6 +30,7 @@ drawable bg_search_dark
 drawable bg_search_forest
 drawable bg_search_light
 drawable bg_search_sepia
+drawable bg_warning_card
 drawable ic_flame
 drawable ic_flame_grey
 drawable ic_launcher_background
@@ -54,6 +55,7 @@ id btnClearSearch
 id btnCloseProDialog
 id btnConnectCalendar
 id btnContinueMindful
+id btnDisableAccessibility
 id btnLockoutEmergencyExit
 id btnLockoutPhone
 id btnOpenDuolingoApp
@@ -69,6 +71,7 @@ id btnSnoozeEmergency
 id btnStepAway
 id btnUnhide
 id btnUnlockSecret
+id cardAccessibilityWarning
 id cardPSeiPro
 id clockArea
 id clockDate

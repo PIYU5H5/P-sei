@@ -1,4 +1,4 @@
-﻿package com.psei.launcher.service
+package com.psei.launcher.service
 
 import android.accessibilityservice.AccessibilityService
 import android.accessibilityservice.AccessibilityServiceInfo

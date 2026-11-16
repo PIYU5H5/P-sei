@@ -672,6 +672,7 @@ drawable bg_search_dark
 drawable bg_search_forest
 drawable bg_search_light
 drawable bg_search_sepia
+drawable bg_warning_card
 drawable btn_checkbox_checked_mtrl
 drawable btn_checkbox_checked_to_unchecked_mtrl_animation
 drawable btn_checkbox_unchecked_mtrl
@@ -815,6 +816,7 @@ id btnClearSearch
 id btnCloseProDialog
 id btnConnectCalendar
 id btnContinueMindful
+id btnDisableAccessibility
 id btnLockoutEmergencyExit
 id btnLockoutPhone
 id btnOpenDuolingoApp
@@ -831,6 +833,7 @@ id btnStepAway
 id btnUnhide
 id btnUnlockSecret
 id buttonPanel
+id cardAccessibilityWarning
 id cardPSeiPro
 id center_vertical
 id checkbox

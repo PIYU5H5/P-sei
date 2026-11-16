@@ -798,7 +798,53 @@
                     android:layout_marginTop="2dp"
                     android:textColor="?attr/secondaryTextColor"
                     android:textSize="13sp"
-                    tools:text="Accessibility Service (Recommended)" />
+                    tools:text="Device Administrator (Google Pay Safe)" />
+            </LinearLayout>
+
+            <!-- Google Pay / Accessibility Alert Card (Shown only when Accessibility is active) -->
+            <LinearLayout
+                android:id="@+id/cardAccessibilityWarning"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginEnd="24dp"
+                android:layout_marginTop="6dp"
+                android:layout_marginBottom="12dp"
+                android:background="@drawable/bg_warning_card"
+                android:orientation="vertical"
+                android:padding="16dp"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="⚠️ Google Pay / UPI Issue Detected"
+                    android:textColor="#FFB800"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:lineSpacingExtra="3dp"
+                    android:text="P-Sei's Accessibility Service is turned on. Indian UPI &amp; banking apps (Google Pay, PhonePe, Paytm) block transactions while any accessibility service is active.\n\nTap below to turn off Accessibility and use Device Administrator instead so Google Pay works immediately."
+                    android:textColor="#CCCCCC"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/btnDisableAccessibility"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:background="@drawable/bg_lockout_button"
+                    android:gravity="center"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
+                    android:text="Turn Off Accessibility (Fix Google Pay)"
+                    android:textColor="#FFB800"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
             </LinearLayout>
 
             <!-- Bottom Left Shortcut -->

@@ -1,4 +1,4 @@
-﻿package com.psei.launcher.data
+package com.psei.launcher.data
 
 import android.app.AppOpsManager
 import android.app.usage.UsageEvents

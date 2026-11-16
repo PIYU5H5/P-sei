@@ -24,6 +24,12 @@ public final class ActivitySettingsBinding implements ViewBinding {
   public final TextView btnBack;
 
   @NonNull
+  public final TextView btnDisableAccessibility;
+
+  @NonNull
+  public final LinearLayout cardAccessibilityWarning;
+
+  @NonNull
   public final LinearLayout cardPSeiPro;
 
   @NonNull
@@ -174,6 +180,7 @@ public final class ActivitySettingsBinding implements ViewBinding {
   public final TextView tvThemeSummary;
 
   private ActivitySettingsBinding(@NonNull LinearLayout rootView, @NonNull TextView btnBack,
+      @NonNull TextView btnDisableAccessibility, @NonNull LinearLayout cardAccessibilityWarning,
       @NonNull LinearLayout cardPSeiPro, @NonNull LinearLayout rowAppLimits,
       @NonNull LinearLayout rowAutoKeyboard, @NonNull LinearLayout rowAutoLaunch,
       @NonNull LinearLayout rowBiometricLock, @NonNull LinearLayout rowCalendarWidget,
@@ -201,6 +208,8 @@ public final class ActivitySettingsBinding implements ViewBinding {
       @NonNull TextView tvTextSizeSummary, @NonNull TextView tvThemeSummary) {
     this.rootView = rootView;
     this.btnBack = btnBack;
+    this.btnDisableAccessibility = btnDisableAccessibility;
+    this.cardAccessibilityWarning = cardAccessibilityWarning;
     this.cardPSeiPro = cardPSeiPro;
     this.rowAppLimits = rowAppLimits;
     this.rowAutoKeyboard = rowAutoKeyboard;
@@ -283,6 +292,18 @@ public final class ActivitySettingsBinding implements ViewBinding {
       id = R.id.btnBack;
       TextView btnBack = ViewBindings.findChildViewById(rootView, id);
       if (btnBack == null) {
+        break missingId;
+      }
+
+      id = R.id.btnDisableAccessibility;
+      TextView btnDisableAccessibility = ViewBindings.findChildViewById(rootView, id);
+      if (btnDisableAccessibility == null) {
+        break missingId;
+      }
+
+      id = R.id.cardAccessibilityWarning;
+      LinearLayout cardAccessibilityWarning = ViewBindings.findChildViewById(rootView, id);
+      if (cardAccessibilityWarning == null) {
         break missingId;
       }
 
@@ -582,19 +603,19 @@ public final class ActivitySettingsBinding implements ViewBinding {
         break missingId;
       }
 
-      return new ActivitySettingsBinding((LinearLayout) rootView, btnBack, cardPSeiPro,
-          rowAppLimits, rowAutoKeyboard, rowAutoLaunch, rowBiometricLock, rowCalendarWidget,
-          rowDefaultLauncher, rowDuolingoAutoSync, rowDuolingoStreak, rowDuolingoWidget,
-          rowFuntouchHelp, rowHiddenApps, rowHomeSlotsCount, rowLockMethod, rowLockoutMode,
-          rowMindfulApps, rowMindfulDelay, rowMindfulDuration, rowShortcutBottomLeft,
-          rowShortcutBottomRight, rowShortcutSwipeLeft, rowShortcutSwipeRight, rowTextSize,
-          rowTheme, settingsContent, settingsHeader, settingsRoot, switchAutoKeyboard,
-          switchAutoLaunch, switchBiometricLock, switchCalendarWidget, switchDuolingoWidget,
-          switchMindfulDelay, tvAppLimitsSummary, tvDuolingoStreakSummary, tvHiddenAppsSummary,
-          tvHomeSlotsSummary, tvLockMethodSummary, tvLockoutSummary, tvMindfulAppsSummary,
-          tvMindfulDurationSummary, tvProBadge, tvProSubtitle, tvSettingsTitle,
-          tvShortcutBottomLeft, tvShortcutBottomRight, tvShortcutSwipeLeft, tvShortcutSwipeRight,
-          tvTextSizeSummary, tvThemeSummary);
+      return new ActivitySettingsBinding((LinearLayout) rootView, btnBack, btnDisableAccessibility,
+          cardAccessibilityWarning, cardPSeiPro, rowAppLimits, rowAutoKeyboard, rowAutoLaunch,
+          rowBiometricLock, rowCalendarWidget, rowDefaultLauncher, rowDuolingoAutoSync,
+          rowDuolingoStreak, rowDuolingoWidget, rowFuntouchHelp, rowHiddenApps, rowHomeSlotsCount,
+          rowLockMethod, rowLockoutMode, rowMindfulApps, rowMindfulDelay, rowMindfulDuration,
+          rowShortcutBottomLeft, rowShortcutBottomRight, rowShortcutSwipeLeft,
+          rowShortcutSwipeRight, rowTextSize, rowTheme, settingsContent, settingsHeader,
+          settingsRoot, switchAutoKeyboard, switchAutoLaunch, switchBiometricLock,
+          switchCalendarWidget, switchDuolingoWidget, switchMindfulDelay, tvAppLimitsSummary,
+          tvDuolingoStreakSummary, tvHiddenAppsSummary, tvHomeSlotsSummary, tvLockMethodSummary,
+          tvLockoutSummary, tvMindfulAppsSummary, tvMindfulDurationSummary, tvProBadge,
+          tvProSubtitle, tvSettingsTitle, tvShortcutBottomLeft, tvShortcutBottomRight,
+          tvShortcutSwipeLeft, tvShortcutSwipeRight, tvTextSizeSummary, tvThemeSummary);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));

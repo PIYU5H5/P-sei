@@ -10105,6 +10105,7 @@ com.psei.launcher.R$drawable:
     public static int bg_search_forest
     public static int bg_search_light
     public static int bg_search_sepia
+    public static int bg_warning_card
     public static int ic_launcher_background
     public static int ic_launcher_foreground
     private void <init>()
@@ -10278,6 +10279,7 @@ com.psei.launcher.service.DuolingoNotificationListener:
     public static final java.lang.String ACTION_DUOLINGO_UPDATED
     private static final java.lang.String DUOLINGO_PACKAGE
 com.psei.launcher.service.LockAccessibilityService$Companion:
+    public final boolean collapseNotificationShade()
     public final void openAccessibilitySettings(android.content.Context)
 javax.inject.Inject
 javax.inject.Named
@@ -16898,7 +16900,7 @@ androidx.appcompat.app.AlertDialog$Builder:
     public static androidx.appcompat.app.AlertDialog$Builder setItems()
     public static androidx.appcompat.app.AlertDialog$Builder setMessage()
     public static androidx.appcompat.app.AlertDialog$Builder setMultiChoiceItems()
-    public final void setNegativeButton(java.lang.String,com.psei.launcher.SettingsActivity$$InternalSyntheticLambda$4$8bd87613e1dd33a80224e3f063fab920c912d3716361803ff057c70447ea6d20$1)
+    public final void setNegativeButton(java.lang.String,android.content.DialogInterface$OnClickListener)
     public static androidx.appcompat.app.AlertDialog$Builder setOnKeyListener()
     public static androidx.appcompat.app.AlertDialog$Builder setSingleChoiceItems()
     public static androidx.appcompat.app.AlertDialog$Builder setTitle()
@@ -22862,6 +22864,8 @@ com.psei.launcher.MainActivity$showProShowcaseDialog$5$1:
     public final void invoke$2()
 com.psei.launcher.MainActivity:
     public static void applyCustomTheme()
+    public static void collapseNotificationPanel()
+    public static void collapseNotificationPanelFast()
     public static void handleCustomShortcut()
     public static void handleDoubleTapLock()
     public static void handleSwipeDownNotifications()
@@ -22975,7 +22979,6 @@ com.psei.launcher.data.Prefs:
     public static void setDuolingoLastPracticeDate()
     public static void setHiddenPackages()
     public static void setHomeSlotsCount()
-    public final void setLockMethod(java.lang.String)
     public final void setLockoutEndTime(long)
     public static void setMindfulDelayEnabled()
     public static void setMindfulDelaySeconds()
@@ -23043,6 +23046,7 @@ com.psei.launcher.service.LauncherAdminReceiver:
     public static final com.psei.launcher.service.LauncherAdminReceiver$Companion Companion
     static void <clinit>()
 com.psei.launcher.service.LockAccessibilityService$Companion:
+    public static boolean disableService()
     public static boolean expandNotifications()
     public static boolean lockScreen()
 com.psei.launcher.service.LockAccessibilityService:

@@ -377,7 +377,7 @@
             android:textSize="17sp"
             android:textStyle="bold" />
 
-        <!-- Subtle Emergency Exit Option -->
+        <!-- Subtle Emergency Exit Option (Tap or Long Press) -->
         <TextView
             android:id="@+id/btnLockoutEmergencyExit"
             android:layout_width="wrap_content"
@@ -386,8 +386,8 @@
             android:layout_marginBottom="32dp"
             android:padding="8dp"
             android:text="@string/lockout_emergency_exit"
-            android:textColor="#444444"
-            android:textSize="12sp" />
+            android:textColor="#AAAAAA"
+            android:textSize="13sp" />
 
     </LinearLayout>
 

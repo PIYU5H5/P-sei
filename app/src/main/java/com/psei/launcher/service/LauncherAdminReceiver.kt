@@ -1,4 +1,4 @@
-﻿package com.psei.launcher.service
+package com.psei.launcher.service
 
 import android.app.admin.DeviceAdminReceiver
 import android.app.admin.DevicePolicyManager

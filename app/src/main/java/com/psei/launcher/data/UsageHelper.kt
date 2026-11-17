@@ -12,10 +12,19 @@ import java.util.Calendar
 
 /**
  * Lightweight helper to query daily app screen-time usage from native UsageStatsManager.
- * Uses exact event intervals from local midnight (00:00:00) to match system Digital Wellbeing.
+ * Uses exact event intervals from local midnight (00:00:00) via UsageEvents to match
+ * system Digital Wellbeing / Jovi exactly, without bucket-merging distortion from yesterday.
  * Zero external libraries, zero battery drain, zero network calls.
  */
 object UsageHelper {
+
+    private val SYSTEM_IGNORED_PACKAGES = setOf(
+        "com.android.systemui",
+        "android",
+        "com.vivo.upslide",
+        "com.bbk.launcher2",
+        "com.vivo.floatingball"
+    )
 
     /**
      * Checks if the user has granted PACKAGE_USAGE_STATS permission to P-Sei.
@@ -60,11 +69,13 @@ object UsageHelper {
     }
 
     /**
-     * Returns total foreground time spent on the specified app today (strictly since local midnight) in minutes.
-     * Queries native UsageStatsManager aggregated daily intervals to match system Digital Wellbeing / Jovi exactly.
+     * Returns total active foreground time spent on a specific app today (strictly since local midnight) in minutes.
+     * Uses native UsageEvents for timestamped precision matching Digital Wellbeing.
      */
     fun getTodayUsageMinutes(context: Context, packageName: String): Int {
+        if (!hasUsagePermission(context)) return 0
         val usageStatsManager = context.getSystemService(Context.USAGE_STATS_SERVICE) as? UsageStatsManager ?: return 0
+
         val calendar = Calendar.getInstance().apply {
             set(Calendar.HOUR_OF_DAY, 0)
             set(Calendar.MINUTE, 0)
@@ -75,27 +86,64 @@ object UsageHelper {
         val now = System.currentTimeMillis()
         if (now <= startOfDay) return 0
 
-        // 1. Primary: queryAndAggregateUsageStats combines the intervals between startOfDay and now
         try {
-            val aggregated = usageStatsManager.queryAndAggregateUsageStats(startOfDay, now)
-            val stats = aggregated[packageName]
-            if (stats != null && stats.totalTimeInForeground > 0L) {
-                return (stats.totalTimeInForeground / 60_000L).toInt()
-            }
-        } catch (e: Exception) {
-            // Fallback
-        }
-
-        // 2. Secondary fallback: queryUsageStats(INTERVAL_DAILY, startOfDay, now)
-        try {
-            val statsList = usageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_DAILY, startOfDay, now)
-            if (!statsList.isNullOrEmpty()) {
+            val usageEvents = usageStatsManager.queryEvents(startOfDay, now)
+            if (usageEvents != null) {
+                val event = UsageEvents.Event()
+                var currentStart = -1L
                 var totalMillis = 0L
-                for (s in statsList) {
-                    if (s.packageName == packageName && s.lastTimeUsed >= startOfDay) {
-                        totalMillis += s.totalTimeInForeground
+
+                while (usageEvents.hasNextEvent()) {
+                    usageEvents.getNextEvent(event)
+                    val pkg = event.packageName ?: continue
+                    val timestamp = event.timeStamp
+                    if (timestamp < startOfDay) continue
+
+                    if (pkg == packageName) {
+                        when (event.eventType) {
+                            UsageEvents.Event.ACTIVITY_RESUMED -> {
+                                if (currentStart == -1L) {
+                                    currentStart = timestamp
+                                }
+                            }
+                            UsageEvents.Event.ACTIVITY_PAUSED,
+                            UsageEvents.Event.ACTIVITY_STOPPED -> {
+                                if (currentStart != -1L) {
+                                    val delta = timestamp - currentStart
+                                    if (delta in 1 until (12 * 3600 * 1000L)) {
+                                        totalMillis += delta
+                                    }
+                                    currentStart = -1L
+                                }
+                            }
+                        }
+                    } else {
+                        // Another app took over foreground
+                        if (currentStart != -1L && event.eventType == UsageEvents.Event.ACTIVITY_RESUMED) {
+                            val delta = timestamp - currentStart
+                            if (delta in 1 until (12 * 3600 * 1000L)) {
+                                totalMillis += delta
+                            }
+                            currentStart = -1L
+                        }
+                    }
+
+                    if (event.eventType == UsageEvents.Event.SCREEN_NON_INTERACTIVE && currentStart != -1L) {
+                        val delta = timestamp - currentStart
+                        if (delta in 1 until (12 * 3600 * 1000L)) {
+                            totalMillis += delta
+                        }
+                        currentStart = -1L
                     }
                 }
+
+                if (currentStart != -1L && now > currentStart) {
+                    val delta = now - currentStart
+                    if (delta in 1 until (12 * 3600 * 1000L)) {
+                        totalMillis += delta
+                    }
+                }
+
                 if (totalMillis > 0L) {
                     return (totalMillis / 60_000L).toInt()
                 }
@@ -104,16 +152,35 @@ object UsageHelper {
             // Fallback
         }
 
+        // Secondary fallback for edge devices
+        try {
+            val statsList = usageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_DAILY, startOfDay, now)
+            if (!statsList.isNullOrEmpty()) {
+                val stats = statsList.firstOrNull { it.packageName == packageName && it.lastTimeUsed >= startOfDay }
+                if (stats != null && stats.totalTimeInForeground > 0L) {
+                    return (stats.totalTimeInForeground / 60_000L).toInt()
+                }
+            }
+        } catch (e: Exception) {
+            // Ignored
+        }
+
         return 0
     }
 
     /**
      * Returns the total active screen time spent across all user applications today
-     * (since midnight) in minutes. Returns -1 if usage permission is not granted.
+     * (since midnight 00:00:00) in minutes. Returns -1 if usage permission is not granted.
+     *
+     * Precision Design:
+     * - Uses exact UsageEvents stream between local midnight and now.
+     * - Prevents Android's queryAndAggregateUsageStats from falsely merging yesterday's historical buckets.
+     * - Excludes launcher and system overlays.
      */
     fun getTotalScreenTimeTodayMinutes(context: Context): Int {
         if (!hasUsagePermission(context)) return -1
         val usageStatsManager = context.getSystemService(Context.USAGE_STATS_SERVICE) as? UsageStatsManager ?: return -1
+
         val calendar = Calendar.getInstance().apply {
             set(Calendar.HOUR_OF_DAY, 0)
             set(Calendar.MINUTE, 0)
@@ -124,56 +191,101 @@ object UsageHelper {
         val now = System.currentTimeMillis()
         if (now <= startOfDay) return 0
 
-        var totalMillis = 0L
         val launcherPkg = context.packageName
 
-        // 1. Primary: queryAndAggregateUsageStats
         try {
-            val aggregated = usageStatsManager.queryAndAggregateUsageStats(startOfDay, now)
-            if (!aggregated.isNullOrEmpty()) {
-                for ((pkg, stats) in aggregated) {
-                    if (pkg == launcherPkg || pkg == "com.android.systemui" || pkg == "android") continue
-                    if (stats.totalTimeInForeground > 0L) {
-                        totalMillis += stats.totalTimeInForeground
+            val usageEvents = usageStatsManager.queryEvents(startOfDay, now)
+            if (usageEvents != null) {
+                val event = UsageEvents.Event()
+                var currentStart = -1L
+                var totalMillis = 0L
+
+                while (usageEvents.hasNextEvent()) {
+                    usageEvents.getNextEvent(event)
+                    val pkg = event.packageName ?: continue
+                    val timestamp = event.timeStamp
+                    if (timestamp < startOfDay) continue
+
+                    val isIgnored = (pkg == launcherPkg || SYSTEM_IGNORED_PACKAGES.contains(pkg))
+
+                    when (event.eventType) {
+                        UsageEvents.Event.ACTIVITY_RESUMED -> {
+                            if (!isIgnored) {
+                                if (currentStart == -1L) {
+                                    currentStart = timestamp
+                                }
+                            } else {
+                                // Returned to launcher or system UI
+                                if (currentStart != -1L) {
+                                    val delta = timestamp - currentStart
+                                    if (delta in 1 until (12 * 3600 * 1000L)) {
+                                        totalMillis += delta
+                                    }
+                                    currentStart = -1L
+                                }
+                            }
+                        }
+                        UsageEvents.Event.SCREEN_NON_INTERACTIVE -> {
+                            // Screen turned off
+                            if (currentStart != -1L) {
+                                val delta = timestamp - currentStart
+                                if (delta in 1 until (12 * 3600 * 1000L)) {
+                                    totalMillis += delta
+                                }
+                                currentStart = -1L
+                            }
+                        }
                     }
                 }
+
+                if (currentStart != -1L && now > currentStart) {
+                    val delta = now - currentStart
+                    if (delta in 1 until (12 * 3600 * 1000L)) {
+                        totalMillis += delta
+                    }
+                }
+
+                return (totalMillis / 60_000L).toInt()
             }
         } catch (e: Exception) {
             // Fallback
         }
 
-        // 2. Secondary fallback: queryUsageStats
-        if (totalMillis == 0L) {
-            try {
-                val statsList = usageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_DAILY, startOfDay, now)
-                if (!statsList.isNullOrEmpty()) {
-                    for (s in statsList) {
-                        if (s.packageName == launcherPkg || s.packageName == "com.android.systemui" || s.packageName == "android") continue
-                        if (s.lastTimeUsed >= startOfDay && s.totalTimeInForeground > 0L) {
-                            totalMillis += s.totalTimeInForeground
-                        }
+        // Secondary fallback
+        try {
+            val statsList = usageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_DAILY, startOfDay, now)
+            if (!statsList.isNullOrEmpty()) {
+                var fallbackMillis = 0L
+                for (s in statsList) {
+                    if (s.packageName == launcherPkg || SYSTEM_IGNORED_PACKAGES.contains(s.packageName)) continue
+                    if (s.lastTimeUsed >= startOfDay && s.totalTimeInForeground > 0L) {
+                        fallbackMillis += s.totalTimeInForeground
                     }
                 }
-            } catch (e: Exception) {
-                // Defensive
+                return (fallbackMillis / 60_000L).toInt()
             }
+        } catch (e: Exception) {
+            // Ignored
         }
 
-        return (totalMillis / 60_000L).toInt()
+        return 0
     }
 
     /**
-     * Formats screen time minutes into a clean, minimal string (e.g. "45m screen time today" or "2h 15m screen time today").
+     * Formats screen time minutes into a clean, minimal string (e.g. "45m screen time today" or "1h 58m screen time today").
      */
     fun formatScreenTime(minutes: Int): String {
         if (minutes < 0) return "Tap to show screen time"
+        if (minutes == 0) return "0m screen time today"
         if (minutes < 60) {
             return "${minutes}m screen time today"
         }
         val hours = minutes / 60
         val mins = minutes % 60
-        return "${hours}h ${mins}m screen time today"
+        return if (mins > 0) {
+            "${hours}h ${mins}m screen time today"
+        } else {
+            "${hours}h screen time today"
+        }
     }
 }
-
-

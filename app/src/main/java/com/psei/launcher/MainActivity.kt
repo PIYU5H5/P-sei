@@ -1055,8 +1055,9 @@ class MainActivity : AppCompatActivity(), AppRepository.OnAppsChangedListener {
                 Toast.makeText(this, R.string.screen_time_permission_toast, Toast.LENGTH_LONG).show()
                 UsageHelper.openUsageAccessSettings(this)
             } else {
+                renderScreenTimeGlance()
                 val currentText = binding.tvScreenTimeGlance.text.toString()
-                Toast.makeText(this, "Active screen time: $currentText", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, currentText, Toast.LENGTH_SHORT).show()
             }
         }
         renderScreenTimeGlance()

@@ -10051,6 +10051,7 @@ com.psei.launcher.MainActivity:
     private java.lang.Boolean lastAppliedDailyIntentCompleted
     private java.lang.String lastAppliedDailyIntentText
     static synthetic void loadTodayCalendarEvents$default(com.psei.launcher.MainActivity,boolean,int,java.lang.Object)
+    static synthetic void renderScreenTimeGlance$default(com.psei.launcher.MainActivity,boolean,int,java.lang.Object)
     public static synthetic void showProShowcaseDialog$default(com.psei.launcher.MainActivity,java.lang.String,int,java.lang.Object)
 com.psei.launcher.R$attr:
     public static int dividerColor
@@ -12340,7 +12341,6 @@ kotlin.collections.ArraysKt___ArraysKt:
     public static final java.util.Collection toCollection(float[],java.util.Collection)
     public static final java.util.Collection toCollection(int[],java.util.Collection)
     public static final java.util.Collection toCollection(long[],java.util.Collection)
-    public static final java.util.Collection toCollection(java.lang.Object[],java.util.Collection)
     public static final java.util.Collection toCollection(short[],java.util.Collection)
     public static final java.util.Collection toCollection(boolean[],java.util.Collection)
     public static final double[] toDoubleArray(java.lang.Double[])
@@ -12389,7 +12389,6 @@ kotlin.collections.ArraysKt___ArraysKt:
     public static final java.util.Set toSet(float[])
     public static final java.util.Set toSet(int[])
     public static final java.util.Set toSet(long[])
-    public static final java.util.Set toSet(java.lang.Object[])
     public static final java.util.Set toSet(short[])
     public static final java.util.Set toSet(boolean[])
     public static final short[] toShortArray(java.lang.Short[])
@@ -13057,7 +13056,6 @@ kotlin.collections.SetsKt__SetsKt:
     public static final varargs java.util.Set mutableSetOf(java.lang.Object[])
     private static final java.util.Set orEmpty(java.util.Set)
     private static final java.util.Set setOf()
-    public static final varargs java.util.Set setOf(java.lang.Object[])
     public static final java.util.Set setOfNotNull(java.lang.Object)
     public static final varargs java.util.Set setOfNotNull(java.lang.Object[])
 kotlin.collections.SetsKt___SetsKt:
@@ -22977,7 +22975,6 @@ com.psei.launcher.data.Prefs:
     public static boolean toggleMindfulApp()
 com.psei.launcher.data.UsageHelper:
     public static final com.psei.launcher.data.UsageHelper INSTANCE
-    static void <clinit>()
     public static java.lang.String formatScreenTime()
     public static int getTodayUsageMinutes()
     public static int getTotalScreenTimeTodayMinutes()

@@ -2736,13 +2736,18 @@
         <item name="android:windowLightNavigationBar">false</item>
 
         
+        <item name="android:windowShowWallpaper">true</item>
+        <item name="android:windowAnimationStyle">@null</item>
+        <item name="android:windowDisablePreview">true</item>
+
+        
         <item name="launcherBackground">@color/bg_dark</item>
         <item name="primaryTextColor">@color/text_primary_dark</item>
         <item name="secondaryTextColor">@color/text_secondary_dark</item>
         <item name="searchBackground">@drawable/bg_search_dark</item>
         <item name="itemHighlight">@color/highlight_dark</item>
         <item name="dividerColor">@color/divider_dark</item>
-    </style><style name="Theme.MinimalLauncher.Dark" parent="Theme.AppCompat.NoActionBar">
+    </style><style name="Theme.MinimalLauncher.Dark" parent="Theme.MinimalLauncher">
         <item name="android:windowBackground">@color/bg_dark</item>
         <item name="android:colorBackground">@color/bg_dark</item>
         <item name="android:statusBarColor">@color/transparent</item>
@@ -2756,7 +2761,7 @@
         <item name="searchBackground">@drawable/bg_search_dark</item>
         <item name="itemHighlight">@color/highlight_dark</item>
         <item name="dividerColor">@color/divider_dark</item>
-    </style><style name="Theme.MinimalLauncher.Light" parent="Theme.AppCompat.NoActionBar">
+    </style><style name="Theme.MinimalLauncher.Light" parent="Theme.MinimalLauncher">
         <item name="android:windowBackground">@color/bg_light</item>
         <item name="android:colorBackground">@color/bg_light</item>
         <item name="android:statusBarColor">@color/transparent</item>
@@ -2770,7 +2775,7 @@
         <item name="searchBackground">@drawable/bg_search_light</item>
         <item name="itemHighlight">@color/highlight_light</item>
         <item name="dividerColor">@color/divider_light</item>
-    </style><style name="Theme.MinimalLauncher.Sepia" parent="Theme.AppCompat.NoActionBar">
+    </style><style name="Theme.MinimalLauncher.Sepia" parent="Theme.MinimalLauncher">
         <item name="android:windowBackground">#F4EFEA</item>
         <item name="android:colorBackground">#F4EFEA</item>
         <item name="android:statusBarColor">@color/transparent</item>
@@ -2784,7 +2789,7 @@
         <item name="searchBackground">@drawable/bg_search_sepia</item>
         <item name="itemHighlight">#E7DFD5</item>
         <item name="dividerColor">#E0D7CB</item>
-    </style><style name="Theme.MinimalLauncher.Forest" parent="Theme.AppCompat.NoActionBar">
+    </style><style name="Theme.MinimalLauncher.Forest" parent="Theme.MinimalLauncher">
         <item name="android:windowBackground">#0B140E</item>
         <item name="android:colorBackground">#0B140E</item>
         <item name="android:statusBarColor">@color/transparent</item>
@@ -2798,7 +2803,7 @@
         <item name="searchBackground">@drawable/bg_search_forest</item>
         <item name="itemHighlight">#15241A</item>
         <item name="dividerColor">#1A2C20</item>
-    </style><style name="Theme.MinimalLauncher.Charcoal" parent="Theme.AppCompat.NoActionBar">
+    </style><style name="Theme.MinimalLauncher.Charcoal" parent="Theme.MinimalLauncher">
         <item name="android:windowBackground">#18191C</item>
         <item name="android:colorBackground">#18191C</item>
         <item name="android:statusBarColor">@color/transparent</item>
@@ -2812,7 +2817,7 @@
         <item name="searchBackground">@drawable/bg_search_charcoal</item>
         <item name="itemHighlight">#26282D</item>
         <item name="dividerColor">#282A2E</item>
-    </style><style name="Theme.MinimalLauncher.Cyber" parent="Theme.AppCompat.NoActionBar">
+    </style><style name="Theme.MinimalLauncher.Cyber" parent="Theme.MinimalLauncher">
         <item name="android:windowBackground">#050508</item>
         <item name="android:colorBackground">#050508</item>
         <item name="android:statusBarColor">@color/transparent</item>

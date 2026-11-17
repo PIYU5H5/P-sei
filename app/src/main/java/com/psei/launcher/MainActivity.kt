@@ -107,11 +107,12 @@ class MainActivity : AppCompatActivity(), AppRepository.OnAppsChangedListener {
     private var lastAppliedDailyIntentCompleted: Boolean? = null
     private var lastAppliedDailyFocusHash: Int = -1
     private var lastAppliedShowScreenTime: Boolean? = null
+    private var lastScreenTimeQueryTime: Long = 0L
 
     private val timeDateReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
             loadTodayCalendarEvents(force = true)
-            renderScreenTimeGlance()
+            renderScreenTimeGlance(force = false)
             if (intent?.action == Intent.ACTION_DATE_CHANGED || intent?.action == Intent.ACTION_TIMEZONE_CHANGED) {
                 renderDailyIntent()
             }
@@ -301,8 +302,10 @@ class MainActivity : AppCompatActivity(), AppRepository.OnAppsChangedListener {
             renderDailyIntent()
         }
 
-        if (screenTimeVisibilityChanged || currentShowScreenTime) {
-            renderScreenTimeGlance()
+        if (screenTimeVisibilityChanged) {
+            renderScreenTimeGlance(force = true)
+        } else if (currentShowScreenTime) {
+            renderScreenTimeGlance(force = false)
         }
 
         lastAppliedShowCalendar = currentShowCalendar
@@ -1055,15 +1058,15 @@ class MainActivity : AppCompatActivity(), AppRepository.OnAppsChangedListener {
                 Toast.makeText(this, R.string.screen_time_permission_toast, Toast.LENGTH_LONG).show()
                 UsageHelper.openUsageAccessSettings(this)
             } else {
-                renderScreenTimeGlance()
+                renderScreenTimeGlance(force = true)
                 val currentText = binding.tvScreenTimeGlance.text.toString()
                 Toast.makeText(this, currentText, Toast.LENGTH_SHORT).show()
             }
         }
-        renderScreenTimeGlance()
+        renderScreenTimeGlance(force = true)
     }
 
-    private fun renderScreenTimeGlance() {
+    private fun renderScreenTimeGlance(force: Boolean = false) {
         lastAppliedShowScreenTime = prefs.showScreenTimeGlance
 
         if (!prefs.showScreenTimeGlance) {
@@ -1073,16 +1076,29 @@ class MainActivity : AppCompatActivity(), AppRepository.OnAppsChangedListener {
         binding.tvScreenTimeGlance.isVisible = true
 
         if (!UsageHelper.hasUsagePermission(this)) {
-            binding.tvScreenTimeGlance.text = getString(R.string.screen_time_tap_enable)
+            val prompt = getString(R.string.screen_time_tap_enable)
+            if (binding.tvScreenTimeGlance.text != prompt) {
+                binding.tvScreenTimeGlance.text = prompt
+            }
             return
         }
+
+        val now = System.currentTimeMillis()
+        if (!force && (now - lastScreenTimeQueryTime < 180_000L)) {
+            // Already up-to-date within 3 minutes; prevent background system_server query thrashing
+            return
+        }
+        lastScreenTimeQueryTime = now
 
         // Query UsageStats off the main thread to ensure 0 frame drops
         appRepo.executeInBackground {
             val minutes = UsageHelper.getTotalScreenTimeTodayMinutes(this@MainActivity)
+            val formatted = UsageHelper.formatScreenTime(minutes)
             runOnUiThread {
                 if (!isFinishing && !isDestroyed && prefs.showScreenTimeGlance) {
-                    binding.tvScreenTimeGlance.text = UsageHelper.formatScreenTime(minutes)
+                    if (binding.tvScreenTimeGlance.text != formatted) {
+                        binding.tvScreenTimeGlance.text = formatted
+                    }
                 }
             }
         }

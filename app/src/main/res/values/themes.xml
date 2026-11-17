@@ -9,6 +9,11 @@
         <item name="android:windowLightStatusBar">false</item>
         <item name="android:windowLightNavigationBar">false</item>
 
+        <!-- Window performance: enable wallpaper backing layer & eliminate transition jank -->
+        <item name="android:windowShowWallpaper">true</item>
+        <item name="android:windowAnimationStyle">@null</item>
+        <item name="android:windowDisablePreview">true</item>
+
         <!-- Custom semantic attributes -->
         <item name="launcherBackground">@color/bg_dark</item>
         <item name="primaryTextColor">@color/text_primary_dark</item>
@@ -19,7 +24,7 @@
     </style>
 
     <!-- Pure AMOLED Black Theme -->
-    <style name="Theme.MinimalLauncher.Dark" parent="Theme.AppCompat.NoActionBar">
+    <style name="Theme.MinimalLauncher.Dark" parent="Theme.MinimalLauncher">
         <item name="android:windowBackground">@color/bg_dark</item>
         <item name="android:colorBackground">@color/bg_dark</item>
         <item name="android:statusBarColor">@color/transparent</item>
@@ -36,7 +41,7 @@
     </style>
 
     <!-- Clean Light Theme -->
-    <style name="Theme.MinimalLauncher.Light" parent="Theme.AppCompat.NoActionBar">
+    <style name="Theme.MinimalLauncher.Light" parent="Theme.MinimalLauncher">
         <item name="android:windowBackground">@color/bg_light</item>
         <item name="android:colorBackground">@color/bg_light</item>
         <item name="android:statusBarColor">@color/transparent</item>
@@ -53,7 +58,7 @@
     </style>
 
     <!-- PRO: Warm Paper / Sepia Theme -->
-    <style name="Theme.MinimalLauncher.Sepia" parent="Theme.AppCompat.NoActionBar">
+    <style name="Theme.MinimalLauncher.Sepia" parent="Theme.MinimalLauncher">
         <item name="android:windowBackground">#F4EFEA</item>
         <item name="android:colorBackground">#F4EFEA</item>
         <item name="android:statusBarColor">@color/transparent</item>
@@ -70,7 +75,7 @@
     </style>
 
     <!-- PRO: Forest Night Theme -->
-    <style name="Theme.MinimalLauncher.Forest" parent="Theme.AppCompat.NoActionBar">
+    <style name="Theme.MinimalLauncher.Forest" parent="Theme.MinimalLauncher">
         <item name="android:windowBackground">#0B140E</item>
         <item name="android:colorBackground">#0B140E</item>
         <item name="android:statusBarColor">@color/transparent</item>
@@ -87,7 +92,7 @@
     </style>
 
     <!-- PRO: Charcoal Slate Theme -->
-    <style name="Theme.MinimalLauncher.Charcoal" parent="Theme.AppCompat.NoActionBar">
+    <style name="Theme.MinimalLauncher.Charcoal" parent="Theme.MinimalLauncher">
         <item name="android:windowBackground">#18191C</item>
         <item name="android:colorBackground">#18191C</item>
         <item name="android:statusBarColor">@color/transparent</item>
@@ -104,7 +109,7 @@
     </style>
 
     <!-- PRO: Cyberpunk Midnight Theme -->
-    <style name="Theme.MinimalLauncher.Cyber" parent="Theme.AppCompat.NoActionBar">
+    <style name="Theme.MinimalLauncher.Cyber" parent="Theme.MinimalLauncher">
         <item name="android:windowBackground">#050508</item>
         <item name="android:colorBackground">#050508</item>
         <item name="android:statusBarColor">@color/transparent</item>

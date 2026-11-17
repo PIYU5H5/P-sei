@@ -211,13 +211,20 @@ class Prefs private constructor(context: Context) {
     // DAILY FOCUS INTENT & SCREEN-TIME GLANCE (UP TO 3 ITEMS)
     // =========================================================================
 
+    private var cachedDailyFocusItems: List<DailyFocusItem>? = null
+    private var cachedDailyFocusDate: String? = null
+
     var showDailyIntent: Boolean
         get() = sp.getBoolean(KEY_SHOW_DAILY_INTENT, true)
         set(value) = sp.edit().putBoolean(KEY_SHOW_DAILY_INTENT, value).apply()
 
     fun getDailyFocusItems(): List<DailyFocusItem> {
-        val savedDate = dailyIntentDate
         val today = getTodayDateString()
+        if (cachedDailyFocusItems != null && cachedDailyFocusDate == today) {
+            return cachedDailyFocusItems!!
+        }
+
+        val savedDate = dailyIntentDate
         val rawJson = sp.getString(KEY_DAILY_FOCUS_ITEMS, null)
 
         val items = mutableListOf<DailyFocusItem>()
@@ -253,23 +260,30 @@ class Prefs private constructor(context: Context) {
             val uncompleted = items.filter { !it.isCompleted }.take(3).toMutableList()
             saveDailyFocusItems(uncompleted)
             dailyIntentDate = today
+            cachedDailyFocusItems = uncompleted
+            cachedDailyFocusDate = today
             return uncompleted
         }
 
-        return items.take(3)
+        val result = items.take(3)
+        cachedDailyFocusItems = result
+        cachedDailyFocusDate = today
+        return result
     }
 
     fun saveDailyFocusItems(items: List<DailyFocusItem>) {
+        val filtered = items.take(3).filter { it.text.isNotBlank() }
+        cachedDailyFocusItems = filtered
+        cachedDailyFocusDate = getTodayDateString()
+
         val jsonArray = JSONArray()
-        for (item in items.take(3)) {
-            if (item.text.isNotBlank()) {
-                val obj = JSONObject().apply {
-                    put("id", item.id)
-                    put("text", item.text.trim())
-                    put("done", item.isCompleted)
-                }
-                jsonArray.put(obj)
+        for (item in filtered) {
+            val obj = JSONObject().apply {
+                put("id", item.id)
+                put("text", item.text.trim())
+                put("done", item.isCompleted)
             }
+            jsonArray.put(obj)
         }
         sp.edit()
             .putString(KEY_DAILY_FOCUS_ITEMS, jsonArray.toString())
@@ -297,6 +311,8 @@ class Prefs private constructor(context: Context) {
     }
 
     fun clearDailyFocusItems() {
+        cachedDailyFocusItems = emptyList()
+        cachedDailyFocusDate = getTodayDateString()
         sp.edit()
             .remove(KEY_DAILY_FOCUS_ITEMS)
             .remove(KEY_DAILY_INTENT_TEXT)

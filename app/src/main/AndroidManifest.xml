@@ -17,6 +17,9 @@
         android:name="android.permission.PACKAGE_USAGE_STATS"
         tools:ignore="ProtectedPermissions" />
 
+    <!-- Pure Black System Wallpaper Sync (Terminates OEM live wallpapers to eliminate Recents blur lag) -->
+    <uses-permission android:name="android.permission.SET_WALLPAPER" />
+
     <!--
         Android 11+ (API 30+) Package Visibility requirement.
         Using a focused <queries> block for LAUNCHER intents avoids needing the high-risk

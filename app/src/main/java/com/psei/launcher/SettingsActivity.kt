@@ -31,6 +31,7 @@ import com.psei.launcher.data.AppModel
 import com.psei.launcher.data.AppRepository
 import com.psei.launcher.data.Prefs
 import com.psei.launcher.data.UsageHelper
+import com.psei.launcher.data.WallpaperHelper
 import com.psei.launcher.databinding.ActivitySettingsBinding
 import com.psei.launcher.databinding.DialogAppPickerBinding
 import com.psei.launcher.databinding.DialogKansoProBinding
@@ -130,6 +131,16 @@ class SettingsActivity : AppCompatActivity() {
         // Theme
         binding.rowTheme.setOnClickListener {
             showThemeDialog()
+        }
+
+        binding.rowBlackWallpaper.setOnClickListener {
+            val success = WallpaperHelper.setPureBlackWallpaper(this)
+            if (success) {
+                prefs.isBlackWallpaperSynced = true
+                Toast.makeText(this, "Pure Black Wallpaper synced! Recents blur lag eliminated. 🌿", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(this, "Could not set wallpaper.", Toast.LENGTH_SHORT).show()
+            }
         }
 
         // Text Size

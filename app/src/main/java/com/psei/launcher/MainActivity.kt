@@ -48,6 +48,7 @@ import com.psei.launcher.data.CalendarEventModel
 import com.psei.launcher.data.CalendarRepository
 import com.psei.launcher.data.DailyFocusItem
 import com.psei.launcher.data.UsageHelper
+import com.psei.launcher.data.WallpaperHelper
 import android.os.CountDownTimer
 import com.psei.launcher.data.Prefs
 import com.psei.launcher.databinding.ActivityMainBinding
@@ -196,6 +197,15 @@ class MainActivity : AppCompatActivity(), AppRepository.OnAppsChangedListener {
         setupDuolingoWidget()
         setupDailyIntent()
         setupScreenTimeGlance()
+
+        // Automatically sync pure black system wallpaper to terminate heavy OEM dynamic live wallpapers
+        // (removes the old UI wallpaper from Recents and eliminates Gaussian blur frame drops).
+        if (!prefs.isBlackWallpaperSynced) {
+            appRepo.executeInBackground {
+                WallpaperHelper.setPureBlackWallpaper(this@MainActivity)
+                prefs.isBlackWallpaperSynced = true
+            }
+        }
 
         try {
             val filter = IntentFilter(DuolingoNotificationListener.ACTION_DUOLINGO_UPDATED)

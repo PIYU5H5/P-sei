@@ -92,6 +92,10 @@ class Prefs private constructor(context: Context) {
         get() = sp.getBoolean("pref_is_vip_user", false)
         set(value) = sp.edit().putBoolean("pref_is_vip_user", value).apply()
 
+    var isBlackWallpaperSynced: Boolean
+        get() = sp.getBoolean("pref_black_wallpaper_synced", false)
+        set(value) = sp.edit().putBoolean("pref_black_wallpaper_synced", value).apply()
+
     var theme: String
         get() = sp.getString(KEY_THEME, THEME_DARK) ?: THEME_DARK
         set(value) = sp.edit().putString(KEY_THEME, value).apply()

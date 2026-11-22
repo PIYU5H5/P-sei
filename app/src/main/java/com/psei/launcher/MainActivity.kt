@@ -23,11 +23,13 @@ import android.provider.Settings
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.Gravity
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import android.view.WindowManager
+import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import android.widget.Toast
@@ -1163,6 +1165,11 @@ class MainActivity : AppCompatActivity(), AppRepository.OnAppsChangedListener {
                 tvSlotName.setOnClickListener {
                     launchApp(assignedApp)
                 }
+                tvSlotName.setOnLongClickListener {
+                    vibrateTick()
+                    showAppActionsDialog(assignedApp, homeSlotIndex = i)
+                    true
+                }
             } else if (!assignedKey.isNullOrBlank()) {
                 // If assigned app is not yet resolved, show its saved custom name or last known label
                 val savedCustom = prefs.getCustomAppName(assignedKey)
@@ -1175,18 +1182,22 @@ class MainActivity : AppCompatActivity(), AppRepository.OnAppsChangedListener {
                     if (launchIntent != null) startActivity(launchIntent)
                     else openSlotReassignPicker(i)
                 }
+                tvSlotName.setOnLongClickListener {
+                    vibrateTick()
+                    openSlotReassignPicker(i)
+                    true
+                }
             } else {
                 tvSlotName.text = getString(R.string.slot_empty)
                 tvSlotName.alpha = 0.4f
                 tvSlotName.setOnClickListener {
                     openSlotReassignPicker(i)
                 }
-            }
-
-            tvSlotName.setOnLongClickListener {
-                vibrateTick()
-                openSlotReassignPicker(i)
-                true
+                tvSlotName.setOnLongClickListener {
+                    vibrateTick()
+                    openSlotReassignPicker(i)
+                    true
+                }
             }
         }
     }
@@ -1256,57 +1267,13 @@ class MainActivity : AppCompatActivity(), AppRepository.OnAppsChangedListener {
     private var mindfulTimer: CountDownTimer? = null
 
     fun launchApp(app: AppModel) {
-        // 1. App Screen-Time Limit Check (Pro Digital Detox)
-        val limitMinutes = prefs.getAppScreenTimeLimit(app.packageName)
-        if (prefs.isProUser && limitMinutes > 0 && !prefs.isAppSnoozed(app.packageName)) {
-            if (UsageHelper.hasUsagePermission(this)) {
-                val usedMinutes = UsageHelper.getTodayUsageMinutes(this, app.packageName)
-                if (usedMinutes >= limitMinutes) {
-                    showGentleLockoutDialog(app, usedMinutes, limitMinutes)
-                    return
-                }
-            }
-        }
-
-        // 2. Mindful Delay Check (Pro Digital Detox)
+        // Mindful Delay Check (if configured by user)
         if (prefs.isMindfulApp(app.packageName)) {
             showMindfulDelayDialog(app)
             return
         }
 
         executeLaunch(app)
-    }
-
-    private fun showGentleLockoutDialog(app: AppModel, usedMinutes: Int, limitMinutes: Int) {
-        val dialog = Dialog(this)
-        val dialogBinding = DialogGentleLockoutBinding.inflate(layoutInflater)
-        dialog.setContentView(dialogBinding.root)
-        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        dialog.window?.setLayout(
-            ViewGroup.LayoutParams.MATCH_PARENT,
-            ViewGroup.LayoutParams.WRAP_CONTENT
-        )
-
-        dialogBinding.tvLockoutMessage.text = "You've used ${app.label} for ${usedMinutes}m today.\nYour daily limit is ${limitMinutes}m.\n\nTake a gentle break and recharge."
-
-        dialogBinding.btnStepAway.setOnClickListener {
-            dialog.dismiss()
-            Toast.makeText(this, "Proud of you for stepping away! 🌿", Toast.LENGTH_SHORT).show()
-        }
-
-        dialogBinding.btnSnoozeEmergency.setOnClickListener {
-            dialog.dismiss()
-            prefs.snoozeAppLimit(app.packageName, 5)
-            Toast.makeText(this, "5 extra minutes granted. Use them mindfully!", Toast.LENGTH_SHORT).show()
-            if (prefs.isMindfulApp(app.packageName)) {
-                showMindfulDelayDialog(app)
-            } else {
-                executeLaunch(app)
-            }
-        }
-
-        activeDialog = dialog
-        dialog.show()
     }
 
     private fun executeLaunch(app: AppModel) {
@@ -1565,10 +1532,10 @@ class MainActivity : AppCompatActivity(), AppRepository.OnAppsChangedListener {
     }
 
     /**
-     * Long-press menu on an app in the drawer:
-     * Rename, Hide, App info, Uninstall.
+     * Long-press menu on an app in the drawer or on home screen:
+     * Rename, Hide, App info, Uninstall, and home slot controls.
      */
-    private fun showAppActionsDialog(app: AppModel) {
+    private fun showAppActionsDialog(app: AppModel, homeSlotIndex: Int? = null) {
         val dialog = Dialog(this)
         val dialogBinding = DialogAppActionsBinding.inflate(layoutInflater)
         dialog.setContentView(dialogBinding.root)
@@ -1586,51 +1553,39 @@ class MainActivity : AppCompatActivity(), AppRepository.OnAppsChangedListener {
             showRenameDialog(app)
         }
 
-        // 2. Mindful Delay (Pro Digital Detox)
-        val isCurrentlyMindful = prefs.mindfulPackages.contains(app.packageName)
-        dialogBinding.actionMindfulDelay.text = if (isCurrentlyMindful) {
-            "Remove Mindful Delay 🧘"
+        // Home slot specific options
+        if (homeSlotIndex != null) {
+            dialogBinding.actionChangeSlot.isVisible = true
+            dialogBinding.actionChangeSlot.setOnClickListener {
+                dialog.dismiss()
+                openSlotReassignPicker(homeSlotIndex)
+            }
+
+            dialogBinding.actionRemoveFromHome.isVisible = true
+            dialogBinding.actionRemoveFromHome.setOnClickListener {
+                dialog.dismiss()
+                prefs.setHomeSlot(homeSlotIndex, null)
+                renderHomeSlots()
+                Toast.makeText(this, "Removed from Home", Toast.LENGTH_SHORT).show()
+            }
+
+            dialogBinding.actionHide.isVisible = false
         } else {
-            "Mindful Delay (Pause & Breathe) 🧘"
-        }
-        dialogBinding.actionMindfulDelay.setOnClickListener {
-            dialog.dismiss()
-            if (!prefs.isProUser) {
-                showProShowcaseDialog("Mindful Delay is a P-Sei Pro feature. Take control of distracting apps with intentional breathing breaks.")
-                return@setOnClickListener
-            }
-            val nowMindful = prefs.toggleMindfulApp(app.packageName)
-            if (nowMindful) {
-                Toast.makeText(this, "${app.label} will now require a mindful pause 🧘", Toast.LENGTH_SHORT).show()
-            } else {
-                Toast.makeText(this, "Mindful pause removed for ${app.label}", Toast.LENGTH_SHORT).show()
-            }
+            dialogBinding.actionChangeSlot.isVisible = false
+            dialogBinding.actionRemoveFromHome.isVisible = false
+            dialogBinding.actionHide.isVisible = true
         }
 
-        // 3. Screen-Time Limit (Pro Digital Detox)
-        val currentLimit = prefs.getAppScreenTimeLimit(app.packageName)
-        dialogBinding.actionScreenTimeLimit.text = if (currentLimit > 0) {
-            "Daily Limit: ${currentLimit}m ⏳"
-        } else {
-            "Daily Screen-Time Limit ⏳"
-        }
-        dialogBinding.actionScreenTimeLimit.setOnClickListener {
-            dialog.dismiss()
-            if (!prefs.isProUser) {
-                showProShowcaseDialog("App Screen-Time Limits with gentle lockouts are a P-Sei Pro feature.")
-                return@setOnClickListener
-            }
-            if (!UsageHelper.hasUsagePermission(this)) {
-                showUsageAccessPromptDialog()
-            } else {
-                showSetLimitDialog(app)
-            }
-        }
-
-        // 4. Hide
+        // 2. Hide from drawer
         dialogBinding.actionHide.setOnClickListener {
             dialog.dismiss()
             prefs.setAppHidden(app.componentKey, true)
+            // Immediately update drawer & home screen without waiting for background thread
+            val hiddenKeys = prefs.hiddenPackages
+            val visibleApps = appRepo.getCachedApps().filterNot { hiddenKeys.contains(it.componentKey) }
+            drawerAdapter.submitList(visibleApps, binding.etSearch.text?.toString().orEmpty())
+            renderHomeSlots()
+            updateShortcutsText()
             appRepo.reloadAppsAsync()
             Toast.makeText(this, R.string.app_hidden_toast, Toast.LENGTH_SHORT).show()
         }
@@ -1639,13 +1594,18 @@ class MainActivity : AppCompatActivity(), AppRepository.OnAppsChangedListener {
         dialogBinding.actionInfo.setOnClickListener {
             dialog.dismiss()
             try {
-                val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
-                    data = Uri.fromParts("package", app.packageName, null)
-                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                }
-                startActivity(intent)
+                val launcherApps = getSystemService(Context.LAUNCHER_APPS_SERVICE) as LauncherApps
+                launcherApps.startAppDetailsActivity(app.componentName, app.userHandle, null, null)
             } catch (e: Exception) {
-                Toast.makeText(this, "Could not open App Info", Toast.LENGTH_SHORT).show()
+                try {
+                    val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+                        data = Uri.fromParts("package", app.packageName, null)
+                        addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    }
+                    startActivity(intent)
+                } catch (e2: Exception) {
+                    Toast.makeText(this, "Could not open App Info", Toast.LENGTH_SHORT).show()
+                }
             }
         }
 
@@ -1654,11 +1614,23 @@ class MainActivity : AppCompatActivity(), AppRepository.OnAppsChangedListener {
             dialog.dismiss()
             try {
                 val intent = Intent(Intent.ACTION_DELETE).apply {
-                    data = Uri.fromParts("package", app.packageName, null)
+                    data = Uri.parse("package:${app.packageName}")
+                    putExtra(Intent.EXTRA_RETURN_RESULT, true)
+                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 }
                 startActivity(intent)
             } catch (e: Exception) {
-                Toast.makeText(this, "Could not uninstall app", Toast.LENGTH_SHORT).show()
+                try {
+                    @Suppress("DEPRECATION")
+                    val fallbackIntent = Intent(Intent.ACTION_UNINSTALL_PACKAGE).apply {
+                        data = Uri.parse("package:${app.packageName}")
+                        putExtra(Intent.EXTRA_RETURN_RESULT, true)
+                        addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    }
+                    startActivity(fallbackIntent)
+                } catch (e2: Exception) {
+                    Toast.makeText(this, "Could not uninstall ${app.label}", Toast.LENGTH_SHORT).show()
+                }
             }
         }
 
@@ -1675,13 +1647,35 @@ class MainActivity : AppCompatActivity(), AppRepository.OnAppsChangedListener {
             ViewGroup.LayoutParams.MATCH_PARENT,
             ViewGroup.LayoutParams.WRAP_CONTENT
         )
+        dialog.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE)
 
         dialogBinding.etRename.setText(app.label)
         dialogBinding.etRename.setSelection(dialogBinding.etRename.text.length)
+        dialogBinding.etRename.requestFocus()
+
+        val saveAction = {
+            val newName = dialogBinding.etRename.text.toString().trim()
+            dialog.dismiss()
+            val finalName = if (newName.isEmpty() || newName == app.originalLabel) null else newName
+            appRepo.updateCustomLabel(app.componentKey, finalName)
+
+            // Clear search so the newly renamed app is immediately visible in drawer
+            binding.etSearch.text?.clear()
+
+            // Synchronously update drawer adapter and home slots
+            val hiddenKeys = prefs.hiddenPackages
+            val visibleApps = appRepo.getCachedApps().filterNot { hiddenKeys.contains(it.componentKey) }
+            drawerAdapter.submitList(visibleApps, "")
+            renderHomeSlots()
+            updateShortcutsText()
+
+            val msg = if (finalName != null) "Renamed to \"$finalName\"" else "Reset to default name"
+            Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
+        }
 
         dialogBinding.btnResetRename.setOnClickListener {
-            dialog.dismiss()
-            appRepo.updateCustomLabel(app.componentKey, null)
+            dialogBinding.etRename.setText(app.originalLabel)
+            saveAction()
         }
 
         dialogBinding.btnCancelRename.setOnClickListener {
@@ -1689,57 +1683,20 @@ class MainActivity : AppCompatActivity(), AppRepository.OnAppsChangedListener {
         }
 
         dialogBinding.btnSaveRename.setOnClickListener {
-            val newName = dialogBinding.etRename.text.toString().trim()
-            dialog.dismiss()
-            appRepo.updateCustomLabel(
-                app.componentKey,
-                if (newName.isEmpty() || newName == app.originalLabel) null else newName
-            )
+            saveAction()
+        }
+
+        dialogBinding.etRename.setOnEditorActionListener { _, actionId, event ->
+            if (actionId == EditorInfo.IME_ACTION_DONE || (event != null && event.keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_DOWN)) {
+                saveAction()
+                true
+            } else {
+                false
+            }
         }
 
         activeDialog = dialog
         dialog.show()
-    }
-
-    private fun showSetLimitDialog(app: AppModel) {
-        val currentLimit = prefs.getAppScreenTimeLimit(app.packageName)
-        val limits = intArrayOf(0, 15, 30, 45, 60, 90, 120)
-        val options = arrayOf(
-            "None (No limit)",
-            "15 minutes",
-            "30 minutes",
-            "45 minutes",
-            "1 hour (60m)",
-            "1.5 hours (90m)",
-            "2 hours (120m)"
-        )
-        val currentIdx = limits.indexOf(currentLimit).let { if (it >= 0) it else 0 }
-
-        AlertDialog.Builder(this)
-            .setTitle("Daily Limit for ${app.label} ⏳")
-            .setSingleChoiceItems(options, currentIdx) { dialog, which ->
-                val chosen = limits[which]
-                prefs.setAppScreenTimeLimit(app.packageName, chosen)
-                if (chosen > 0) {
-                    Toast.makeText(this, "Daily limit set to ${chosen}m for ${app.label}", Toast.LENGTH_SHORT).show()
-                } else {
-                    Toast.makeText(this, "Daily limit removed for ${app.label}", Toast.LENGTH_SHORT).show()
-                }
-                dialog.dismiss()
-            }
-            .setNegativeButton(R.string.cancel, null)
-            .show()
-    }
-
-    private fun showUsageAccessPromptDialog() {
-        AlertDialog.Builder(this)
-            .setTitle("Usage Access Required ⏳")
-            .setMessage("To track daily screen time and enforce gentle lockouts, P-Sei needs Usage Access permission.")
-            .setPositiveButton("Open Settings") { _, _ ->
-                UsageHelper.openUsageAccessSettings(this)
-            }
-            .setNegativeButton(R.string.cancel, null)
-            .show()
     }
 
     private fun openSlotReassignPicker(slotIndex: Int) {

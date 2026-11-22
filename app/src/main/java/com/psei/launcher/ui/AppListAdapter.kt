@@ -19,10 +19,6 @@ class AppListAdapter(
     private var displayedApps: List<AppModel> = emptyList()
     private var currentTextSizeSp: Float = 20f
 
-    init {
-        setHasStableIds(true)
-    }
-
     fun submitList(apps: List<AppModel>, currentQuery: String = "") {
         allApps = apps
         filter(currentQuery)
@@ -44,10 +40,8 @@ class AppListAdapter(
                 app.label.contains(trimmed, ignoreCase = true)
             }
         }
-        if (displayedApps != newList) {
-            displayedApps = newList
-            notifyDataSetChanged()
-        }
+        displayedApps = newList
+        notifyDataSetChanged()
     }
 
     fun getDisplayedApps(): List<AppModel> = displayedApps

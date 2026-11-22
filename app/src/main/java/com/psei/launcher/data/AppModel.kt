@@ -28,10 +28,10 @@ data class AppModel(
         get() = "$packageName/$activityName"
 
     /**
-     * Stable ID for RecyclerView recycling optimizations.
+     * Stable ID for RecyclerView recycling optimizations including label changes.
      */
     val stableId: Long
-        get() = componentKey.hashCode().toLong()
+        get() = "$componentKey/$label".hashCode().toLong()
 
     /**
      * Target component name for explicit intent launching.

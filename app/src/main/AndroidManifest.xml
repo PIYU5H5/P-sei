@@ -20,6 +20,9 @@
     <!-- Pure Black System Wallpaper Sync (Terminates OEM live wallpapers to eliminate Recents blur lag) -->
     <uses-permission android:name="android.permission.SET_WALLPAPER" />
 
+    <!-- Allows launcher to trigger app uninstallation dialogs on Android 8.0+ / 11+ -->
+    <uses-permission android:name="android.permission.REQUEST_DELETE_PACKAGES" />
+
     <!--
         Android 11+ (API 30+) Package Visibility requirement.
         Using a focused <queries> block for LAUNCHER intents avoids needing the high-risk

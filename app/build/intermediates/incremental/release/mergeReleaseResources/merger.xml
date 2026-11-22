@@ -2736,7 +2736,6 @@
         <item name="android:windowLightNavigationBar">false</item>
 
         
-        <item name="android:windowShowWallpaper">true</item>
         <item name="android:windowAnimationStyle">@null</item>
         <item name="android:windowDisablePreview">true</item>
 

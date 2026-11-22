@@ -16890,7 +16890,7 @@ androidx.appcompat.app.AlertDialog$Builder:
     public static androidx.appcompat.app.AlertDialog$Builder setItems()
     public static androidx.appcompat.app.AlertDialog$Builder setMessage()
     public static androidx.appcompat.app.AlertDialog$Builder setMultiChoiceItems()
-    public final void setNegativeButton(java.lang.String,com.psei.launcher.SettingsActivity$$InternalSyntheticLambda$3$5ec6ac7c7dc9a44b282e21e4ed497c577dc4c8c0d03ee6b53b77ebc2bb50d701$1)
+    public final void setNegativeButton(java.lang.String,com.psei.launcher.SettingsActivity$$InternalSyntheticLambda$3$28f25194283f9eb6dfba867461c90f56afe8343d915553017f0098834564f083$1)
     public static androidx.appcompat.app.AlertDialog$Builder setOnKeyListener()
     public final void setPositiveButton(java.lang.String,android.content.DialogInterface$OnClickListener)
     public static androidx.appcompat.app.AlertDialog$Builder setSingleChoiceItems()
@@ -22818,6 +22818,8 @@ com.psei.launcher.HiddenAppsActivity:
     public static void setupRecyclerView$1()
 com.psei.launcher.MainActivity$loadTodayCalendarEvents$1:
     public final void invoke$1()
+com.psei.launcher.MainActivity$onCreate$1:
+    public final void invoke$1()
 com.psei.launcher.MainActivity$openAppPickerForShortcut$pickerAdapter$1:
     public final void invoke()
 com.psei.launcher.MainActivity$openSlotReassignPicker$pickerAdapter$1:
@@ -22949,11 +22951,13 @@ com.psei.launcher.data.Prefs:
     public final boolean getShowScreenTimeGlance()
     public static boolean isAppSnoozed()
     public final boolean isBiometricLockEnabled()
+    public static boolean isBlackWallpaperSynced()
     public final boolean isMindfulDelayEnabled()
     public static boolean isVipUser()
     public static void setAutoLaunchSingleResult()
     public static void setAutoOpenKeyboard()
     public static void setBiometricLockEnabled()
+    public final void setBlackWallpaperSynced()
     public static void setCustomAppName()
     public static void setDailyIntentDate()
     public static void setDuolingoLastPracticeDate()
@@ -22978,6 +22982,7 @@ com.psei.launcher.data.UsageHelper:
     public static java.lang.String formatScreenTime()
     public static int getTodayUsageMinutes()
     public static int getTotalScreenTimeTodayMinutes()
+com.psei.launcher.data.WallpaperHelper
 com.psei.launcher.databinding.ActivityHiddenAppsBinding:
     public final android.widget.LinearLayout hiddenAppsRoot
     public static android.widget.LinearLayout getRoot()

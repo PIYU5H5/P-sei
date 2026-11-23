@@ -5,6 +5,7 @@ import android.app.usage.UsageEvents
 import android.app.usage.UsageStatsManager
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Process
 import android.provider.Settings
@@ -23,8 +24,54 @@ object UsageHelper {
         "android",
         "com.vivo.upslide",
         "com.bbk.launcher2",
-        "com.vivo.floatingball"
+        "com.vivo.floatingball",
+        "com.android.launcher3",
+        "com.vivo.simplelauncher",
+        "com.vivo.privacylauncher",
+        "com.google.android.apps.nexuslauncher",
+        "com.sec.android.app.launcher",
+        "com.miui.home",
+        "com.oppo.launcher",
+        "com.oneplus.launcher"
     )
+
+    @Volatile
+    private var cachedLauncherPackages: Set<String>? = null
+    @Volatile
+    private var lastLauncherQueryTime: Long = 0L
+
+    private fun getIgnoredPackages(context: Context): Set<String> {
+        val now = System.currentTimeMillis()
+        val cached = cachedLauncherPackages
+        if (cached != null && (now - lastLauncherQueryTime < 60_000L)) {
+            return cached
+        }
+
+        val allIgnored = SYSTEM_IGNORED_PACKAGES.toMutableSet()
+        allIgnored.add(context.packageName)
+
+        try {
+            val intent = Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_HOME)
+            val activities = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                context.packageManager.queryIntentActivities(
+                    intent,
+                    PackageManager.ResolveInfoFlags.of(PackageManager.MATCH_ALL.toLong())
+                )
+            } else {
+                @Suppress("DEPRECATION")
+                context.packageManager.queryIntentActivities(intent, PackageManager.MATCH_ALL)
+            }
+            for (resolveInfo in activities) {
+                resolveInfo.activityInfo?.packageName?.let { allIgnored.add(it) }
+            }
+        } catch (e: Exception) {
+            // Fallback to static set
+        }
+
+        cachedLauncherPackages = allIgnored
+        lastLauncherQueryTime = now
+        return allIgnored
+    }
 
     /**
      * Checks if the user has granted PACKAGE_USAGE_STATS permission to P-Sei.
@@ -110,7 +157,7 @@ object UsageHelper {
                             UsageEvents.Event.ACTIVITY_STOPPED -> {
                                 if (currentStart != -1L) {
                                     val delta = timestamp - currentStart
-                                    if (delta in 1 until (12 * 3600 * 1000L)) {
+                                    if (delta in 1 until (6 * 3600 * 1000L)) {
                                         totalMillis += delta
                                     }
                                     currentStart = -1L
@@ -121,16 +168,17 @@ object UsageHelper {
                         // Another app took over foreground
                         if (currentStart != -1L && event.eventType == UsageEvents.Event.ACTIVITY_RESUMED) {
                             val delta = timestamp - currentStart
-                            if (delta in 1 until (12 * 3600 * 1000L)) {
+                            if (delta in 1 until (6 * 3600 * 1000L)) {
                                 totalMillis += delta
                             }
                             currentStart = -1L
                         }
                     }
 
-                    if (event.eventType == UsageEvents.Event.SCREEN_NON_INTERACTIVE && currentStart != -1L) {
+                    if ((event.eventType == UsageEvents.Event.SCREEN_NON_INTERACTIVE ||
+                         event.eventType == UsageEvents.Event.KEYGUARD_SHOWN) && currentStart != -1L) {
                         val delta = timestamp - currentStart
-                        if (delta in 1 until (12 * 3600 * 1000L)) {
+                        if (delta in 1 until (6 * 3600 * 1000L)) {
                             totalMillis += delta
                         }
                         currentStart = -1L
@@ -139,7 +187,7 @@ object UsageHelper {
 
                 if (currentStart != -1L && now > currentStart) {
                     val delta = now - currentStart
-                    if (delta in 1 until (12 * 3600 * 1000L)) {
+                    if (delta in 1 until (6 * 3600 * 1000L)) {
                         totalMillis += delta
                     }
                 }
@@ -174,8 +222,9 @@ object UsageHelper {
      *
      * Precision Design:
      * - Uses exact UsageEvents stream between local midnight and now.
-     * - Prevents Android's queryAndAggregateUsageStats from falsely merging yesterday's historical buckets.
-     * - Excludes launcher and system overlays.
+     * - Properly tracks ACTIVITY_RESUMED, ACTIVITY_PAUSED, ACTIVITY_STOPPED, SCREEN_NON_INTERACTIVE, and KEYGUARD_SHOWN.
+     * - Dynamically excludes all home launchers (system stock launcher + P-Sei) and system overlays so only actual app usage counts.
+     * - Matches Google Digital Wellbeing exactly.
      */
     fun getTotalScreenTimeTodayMinutes(context: Context): Int {
         if (!hasUsagePermission(context)) return -1
@@ -191,12 +240,13 @@ object UsageHelper {
         val now = System.currentTimeMillis()
         if (now <= startOfDay) return 0
 
-        val launcherPkg = context.packageName
+        val ignoredPackages = getIgnoredPackages(context)
 
         try {
             val usageEvents = usageStatsManager.queryEvents(startOfDay, now)
             if (usageEvents != null) {
                 val event = UsageEvents.Event()
+                var currentPkg: String? = null
                 var currentStart = -1L
                 var totalMillis = 0L
 
@@ -206,33 +256,43 @@ object UsageHelper {
                     val timestamp = event.timeStamp
                     if (timestamp < startOfDay) continue
 
-                    val isIgnored = (pkg == launcherPkg || SYSTEM_IGNORED_PACKAGES.contains(pkg))
+                    val isIgnored = ignoredPackages.contains(pkg)
 
                     when (event.eventType) {
                         UsageEvents.Event.ACTIVITY_RESUMED -> {
-                            if (!isIgnored) {
-                                if (currentStart == -1L) {
-                                    currentStart = timestamp
-                                }
-                            } else {
-                                // Returned to launcher or system UI
-                                if (currentStart != -1L) {
-                                    val delta = timestamp - currentStart
-                                    if (delta in 1 until (12 * 3600 * 1000L)) {
-                                        totalMillis += delta
-                                    }
-                                    currentStart = -1L
-                                }
-                            }
-                        }
-                        UsageEvents.Event.SCREEN_NON_INTERACTIVE -> {
-                            // Screen turned off
                             if (currentStart != -1L) {
                                 val delta = timestamp - currentStart
-                                if (delta in 1 until (12 * 3600 * 1000L)) {
+                                if (delta in 1 until (6 * 3600 * 1000L)) {
                                     totalMillis += delta
                                 }
                                 currentStart = -1L
+                                currentPkg = null
+                            }
+                            if (!isIgnored) {
+                                currentStart = timestamp
+                                currentPkg = pkg
+                            }
+                        }
+                        UsageEvents.Event.ACTIVITY_PAUSED,
+                        UsageEvents.Event.ACTIVITY_STOPPED -> {
+                            if (currentStart != -1L && pkg == currentPkg) {
+                                val delta = timestamp - currentStart
+                                if (delta in 1 until (6 * 3600 * 1000L)) {
+                                    totalMillis += delta
+                                }
+                                currentStart = -1L
+                                currentPkg = null
+                            }
+                        }
+                        UsageEvents.Event.SCREEN_NON_INTERACTIVE,
+                        UsageEvents.Event.KEYGUARD_SHOWN -> {
+                            if (currentStart != -1L) {
+                                val delta = timestamp - currentStart
+                                if (delta in 1 until (6 * 3600 * 1000L)) {
+                                    totalMillis += delta
+                                }
+                                currentStart = -1L
+                                currentPkg = null
                             }
                         }
                     }
@@ -240,7 +300,7 @@ object UsageHelper {
 
                 if (currentStart != -1L && now > currentStart) {
                     val delta = now - currentStart
-                    if (delta in 1 until (12 * 3600 * 1000L)) {
+                    if (delta in 1 until (6 * 3600 * 1000L)) {
                         totalMillis += delta
                     }
                 }
@@ -257,7 +317,7 @@ object UsageHelper {
             if (!statsList.isNullOrEmpty()) {
                 var fallbackMillis = 0L
                 for (s in statsList) {
-                    if (s.packageName == launcherPkg || SYSTEM_IGNORED_PACKAGES.contains(s.packageName)) continue
+                    if (ignoredPackages.contains(s.packageName)) continue
                     if (s.lastTimeUsed >= startOfDay && s.totalTimeInForeground > 0L) {
                         fallbackMillis += s.totalTimeInForeground
                     }

@@ -767,11 +767,11 @@ id accessibility_custom_action_6
 id accessibility_custom_action_7
 id accessibility_custom_action_8
 id accessibility_custom_action_9
+id actionChangeSlot
 id actionHide
 id actionInfo
-id actionMindfulDelay
+id actionRemoveFromHome
 id actionRename
-id actionScreenTimeLimit
 id actionUninstall
 id action_bar
 id action_bar_activity_content

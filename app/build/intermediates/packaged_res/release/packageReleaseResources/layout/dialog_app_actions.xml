@@ -38,26 +38,28 @@
         android:textSize="17sp" />
 
     <TextView
-        android:id="@+id/actionMindfulDelay"
+        android:id="@+id/actionChangeSlot"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?android:attr/selectableItemBackground"
         android:paddingTop="14dp"
         android:paddingBottom="14dp"
-        android:text="Mindful Delay (Pause &amp; Breathe) 🧘"
+        android:text="Change app"
         android:textColor="?attr/primaryTextColor"
-        android:textSize="17sp" />
+        android:textSize="17sp"
+        android:visibility="gone" />
 
     <TextView
-        android:id="@+id/actionScreenTimeLimit"
+        android:id="@+id/actionRemoveFromHome"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?android:attr/selectableItemBackground"
         android:paddingTop="14dp"
         android:paddingBottom="14dp"
-        android:text="Daily Screen-Time Limit ⏳"
+        android:text="Remove from Home screen"
         android:textColor="?attr/primaryTextColor"
-        android:textSize="17sp" />
+        android:textSize="17sp"
+        android:visibility="gone" />
 
     <TextView
         android:id="@+id/actionHide"

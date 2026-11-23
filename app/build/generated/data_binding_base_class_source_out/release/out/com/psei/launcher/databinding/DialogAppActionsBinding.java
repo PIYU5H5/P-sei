@@ -20,19 +20,19 @@ public final class DialogAppActionsBinding implements ViewBinding {
   private final LinearLayout rootView;
 
   @NonNull
+  public final TextView actionChangeSlot;
+
+  @NonNull
   public final TextView actionHide;
 
   @NonNull
   public final TextView actionInfo;
 
   @NonNull
-  public final TextView actionMindfulDelay;
+  public final TextView actionRemoveFromHome;
 
   @NonNull
   public final TextView actionRename;
-
-  @NonNull
-  public final TextView actionScreenTimeLimit;
 
   @NonNull
   public final TextView actionUninstall;
@@ -40,16 +40,17 @@ public final class DialogAppActionsBinding implements ViewBinding {
   @NonNull
   public final TextView tvActionAppTitle;
 
-  private DialogAppActionsBinding(@NonNull LinearLayout rootView, @NonNull TextView actionHide,
-      @NonNull TextView actionInfo, @NonNull TextView actionMindfulDelay,
-      @NonNull TextView actionRename, @NonNull TextView actionScreenTimeLimit,
-      @NonNull TextView actionUninstall, @NonNull TextView tvActionAppTitle) {
+  private DialogAppActionsBinding(@NonNull LinearLayout rootView,
+      @NonNull TextView actionChangeSlot, @NonNull TextView actionHide,
+      @NonNull TextView actionInfo, @NonNull TextView actionRemoveFromHome,
+      @NonNull TextView actionRename, @NonNull TextView actionUninstall,
+      @NonNull TextView tvActionAppTitle) {
     this.rootView = rootView;
+    this.actionChangeSlot = actionChangeSlot;
     this.actionHide = actionHide;
     this.actionInfo = actionInfo;
-    this.actionMindfulDelay = actionMindfulDelay;
+    this.actionRemoveFromHome = actionRemoveFromHome;
     this.actionRename = actionRename;
-    this.actionScreenTimeLimit = actionScreenTimeLimit;
     this.actionUninstall = actionUninstall;
     this.tvActionAppTitle = tvActionAppTitle;
   }
@@ -81,6 +82,12 @@ public final class DialogAppActionsBinding implements ViewBinding {
     // This is done to optimize the compiled bytecode for size and performance.
     int id;
     missingId: {
+      id = R.id.actionChangeSlot;
+      TextView actionChangeSlot = ViewBindings.findChildViewById(rootView, id);
+      if (actionChangeSlot == null) {
+        break missingId;
+      }
+
       id = R.id.actionHide;
       TextView actionHide = ViewBindings.findChildViewById(rootView, id);
       if (actionHide == null) {
@@ -93,21 +100,15 @@ public final class DialogAppActionsBinding implements ViewBinding {
         break missingId;
       }
 
-      id = R.id.actionMindfulDelay;
-      TextView actionMindfulDelay = ViewBindings.findChildViewById(rootView, id);
-      if (actionMindfulDelay == null) {
+      id = R.id.actionRemoveFromHome;
+      TextView actionRemoveFromHome = ViewBindings.findChildViewById(rootView, id);
+      if (actionRemoveFromHome == null) {
         break missingId;
       }
 
       id = R.id.actionRename;
       TextView actionRename = ViewBindings.findChildViewById(rootView, id);
       if (actionRename == null) {
-        break missingId;
-      }
-
-      id = R.id.actionScreenTimeLimit;
-      TextView actionScreenTimeLimit = ViewBindings.findChildViewById(rootView, id);
-      if (actionScreenTimeLimit == null) {
         break missingId;
       }
 
@@ -123,9 +124,8 @@ public final class DialogAppActionsBinding implements ViewBinding {
         break missingId;
       }
 
-      return new DialogAppActionsBinding((LinearLayout) rootView, actionHide, actionInfo,
-          actionMindfulDelay, actionRename, actionScreenTimeLimit, actionUninstall,
-          tvActionAppTitle);
+      return new DialogAppActionsBinding((LinearLayout) rootView, actionChangeSlot, actionHide,
+          actionInfo, actionRemoveFromHome, actionRename, actionUninstall, tvActionAppTitle);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));

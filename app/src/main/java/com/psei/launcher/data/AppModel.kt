@@ -1,4 +1,4 @@
-﻿package com.psei.launcher.data
+package com.psei.launcher.data
 
 import android.content.ComponentName
 import android.os.Process

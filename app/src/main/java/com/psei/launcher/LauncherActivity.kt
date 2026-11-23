@@ -1,4 +1,4 @@
-﻿package com.psei.launcher
+package com.psei.launcher
 
 import android.app.Activity
 import android.content.Intent

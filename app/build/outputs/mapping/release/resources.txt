@@ -1,21 +1,19 @@
 Marking dimen:abc_dropdownitem_icon_width:2131099689 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
 Marking dimen:abc_dropdownitem_text_padding_left:2131099690 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
-Marking string:daily_intent_action_edit:2131624004 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
-Marking string:daily_intent_done:2131624013 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
-Marking string:daily_intent_delete_item:2131624010 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
-Marking string:daily_intent_clear_all:2131624008 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
 Marking id:btnClearOption:2131230806 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
 Marking id:etPickerSearch:2131230857 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
 Marking id:rvPickerApps:2131230950 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
 Marking id:tvPickerTitle:2131231044 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
 Marking layout:dialog_app_picker:2131427361 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
-Marking attr:primaryTextColor:2130903252 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
 Marking id:view_tree_lifecycle_owner:2131231065 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
 Marking id:view_tree_view_model_store_owner:2131231068 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
 Marking id:view_tree_saved_state_registry_owner:2131231067 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
 Marking layout:abc_action_menu_layout:2131427331 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
 Marking layout:abc_action_menu_item_layout:2131427330 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
-Marking string:calendar_permission_denied:2131623975 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
+Marking string:daily_intent_action_edit:2131624004 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
+Marking string:daily_intent_done:2131624013 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
+Marking string:daily_intent_delete_item:2131624010 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
+Marking string:daily_intent_clear_all:2131624008 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
 Marking id:btnBack:2131230796 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
 Marking id:btnDisableAccessibility:2131230811 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
 Marking id:cardAccessibilityWarning:2131230831 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
@@ -72,6 +70,7 @@ Marking id:tvShortcutSwipeRight:2131231057 reachable: referenced from E:\Coding\
 Marking id:tvTextSizeSummary:2131231059 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
 Marking id:tvThemeSummary:2131231060 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
 Marking layout:activity_settings:2131427358 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
+Marking attr:primaryTextColor:2130903252 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
 Marking attr:textColorSearchUrl:2130903308 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
 Marking id:edit_query:2131230851 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
 Marking attr:colorControlHighlight:2130903127 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
@@ -97,16 +96,7 @@ Marking color:abc_tint_btn_checkable:2131034131 reachable: referenced from E:\Co
 Marking drawable:abc_seekbar_thumb_material:2131165242 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
 Marking color:abc_tint_seek_thumb:2131034134 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
 Marking color:abc_tint_spinner:2131034135 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
-Marking id:visible_removing_fragment_view_tag:2131231069 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
-Marking animator:fragment_close_enter:2130837504 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
-Marking animator:fragment_close_exit:2130837505 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
-Marking animator:fragment_fade_enter:2130837506 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
-Marking animator:fragment_fade_exit:2130837507 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
-Marking animator:fragment_open_enter:2130837508 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
-Marking animator:fragment_open_exit:2130837509 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
 Marking id:pooling_container_listener_holder_tag:2131230913 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
-Marking id:tag_unhandled_key_event_manager:2131231004 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
-Marking id:tag_unhandled_key_listeners:2131231005 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
 Marking id:btnBackHidden:2131230797 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
 Marking id:hiddenHeader:2131230868 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
 Marking id:rvHiddenApps:2131230949 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
@@ -122,9 +112,7 @@ Marking string:common_google_play_services_install_button:2131623988 reachable: 
 Marking string:common_google_play_services_notification_ticker:2131623992 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
 Marking string:common_open_on_phone:2131624000 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
 Marking string:common_google_play_services_notification_channel_name:2131623991 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
-Marking id:btnUnhide:2131230828 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
-Marking id:tvHiddenAppName:2131231034 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
-Marking layout:item_hidden_app:2131427374 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
+Marking layout:item_home_slot:2131427375 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
 Marking attr:actionBarSize:2130903043 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
 Marking id:action_bar_activity_content:2131230766 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
 Marking id:action_bar_container:2131230767 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
@@ -132,6 +120,7 @@ Marking attr:actionOverflowMenuStyle:2130903072 reachable: referenced from E:\Co
 Marking layout:abc_list_menu_item_layout:2131427344 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
 Marking id:view_tree_on_back_pressed_dispatcher_owner:2131231066 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
 Marking attr:seekBarStyle:2130903270 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
+Marking id:tag_unhandled_key_listeners:2131231005 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
 Marking id:tag_accessibility_actions:2131230994 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
 Marking id:accessibility_action_clickable_span:2131230726 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
 Marking id:tag_accessibility_clickable_spans:2131230995 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
@@ -142,12 +131,13 @@ Marking dimen:fastscroll_default_thickness:2131099738 reachable: referenced from
 Marking dimen:fastscroll_minimum_range:2131099740 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
 Marking dimen:fastscroll_margin:2131099739 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
 Marking id:is_pooling_container_tag:2131230879 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
-Marking string:duolingo_not_installed:2131624024 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
-Marking id:tvEventBullet:2131231029 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
-Marking id:tvEventTime:2131231030 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
-Marking id:tvEventTitle:2131231031 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
-Marking layout:item_calendar_event:2131427372 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
+Marking id:btnFocusDone:2131230812 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
+Marking id:tvFocusIcon:2131231032 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
+Marking id:tvFocusText:2131231033 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
+Marking layout:item_daily_focus:2131427373 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
 Marking string:cancel:2131623983 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
+Marking string:accessibility_prompt:2131623963 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
+Marking string:device_admin_prompt:2131624021 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
 Marking attr:nestedScrollViewStyle:2130903238 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
 Marking id:tag_window_insets_animation_callback:2131231006 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
 Marking id:tag_on_apply_window_listener:2131230998 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
@@ -156,13 +146,11 @@ Marking id:tag_screen_reader_focusable:2131231001 reachable: referenced from E:\
 Marking id:tag_accessibility_heading:2131230996 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
 Marking id:tag_accessibility_pane_title:2131230997 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
 Marking id:tag_state_description:2131231002 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
-Marking id:btnCancelSecret:2131230804 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
-Marking id:btnUnlockSecret:2131230829 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
-Marking id:etSecretCode:2131230860 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
-Marking layout:dialog_secret_vip:2131427368 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
+Marking layout:item_app:2131427371 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
 Marking string:pref_shortcut_bottom_left:2131624055 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
 Marking string:pref_shortcut_bottom_right:2131624056 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
 Marking string:reset_default:2131624078 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
+Marking string:duolingo_not_installed:2131624024 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
 Marking string:reassign_slot:2131624075 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
 Marking string:daily_intent_reset:2131624018 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
 Marking drawable:ic_flame:2131165310 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
@@ -210,11 +198,12 @@ Marking drawable:abc_text_cursor_material:2131165253 reachable: referenced from 
 Marking drawable:abc_text_select_handle_left_mtrl:2131165254 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
 Marking drawable:abc_text_select_handle_middle_mtrl:2131165255 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
 Marking drawable:abc_text_select_handle_right_mtrl:2131165256 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
-Marking id:btnCancelMindful:2131230802 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
-Marking id:btnContinueMindful:2131230810 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
-Marking id:tvMindfulCountdown:2131231040 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
-Marking id:tvMindfulMessage:2131231042 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
-Marking layout:dialog_mindful_delay:2131427366 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
+Marking id:btnCancelRename:2131230803 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
+Marking id:btnResetRename:2131230820 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
+Marking id:btnSaveRename:2131230824 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
+Marking id:etRename:2131230858 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
+Marking id:tvRenameDialogTitle:2131231051 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
+Marking layout:dialog_rename:2131427367 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
 Marking string:pref_shortcut_swipe_left:2131624057 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
 Marking string:pref_shortcut_swipe_right:2131624058 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
 Marking string:pref_home_slots_count_summary:2131624050 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
@@ -238,21 +227,25 @@ Marking string:abc_searchview_description_search:2131623957 reachable: reference
 Marking layout:abc_search_dropdown_item_icons_2line:2131427352 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
 Marking dimen:abc_search_view_preferred_height:2131099702 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
 Marking dimen:abc_search_view_preferred_width:2131099703 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
-Marking string:pref_text_size:2131624067 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
-Marking string:pref_theme:2131624071 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
-Marking string:pref_home_slots_count:2131624049 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
-Marking string:pref_funtouch_help:2131624047 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
-Marking string:pref_lock_method:2131624051 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
+Marking string:app_hidden_toast:2131623973 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
 Marking style:Theme_AppCompat_Light:2131689730 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
 Marking id:topPanel:2131231016 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
 Marking id:buttonPanel:2131230830 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
 Marking id:contentPanel:2131230842 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
 Marking id:customPanel:2131230844 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
 Marking attr:checkboxStyle:2130903115 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
-Marking id:btnSnoozeEmergency:2131230826 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
-Marking id:btnStepAway:2131230827 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
-Marking id:tvLockoutMessage:2131231038 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
-Marking layout:dialog_gentle_lockout:2131427364 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
+Marking id:btnCloseProDialog:2131230808 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
+Marking id:btnPlanLifetime:2131230814 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
+Marking id:btnPlanMonthly:2131230815 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
+Marking id:btnPlanYearly:2131230816 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
+Marking id:btnRestorePurchases:2131230821 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
+Marking id:layoutPlans:2131230892 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
+Marking id:layoutProActive:2131230893 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
+Marking id:tvDialogProBadge:2131231024 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
+Marking id:tvPriceLifetime:2131231046 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
+Marking id:tvPriceMonthly:2131231047 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
+Marking id:tvPriceYearly:2131231048 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
+Marking layout:dialog_kanso_pro:2131427365 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
 Marking attr:dialogTheme:2130903147 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
 Marking attr:alertDialogTheme:2130903079 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
 Marking id:parentPanel:2131230910 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
@@ -278,6 +271,8 @@ Marking id:decor_content_parent:2131230846 reachable: referenced from E:\Coding\
 Marking layout:abc_screen_simple_overlay_action_mode:2131427350 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
 Marking layout:abc_screen_simple:2131427349 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
 Marking id:title:2131231012 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
+Marking string:calendar_permission_denied:2131623975 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
+Marking string:screen_time_permission_toast:2131624080 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
 Marking attr:toolbarStyle:2130903331 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
 Marking attr:toolbarNavigationButtonStyle:2130903330 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
 Marking attr:actionBarStyle:2130903045 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
@@ -298,14 +293,12 @@ Marking id:layoutIntentRow3:2131230891 reachable: referenced from E:\Coding\Laun
 Marking id:tvDailyIntentDialogSubtitle:2131231020 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
 Marking id:tvDailyIntentDialogTitle:2131231021 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
 Marking layout:dialog_daily_intent:2131427362 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
-Marking string:screen_time_permission_toast:2131624080 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
 Marking attr:dropDownListViewStyle:2130903164 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
-Marking string:daily_intent_completed:2131624009 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
-Marking id:actionHide:2131230759 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
-Marking id:actionInfo:2131230760 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
-Marking id:actionMindfulDelay:2131230761 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
-Marking id:actionRename:2131230762 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
-Marking id:actionScreenTimeLimit:2131230763 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
+Marking id:actionChangeSlot:2131230759 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
+Marking id:actionHide:2131230760 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
+Marking id:actionInfo:2131230761 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
+Marking id:actionRemoveFromHome:2131230762 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
+Marking id:actionRename:2131230763 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
 Marking id:actionUninstall:2131230764 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
 Marking id:tvActionAppTitle:2131231017 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
 Marking layout:dialog_app_actions:2131427360 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
@@ -358,10 +351,17 @@ Marking id:content:2131230841 reachable: referenced from E:\Coding\Launcher\app\
 Marking layout:abc_list_menu_item_radio:2131427345 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
 Marking layout:abc_list_menu_item_checkbox:2131427342 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
 Marking layout:abc_list_menu_item_icon:2131427343 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
+Marking id:tag_unhandled_key_event_manager:2131231004 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
 Marking id:tag_on_receive_content_mime_types:2131231000 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
 Marking id:tag_on_receive_content_listener:2131230999 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
+Marking id:visible_removing_fragment_view_tag:2131231069 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
+Marking animator:fragment_close_enter:2130837504 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
+Marking animator:fragment_close_exit:2130837505 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
+Marking animator:fragment_fade_enter:2130837506 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
+Marking animator:fragment_fade_exit:2130837507 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
+Marking animator:fragment_open_enter:2130837508 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
+Marking animator:fragment_open_exit:2130837509 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
 Marking attr:actionOverflowButtonStyle:2130903071 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
-Marking layout:item_home_slot:2131427375 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
 Marking dimen:abc_config_prefDialogWidth:2131099671 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
 Marking layout:abc_cascading_menu_item_layout:2131427339 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
 Marking layout:abc_popup_menu_header_item_layout:2131427346 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
@@ -378,19 +378,24 @@ Marking drawable:abc_vector_test:2131165262 reachable: referenced from E:\Coding
 Marking drawable:abc_seekbar_track_material:2131165244 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
 Marking drawable:abc_list_divider_mtrl_alpha:2131165221 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
 Marking drawable:abc_dialog_material_background:2131165203 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
-Marking id:btnFocusDone:2131230812 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
-Marking id:tvFocusIcon:2131231032 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
-Marking id:tvFocusText:2131231033 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
-Marking layout:item_daily_focus:2131427373 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
+Marking id:btnUnhide:2131230828 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
+Marking id:tvHiddenAppName:2131231034 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
+Marking layout:item_hidden_app:2131427374 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
+Marking string:pref_text_size:2131624067 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
+Marking string:pref_theme:2131624071 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
+Marking string:pref_home_slots_count:2131624049 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
+Marking string:pref_funtouch_help:2131624047 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
+Marking string:pref_lock_method:2131624051 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
 Marking id:spacer:2131230975 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
 Marking color:abc_decor_view_status_guard_light:2131034118 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
 Marking color:abc_decor_view_status_guard:2131034117 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
 Marking attr:ratingBarStyle:2130903259 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
 Marking layout:abc_popup_menu_item_layout:2131427347 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
-Marking string:device_admin_prompt:2131624021 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
-Marking string:accessibility_prompt:2131623963 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
 Marking drawable:common_full_open_on_phone:2131165283 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
-Marking layout:item_app:2131427371 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
+Marking id:tvEventBullet:2131231029 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
+Marking id:tvEventTime:2131231030 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
+Marking id:tvEventTitle:2131231031 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
+Marking layout:item_calendar_event:2131427372 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
 Marking string:common_google_play_services_updating_text:2131623998 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
 Marking string:common_google_play_services_unsupported_text:2131623994 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
 Marking string:common_google_play_services_enable_text:2131623986 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
@@ -401,27 +406,19 @@ Marking string:common_google_play_services_enable_title:2131623987 reachable: re
 Marking string:common_google_play_services_update_title:2131623997 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
 Marking string:common_google_play_services_install_title:2131623990 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
 Marking attr:checkedTextViewStyle:2130903116 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
-Marking id:btnCancelRename:2131230803 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
-Marking id:btnResetRename:2131230820 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
-Marking id:btnSaveRename:2131230824 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
-Marking id:etRename:2131230858 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
-Marking id:tvRenameDialogTitle:2131231051 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
-Marking layout:dialog_rename:2131427367 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
+Marking id:btnCancelSecret:2131230804 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
+Marking id:btnUnlockSecret:2131230829 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
+Marking id:etSecretCode:2131230860 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
+Marking layout:dialog_secret_vip:2131427368 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
 Marking bool:abc_action_bar_embed_tabs:2130968576 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
 Marking id:fragment_container_view_tag:2131230865 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
+Marking string:daily_intent_completed:2131624009 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
 Marking attr:buttonStyle:2130903108 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
-Marking id:btnCloseProDialog:2131230808 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
-Marking id:btnPlanLifetime:2131230814 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
-Marking id:btnPlanMonthly:2131230815 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
-Marking id:btnPlanYearly:2131230816 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
-Marking id:btnRestorePurchases:2131230821 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
-Marking id:layoutPlans:2131230892 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
-Marking id:layoutProActive:2131230893 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
-Marking id:tvDialogProBadge:2131231024 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
-Marking id:tvPriceLifetime:2131231046 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
-Marking id:tvPriceMonthly:2131231047 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
-Marking id:tvPriceYearly:2131231048 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
-Marking layout:dialog_kanso_pro:2131427365 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
+Marking id:btnCancelMindful:2131230802 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
+Marking id:btnContinueMindful:2131230810 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
+Marking id:tvMindfulCountdown:2131231040 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
+Marking id:tvMindfulMessage:2131231042 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
+Marking layout:dialog_mindful_delay:2131427366 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
 Marking style:Theme_AppCompat_Empty:2131689729 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
 Marking attr:actionModeStyle:2130903068 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
 Marking layout:abc_action_mode_close_item_material:2131427333 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
@@ -429,7 +426,6 @@ Marking id:action_mode_close_button:2131230780 reachable: referenced from E:\Cod
 Marking layout:abc_action_bar_title_item:2131427328 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
 Marking id:action_bar_title:2131230771 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
 Marking id:action_bar_subtitle:2131230770 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
-Marking string:app_hidden_toast:2131623973 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
 Marking attr:alpha:2130903081 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
 Marking attr:lStar:2130903208 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
 Marking id:special_effects_controller_view_tag:2131230976 reachable: referenced from E:\Coding\Launcher\app\build\intermediates\dex\release\minifyReleaseWithR8\classes.dex
@@ -505,8 +501,8 @@ removeItemAt
 forest
 setNextSelectedPositionInt
 role
-DETAILS_LIST
 emoji2.text.DefaultEmojiConfig
+DETAILS_LIST
 displayName
 pref_text_size
 android.settings.ACCESSIBILITY_SETTINGS
@@ -520,7 +516,6 @@ WIFI_P2P
 addFontWeightStyle
 EmojiCompat.EmojiCompatInitializer.run
 _
-android.intent.category.HOME
 a
 mobileSubtype
 7.1.1
@@ -541,12 +536,13 @@ kotlin.String
 originalExternalTransactionId
 n
 VERSION_NAME
-DRIVE_EXTERNAL_STORAGE_REQUIRED
 r
+DRIVE_EXTERNAL_STORAGE_REQUIRED
 event_id
 java.lang.Module
 androidx.lifecycle.BundlableSavedStat...
 DEVELOPER_ERROR
+package:
 discountDisplayInfo
 v
 com.vivo.permissionmanager
@@ -554,8 +550,8 @@ this$0
 x
 android:theme
 Loaders:
-layoutDailyIntentEmpty
 charcoal
+layoutDailyIntentEmpty
 requestTimeMs
 AzSCki82AwsLzKd5O8zo
 clientMetrics
@@ -577,8 +573,8 @@ btnClearDailyIntent
 android:style
 RESULT_OK
 ACTION_SCROLL_FORWARD
-SIGN_IN_REQUIRED
 androidx.core.view.inputmethod.Editor...
+SIGN_IN_REQUIRED
 nextRequestWaitMillis
 add
 eventUptimeMs
@@ -615,8 +611,8 @@ com.google.android.gms.common.interna...
 provider
 android.graphics.drawable.VectorDrawable
 ADDITIONAL_LOG_DETAILS
-end
 kotlinx.coroutines.main.delay
+end
 requestRelaunchActivity
 _delayed
 FIXED32_LIST_PACKED
@@ -690,8 +686,8 @@ kotlin.Long
 androidx.view.accessibility.Accessibi...
 ITEM_UNAVAILABLE
 java.lang.String
-product
 android.settings.APPLICATION_DETAILS_...
+product
 SOURCE_APP
 logSourceMetrics
 gzip
@@ -706,8 +702,8 @@ CONNECTED
 SUBS_MANAGEMENT_INTENT
 mMainThread
 packageNames
-UTC
 kotlin.collections.Collection
+UTC
 android.intent.action.TIME_SET
 btnAddFocusItem
 allDay
@@ -769,7 +765,6 @@ $appList
 API_NOT_CONNECTED
 priceCurrencyCode
 layoutDailyIntent
-android.intent.action.MAIN
 RECONNECTION_TIMED_OUT
 cyber
 DISCONNECTED
@@ -779,6 +774,7 @@ ATTACH
 setValue
 layout_inflater
 expandNotificationsPanel
+android.intent.extra.RETURN_RESULT
 context_id
 UNKNOWN
 BLUETOOTH
@@ -817,19 +813,19 @@ uptime_ms
 ACTION_SCROLL_DOWN
 INAPP_PURCHASE_DATA_LIST
 android.view.ViewRootImpl
-owner.viewModelStore
 $tmp0
+owner.viewModelStore
 input
 first_party
 pref_shortcut_bottom_left
 remoteInputs
 expirationTime
-anim
 REMOVE_FROZEN
+anim
 pref_mindful_packages
 pref_mindful_delay_seconds
-peekInt
 pref_shortcut_swipe_right
+peekInt
 apps_cache.json.tmp
 getHorizontallyScrolling
 Spinner
@@ -837,8 +833,8 @@ skusToReplace
 androidx.savedstate.Restarter
 logSourceName
 android.hardware.type.automotive
-additionalSkus
 $allApps
+additionalSkus
 FEATURE_NOT_SUPPORTED
 kotlin.collections.ListIterator
 GROUP
@@ -885,10 +881,11 @@ UINT32_LIST_PACKED
 suggest_intent_query
 CctTransportBackend
 search_suggest_query
-CANON_EQ
 androidx.core.view.inputmethod.Editor...
-ALTERNATIVE_BILLING_ONLY_DIALOG_INTENT
+CANON_EQ
+actionRemoveFromHome
 com.iqoo.secure
+ALTERNATIVE_BILLING_ONLY_DIALOG_INTENT
 UINT64
 UINT64_LIST
 FragmentManager
@@ -900,6 +897,7 @@ MESSAGE_LIST
 getDescriptor
 userHandle
 CLIENT_TELEMETRY
+actionHide
 string
 bool
 font_variation_settings
@@ -920,13 +918,13 @@ androidx.view.accessibility.Accessibi...
 ဉ ဉ᠌
 btnConnectCalendar
 SHOW
-networkType
 androidx.content.action.LOAD_EMOJI_FONT
+networkType
 events_dropped_count
 androidClientInfo
 Tiramisu
-android:view_state
 androidx.appcompat.app.AppLocalesMeta...
+android:view_state
 EXPIRED_OFFER_TOKEN
 SeekBar
 Dispatchers.Main
@@ -937,9 +935,9 @@ XB
 notify_manager
 subs:
 RatingBar
-pair
 generic
 launcherapps
+pair
 BOOL_LIST
 BOOL
 GoogleApiManager
@@ -1067,8 +1065,8 @@ package
 putInt
 com.android.vending
 android.speech.extra.RESULTS_PENDINGI...
-selfAttendeeStatus
 com.google.android.gms.signin
+selfAttendeeStatus
 done
 REASON_UNKNOWN
 CANCELLED
@@ -1144,8 +1142,8 @@ LOG_REASON
 androidx.lifecycle.LifecycleDispatche...
 kotlin.reflect.jvm.internal.Reflectio...
 getSuppressed
-pref_mindful_delay_enabled
 DOUBLE_LIST_PACKED
+pref_mindful_delay_enabled
 pref_lock_method
 HSPA
 proxyPackageVersion
@@ -1182,6 +1180,7 @@ RESPONSE_CODE
 android.app.extra.ADD_EXPLANATION
 common_google_play_services_resolutio...
 Set
+android.intent.action.UNINSTALL_PACKAGE
 Theme.Dialog.Alert
 getResPackage
 icon
@@ -1244,6 +1243,7 @@ ACTION_ACCESSIBILITY_FOCUS
 tvEmptyApps
 CASE_INSENSITIVE_ORDER
 font_weight
+actionChangeSlot
 SignInCoordinator
 startTimeMillis
 ACTION_LONG_CLICK
@@ -1361,11 +1361,12 @@ ACTION_HIDE_TOOLTIP
 com.android.internal.view.menu.MenuBu...
 mH
 EmojiCompat.MetadataRepo.create
+$saveAction
 RESUMED
 PROXY_PACKAGE
 KEY_COMPONENT_ACTIVITY_PENDING_RESULT
-android.speech.action.RECOGNIZE_SPEECH
 application_locales
+android.speech.action.RECOGNIZE_SPEECH
 android.permission.READ_CALENDAR
 com.google.android.gms.availability
 START_CONNECTION
@@ -1427,8 +1428,8 @@ android.settings.USAGE_ACCESS_SETTINGS
 proxyPackage
 android.widget.
 _LifecycleAdapter
-bytes
 initializers
+bytes
 SERVICE_UNAVAILABLE
 mOnKeyListener
 thumbPos
@@ -1463,8 +1464,8 @@ endTimeMillis
 defaultCreationExtras
 RESOLUTION_ACTIVITY_NOT_FOUND
 setCurrentState
-Close
 SOURCE_DRAG_AND_DROP
+Close
 transitionPlanDetails
 rm
 device
@@ -1552,8 +1553,8 @@ serviceActionBundleKey
 semanticAction
 _next
 androidx.lifecycle.internal.SavedStat...
-MULTILINE
 com.iqoo.secure.ui.phoneoptimize.AddW...
+MULTILINE
 PROXY
 StartActivityForResult
 removeObserver
@@ -1602,7 +1603,6 @@ type
 android.hardware.type.iot
 getViewRootImpl
 appops
-pref_app_snooze_
 NONE
 getTextDirectionHeuristic
 android:savedDialogState
@@ -1696,9 +1696,9 @@ familyName
 $limits
 FIXED64_LIST_PACKED
 android.permission.POST_NOTIFICATIONS
+EmojiCompat.FontRequestEmojiCompatCon...
 IN_APP_MESSAGE_INTENT
 android.hardware.type.embedded
-EmojiCompat.FontRequestEmojiCompatCon...
 android.speech.extra.PROMPT
 bottom
 kotlin.jvm.internal.EnumCompanionObject
@@ -1841,11 +1841,11 @@ Marking attr:actionOverflowMenuStyle:2130903072 used because it matches string p
 Marking attr:actionProviderClass:2130903073 used because it matches string pool constant act
 Marking attr:actionViewClass:2130903074 used because it matches string pool constant act
 Marking attr:activityChooserViewStyle:2130903075 used because it matches string pool constant act
-Marking id:actionHide:2131230759 used because it matches string pool constant act
-Marking id:actionInfo:2131230760 used because it matches string pool constant act
-Marking id:actionMindfulDelay:2131230761 used because it matches string pool constant act
-Marking id:actionRename:2131230762 used because it matches string pool constant act
-Marking id:actionScreenTimeLimit:2131230763 used because it matches string pool constant act
+Marking id:actionChangeSlot:2131230759 used because it matches string pool constant act
+Marking id:actionHide:2131230760 used because it matches string pool constant act
+Marking id:actionInfo:2131230761 used because it matches string pool constant act
+Marking id:actionRemoveFromHome:2131230762 used because it matches string pool constant act
+Marking id:actionRename:2131230763 used because it matches string pool constant act
 Marking id:actionUninstall:2131230764 used because it matches string pool constant act
 Marking id:action_bar:2131230765 used because it matches string pool constant act
 Marking id:action_bar_activity_content:2131230766 used because it matches string pool constant act
@@ -1954,6 +1954,8 @@ Marking id:view_tree_lifecycle_owner:2131231065 used because it matches string p
 Marking id:view_tree_on_back_pressed_dispatcher_owner:2131231066 used because it matches string pool constant view
 Marking id:view_tree_saved_state_registry_owner:2131231067 used because it matches string pool constant view
 Marking id:view_tree_view_model_store_owner:2131231068 used because it matches string pool constant view
+Marking id:actionRemoveFromHome:2131230762 used because it matches string pool constant actionRemoveFromHome
+Marking id:actionHide:2131230760 used because it matches string pool constant actionHide
 Marking color:androidx_core_ripple_material_light:2131034139 used because it matches string pool constant android
 Marking color:androidx_core_secondary_text_default_material_light:2131034140 used because it matches string pool constant android
 Marking string:androidx_startup:2131623972 used because it matches string pool constant android
@@ -2060,6 +2062,7 @@ Marking attr:fontWeight:2130903189 used because it matches string pool constant 
 Marking id:tvScreenTimeGlance:2131231052 used because it matches string pool constant tvScreenTimeGlance
 Marking id:end:2131230853 used because it matches string pool constant en
 Marking id:tvEmptyApps:2131231027 used because it matches string pool constant tvEmptyApps
+Marking id:actionChangeSlot:2131230759 used because it matches string pool constant actionChangeSlot
 Marking attr:title:2130903320 used because it matches string pool constant title
 Marking attr:titleMargin:2130903321 used because it matches string pool constant title
 Marking attr:titleMarginBottom:2130903322 used because it matches string pool constant title
@@ -3148,11 +3151,11 @@ Marking id:fragment_container_view_tag:2131230865 used because it matches string
 @id/accessibility_custom_action_7 : reachable=true
 @id/accessibility_custom_action_8 : reachable=true
 @id/accessibility_custom_action_9 : reachable=true
+@id/actionChangeSlot : reachable=true
 @id/actionHide : reachable=true
 @id/actionInfo : reachable=true
-@id/actionMindfulDelay : reachable=true
+@id/actionRemoveFromHome : reachable=true
 @id/actionRename : reachable=true
-@id/actionScreenTimeLimit : reachable=true
 @id/actionUninstall : reachable=true
 @id/action_bar : reachable=true
 @id/action_bar_activity_content : reachable=true
@@ -3215,8 +3218,8 @@ Marking id:fragment_container_view_tag:2131230865 used because it matches string
 @id/btnSaveDuolingo : reachable=true
 @id/btnSaveRename : reachable=true
 @id/btnSettings : reachable=true
-@id/btnSnoozeEmergency : reachable=true
-@id/btnStepAway : reachable=true
+@id/btnSnoozeEmergency : reachable=false
+@id/btnStepAway : reachable=false
 @id/btnUnhide : reachable=true
 @id/btnUnlockSecret : reachable=true
 @id/buttonPanel : reachable=true
@@ -3427,7 +3430,7 @@ Marking id:fragment_container_view_tag:2131230865 used because it matches string
 @id/tvHiddenAppsSummary : reachable=true
 @id/tvHomeSlotsSummary : reachable=true
 @id/tvLockMethodSummary : reachable=true
-@id/tvLockoutMessage : reachable=true
+@id/tvLockoutMessage : reachable=false
 @id/tvMindfulAppsSummary : reachable=true
 @id/tvMindfulCountdown : reachable=true
 @id/tvMindfulDurationSummary : reachable=true
@@ -3700,7 +3703,7 @@ Marking id:fragment_container_view_tag:2131230865 used because it matches string
     @string/open_duolingo
     @string/cancel
     @string/save
-@layout/dialog_gentle_lockout : reachable=true
+@layout/dialog_gentle_lockout : reachable=false
     @attr/launcherBackground
     @attr/primaryTextColor
     @attr/secondaryTextColor
@@ -5754,11 +5757,11 @@ The root reachable resources are:
  id:accessibility_custom_action_7:2131230756
  id:accessibility_custom_action_8:2131230757
  id:accessibility_custom_action_9:2131230758
- id:actionHide:2131230759
- id:actionInfo:2131230760
- id:actionMindfulDelay:2131230761
- id:actionRename:2131230762
- id:actionScreenTimeLimit:2131230763
+ id:actionChangeSlot:2131230759
+ id:actionHide:2131230760
+ id:actionInfo:2131230761
+ id:actionRemoveFromHome:2131230762
+ id:actionRename:2131230763
  id:actionUninstall:2131230764
  id:action_bar:2131230765
  id:action_bar_activity_content:2131230766
@@ -5815,8 +5818,6 @@ The root reachable resources are:
  id:btnSaveDuolingo:2131230823
  id:btnSaveRename:2131230824
  id:btnSettings:2131230825
- id:btnSnoozeEmergency:2131230826
- id:btnStepAway:2131230827
  id:btnUnhide:2131230828
  id:btnUnlockSecret:2131230829
  id:buttonPanel:2131230830
@@ -5978,7 +5979,6 @@ The root reachable resources are:
  id:tvHiddenAppsSummary:2131231035
  id:tvHomeSlotsSummary:2131231036
  id:tvLockMethodSummary:2131231037
- id:tvLockoutMessage:2131231038
  id:tvMindfulAppsSummary:2131231039
  id:tvMindfulCountdown:2131231040
  id:tvMindfulDurationSummary:2131231041
@@ -6034,7 +6034,6 @@ The root reachable resources are:
  layout:dialog_app_picker:2131427361
  layout:dialog_daily_intent:2131427362
  layout:dialog_duolingo_edit:2131427363
- layout:dialog_gentle_lockout:2131427364
  layout:dialog_kanso_pro:2131427365
  layout:dialog_mindful_delay:2131427366
  layout:dialog_rename:2131427367
@@ -6301,6 +6300,8 @@ Unused resources are:
  id:async:2131230789
  id:auto:2131230790
  id:blocking:2131230792
+ id:btnSnoozeEmergency:2131230826
+ id:btnStepAway:2131230827
  id:center_vertical:2131230833
  id:checkbox:2131230834
  id:checked:2131230835
@@ -6350,6 +6351,7 @@ Unused resources are:
  id:tabMode:2131230993
  id:tag_transition_group:2131231003
  id:tvAppName:2131231019
+ id:tvLockoutMessage:2131231038
  id:unchecked:2131231061
  id:uniform:2131231062
  id:useLogo:2131231064
@@ -6363,6 +6365,7 @@ Unused resources are:
  layout:abc_activity_chooser_view:2131427334
  layout:abc_activity_chooser_view_list_item:2131427335
  layout:abc_tooltip:2131427355
+ layout:dialog_gentle_lockout:2131427364
  layout:ime_base_split_test_activity:2131427369
  layout:ime_secondary_split_test_activity:2131427370
  raw:com_android_billingclient_heterodyne_info:2131558400

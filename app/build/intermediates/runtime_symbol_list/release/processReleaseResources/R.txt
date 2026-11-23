@@ -766,11 +766,11 @@ int id accessibility_custom_action_6 0x7f080023
 int id accessibility_custom_action_7 0x7f080024
 int id accessibility_custom_action_8 0x7f080025
 int id accessibility_custom_action_9 0x7f080026
-int id actionHide 0x7f080027
-int id actionInfo 0x7f080028
-int id actionMindfulDelay 0x7f080029
-int id actionRename 0x7f08002a
-int id actionScreenTimeLimit 0x7f08002b
+int id actionChangeSlot 0x7f080027
+int id actionHide 0x7f080028
+int id actionInfo 0x7f080029
+int id actionRemoveFromHome 0x7f08002a
+int id actionRename 0x7f08002b
 int id actionUninstall 0x7f08002c
 int id action_bar 0x7f08002d
 int id action_bar_activity_content 0x7f08002e

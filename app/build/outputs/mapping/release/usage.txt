@@ -10075,6 +10075,8 @@ com.psei.launcher.R$drawable:
     public static int ic_launcher_foreground
     private void <init>()
 com.psei.launcher.R$id:
+    public static int btnSnoozeEmergency
+    public static int btnStepAway
     public static int hiddenAppsRoot
     public static int pathFlameInner
     public static int pathFlameOuter
@@ -10082,8 +10084,10 @@ com.psei.launcher.R$id:
     public static int rowDailyFocus
     public static int settingsRoot
     public static int tvAppName
+    public static int tvLockoutMessage
     private void <init>()
 com.psei.launcher.R$layout:
+    public static int dialog_gentle_lockout
     private void <init>()
 com.psei.launcher.R$mipmap
 com.psei.launcher.R$string:
@@ -10226,10 +10230,15 @@ com.psei.launcher.data.Prefs:
     public static final java.lang.String THEME_SEPIA
     public static final java.lang.String THEME_SYSTEM
     public final java.lang.String getDailyIntentText()
+    public final boolean isAppSnoozed(java.lang.String)
     public final boolean isDailyIntentCompleted()
     public final void setDailyIntentCompleted(boolean)
     public final void setDailyIntentText(java.lang.String)
+    public final void snoozeAppLimit(java.lang.String,int)
     public static synthetic void snoozeAppLimit$default(com.psei.launcher.data.Prefs,java.lang.String,int,int,java.lang.Object)
+    public final boolean toggleMindfulApp(java.lang.String)
+com.psei.launcher.data.UsageHelper:
+    public final int getTodayUsageMinutes(android.content.Context,java.lang.String)
 com.psei.launcher.databinding.ActivityHiddenAppsBinding:
     public synthetic bridge android.view.View getRoot()
 com.psei.launcher.databinding.ActivityMainBinding:
@@ -10244,8 +10253,7 @@ com.psei.launcher.databinding.DialogDailyIntentBinding:
     public synthetic bridge android.view.View getRoot()
 com.psei.launcher.databinding.DialogDuolingoEditBinding:
     public synthetic bridge android.view.View getRoot()
-com.psei.launcher.databinding.DialogGentleLockoutBinding:
-    public synthetic bridge android.view.View getRoot()
+com.psei.launcher.databinding.DialogGentleLockoutBinding
 com.psei.launcher.databinding.DialogKansoProBinding:
     public synthetic bridge android.view.View getRoot()
 com.psei.launcher.databinding.DialogMindfulDelayBinding:
@@ -20156,7 +20164,7 @@ androidx.recyclerview.widget.RecyclerView$Adapter:
     public abstract void onViewDetachedFromWindow()
     public abstract void onViewRecycled()
     public abstract void registerAdapterDataObserver()
-    public final void setHasStableIds()
+    public abstract void setHasStableIds()
     public abstract void unregisterAdapterDataObserver()
 androidx.recyclerview.widget.RecyclerView$AdapterDataObserver
 androidx.recyclerview.widget.RecyclerView$ChildDrawingOrderCallback:
@@ -22838,6 +22846,8 @@ com.psei.launcher.MainActivity$setupRecyclerView$2:
     public final void invoke()
 com.psei.launcher.MainActivity$showProShowcaseDialog$5$1:
     public final void invoke$2()
+com.psei.launcher.MainActivity$showRenameDialog$saveAction$1:
+    public final void invoke$1()
 com.psei.launcher.MainActivity:
     public static void applyCustomTheme()
     public static void handleCustomShortcut()
@@ -22854,12 +22864,9 @@ com.psei.launcher.MainActivity:
     public static void setupScreenTimeGlance()
     public static void setupSearch()
     public static void setupShortcuts()
-    public static void showAppActionsDialog()
-    public static void showGentleLockoutDialog()
+    public static void showMindfulDelayDialog()
     public static void showRenameDialog()
-    public static void showSetLimitDialog()
     public static void showSingleFocusActionMenu()
-    public static void showUsageAccessPromptDialog()
     public static void unregisterCalendarObserver()
 com.psei.launcher.MinimalLauncherApp:
     public static void applyThemeSetting()
@@ -22897,7 +22904,7 @@ com.psei.launcher.SettingsActivity:
     public static void showSlotsCountDialog()
     public static void showTextSizeDialog()
     public static void showThemeDialog()
-    public static void showUsageAccessPromptDialog$1()
+    public static void showUsageAccessPromptDialog()
     public static void tryOpenAutostartSettings()
 com.psei.launcher.billing.BillingManager$startConnection$1:
     public final void onBillingServiceDisconnected()
@@ -22917,6 +22924,7 @@ com.psei.launcher.data.AppRepository:
     public static java.util.List loadAppsFromSystem()
     public final synchronized void onStart()
     public final synchronized void onStop()
+    public static void updateCustomLabel()
 com.psei.launcher.data.CalendarEventModel:
     public static long getEndMillis()
     public static java.lang.String getFormattedTime()
@@ -22936,6 +22944,7 @@ com.psei.launcher.data.DailyFocusItem:
 com.psei.launcher.data.Prefs:
     public static void deleteDailyFocusItem()
     public static java.util.Map getAllConfiguredLimits()
+    public static int getAppScreenTimeLimit()
     public final boolean getAutoLaunchSingleResult()
     public final boolean getAutoOpenKeyboard()
     public static java.lang.String getDailyIntentDate()
@@ -22949,11 +22958,12 @@ com.psei.launcher.data.Prefs:
     public final boolean getShowDailyIntent()
     public final boolean getShowDuolingoWidget()
     public final boolean getShowScreenTimeGlance()
-    public static boolean isAppSnoozed()
     public final boolean isBiometricLockEnabled()
     public static boolean isBlackWallpaperSynced()
+    public static boolean isMindfulApp()
     public final boolean isMindfulDelayEnabled()
     public static boolean isVipUser()
+    public static void setAppScreenTimeLimit()
     public static void setAutoLaunchSingleResult()
     public static void setAutoOpenKeyboard()
     public static void setBiometricLockEnabled()
@@ -22975,12 +22985,9 @@ com.psei.launcher.data.Prefs:
     public static void setTextSize()
     public static void setTheme()
     public static void setVipUser()
-    public static void snoozeAppLimit()
-    public static boolean toggleMindfulApp()
 com.psei.launcher.data.UsageHelper:
     public static final com.psei.launcher.data.UsageHelper INSTANCE
     public static java.lang.String formatScreenTime()
-    public static int getTodayUsageMinutes()
     public static int getTotalScreenTimeTodayMinutes()
 com.psei.launcher.data.WallpaperHelper
 com.psei.launcher.databinding.ActivityHiddenAppsBinding:
@@ -23005,8 +23012,6 @@ com.psei.launcher.databinding.DialogDailyIntentBinding:
     public static android.widget.LinearLayout getRoot()
 com.psei.launcher.databinding.DialogDuolingoEditBinding:
     public final android.widget.TextView tvPracticedStatus
-    public static android.widget.LinearLayout getRoot()
-com.psei.launcher.databinding.DialogGentleLockoutBinding:
     public static android.widget.LinearLayout getRoot()
 com.psei.launcher.databinding.DialogKansoProBinding:
     public static android.widget.LinearLayout getRoot()
@@ -23092,11 +23097,10 @@ kotlin.collections.AbstractList$IteratorImpl:
 kotlin.collections.AbstractList:
     public static final kotlin.collections.AbstractList$Companion Companion
     static void <clinit>()
-kotlin.collections.ArraysKt:
-    public static java.lang.Object getOrNull(java.lang.Object[],int)
-    public static char single(char[])
-kotlin.collections.ArraysKt___ArraysJvmKt:
-    public static final java.util.List asList(java.lang.Object[])
+kotlin.collections.ArraysKt
+kotlin.collections.ArraysKt__ArraysJVMKt
+kotlin.collections.ArraysKt__ArraysKt
+kotlin.collections.ArraysKt___ArraysJvmKt
 kotlin.collections.ArraysKt___ArraysKt
 kotlin.collections.ArraysUtilJVM
 kotlin.collections.CollectionsKt:

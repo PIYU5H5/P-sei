@@ -35,11 +35,11 @@ drawable ic_flame
 drawable ic_flame_grey
 drawable ic_launcher_background
 drawable ic_launcher_foreground
+id actionChangeSlot
 id actionHide
 id actionInfo
-id actionMindfulDelay
+id actionRemoveFromHome
 id actionRename
-id actionScreenTimeLimit
 id actionUninstall
 id bottomShortcutsContainer
 id btnAddFocusItem

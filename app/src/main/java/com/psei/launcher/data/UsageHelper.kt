@@ -1,7 +1,6 @@
 package com.psei.launcher.data
 
 import android.app.AppOpsManager
-import android.app.usage.UsageEvents
 import android.app.usage.UsageStatsManager
 import android.content.Context
 import android.content.Intent
@@ -48,7 +47,6 @@ object UsageHelper {
         }
 
         val allIgnored = SYSTEM_IGNORED_PACKAGES.toMutableSet()
-        allIgnored.add(context.packageName)
 
         try {
             val intent = Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_HOME)
@@ -62,7 +60,10 @@ object UsageHelper {
                 context.packageManager.queryIntentActivities(intent, PackageManager.MATCH_ALL)
             }
             for (resolveInfo in activities) {
-                resolveInfo.activityInfo?.packageName?.let { allIgnored.add(it) }
+                val pkg = resolveInfo.activityInfo?.packageName
+                if (pkg != null && pkg != context.packageName) {
+                    allIgnored.add(pkg)
+                }
             }
         } catch (e: Exception) {
             // Fallback to static set
@@ -117,7 +118,7 @@ object UsageHelper {
 
     /**
      * Returns total active foreground time spent on a specific app today (strictly since local midnight) in minutes.
-     * Uses native UsageEvents for timestamped precision matching Digital Wellbeing.
+     * Mimics Android System Settings / Digital Wellbeing by querying native aggregated stats directly.
      */
     fun getTodayUsageMinutes(context: Context, packageName: String): Int {
         if (!hasUsagePermission(context)) return 0
@@ -133,74 +134,18 @@ object UsageHelper {
         val now = System.currentTimeMillis()
         if (now <= startOfDay) return 0
 
+        // Primary: Query aggregated stats
         try {
-            val usageEvents = usageStatsManager.queryEvents(startOfDay, now)
-            if (usageEvents != null) {
-                val event = UsageEvents.Event()
-                var currentStart = -1L
-                var totalMillis = 0L
-
-                while (usageEvents.hasNextEvent()) {
-                    usageEvents.getNextEvent(event)
-                    val pkg = event.packageName ?: continue
-                    val timestamp = event.timeStamp
-                    if (timestamp < startOfDay) continue
-
-                    if (pkg == packageName) {
-                        when (event.eventType) {
-                            UsageEvents.Event.ACTIVITY_RESUMED -> {
-                                if (currentStart == -1L) {
-                                    currentStart = timestamp
-                                }
-                            }
-                            UsageEvents.Event.ACTIVITY_PAUSED,
-                            UsageEvents.Event.ACTIVITY_STOPPED -> {
-                                if (currentStart != -1L) {
-                                    val delta = timestamp - currentStart
-                                    if (delta in 1 until (6 * 3600 * 1000L)) {
-                                        totalMillis += delta
-                                    }
-                                    currentStart = -1L
-                                }
-                            }
-                        }
-                    } else {
-                        // Another app took over foreground
-                        if (currentStart != -1L && event.eventType == UsageEvents.Event.ACTIVITY_RESUMED) {
-                            val delta = timestamp - currentStart
-                            if (delta in 1 until (6 * 3600 * 1000L)) {
-                                totalMillis += delta
-                            }
-                            currentStart = -1L
-                        }
-                    }
-
-                    if ((event.eventType == UsageEvents.Event.SCREEN_NON_INTERACTIVE ||
-                         event.eventType == UsageEvents.Event.KEYGUARD_SHOWN) && currentStart != -1L) {
-                        val delta = timestamp - currentStart
-                        if (delta in 1 until (6 * 3600 * 1000L)) {
-                            totalMillis += delta
-                        }
-                        currentStart = -1L
-                    }
-                }
-
-                if (currentStart != -1L && now > currentStart) {
-                    val delta = now - currentStart
-                    if (delta in 1 until (6 * 3600 * 1000L)) {
-                        totalMillis += delta
-                    }
-                }
-
-                if (totalMillis > 0L) {
-                    return (totalMillis / 60_000L).toInt()
-                }
+            val statsMap = usageStatsManager.queryAndAggregateUsageStats(startOfDay, now)
+            val stats = statsMap[packageName]
+            if (stats != null && stats.totalTimeInForeground > 0L) {
+                return (stats.totalTimeInForeground / 60_000L).toInt()
             }
         } catch (e: Exception) {
             // Fallback
         }
 
-        // Secondary fallback for edge devices
+        // Secondary fallback
         try {
             val statsList = usageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_DAILY, startOfDay, now)
             if (!statsList.isNullOrEmpty()) {
@@ -221,10 +166,10 @@ object UsageHelper {
      * (since midnight 00:00:00) in minutes. Returns -1 if usage permission is not granted.
      *
      * Precision Design:
-     * - Uses exact UsageEvents stream between local midnight and now.
-     * - Properly tracks ACTIVITY_RESUMED, ACTIVITY_PAUSED, ACTIVITY_STOPPED, SCREEN_NON_INTERACTIVE, and KEYGUARD_SHOWN.
-     * - Dynamically excludes all home launchers (system stock launcher + P-Sei) and system overlays so only actual app usage counts.
-     * - Matches Google Digital Wellbeing exactly.
+     * - Uses Android's native aggregated usage stats (queryAndAggregateUsageStats) to directly mimic
+     *   the exact values displayed in System Settings / Google Digital Wellbeing.
+     * - Dynamically excludes all OEM stock home launchers and system overlays so only actual app usage counts.
+     * - Avoids custom event timestamp stitching, eliminating discrepancies.
      */
     fun getTotalScreenTimeTodayMinutes(context: Context): Int {
         if (!hasUsagePermission(context)) return -1
@@ -242,69 +187,18 @@ object UsageHelper {
 
         val ignoredPackages = getIgnoredPackages(context)
 
+        // Primary: Query system aggregated usage stats directly (matches Android System Settings)
         try {
-            val usageEvents = usageStatsManager.queryEvents(startOfDay, now)
-            if (usageEvents != null) {
-                val event = UsageEvents.Event()
-                var currentPkg: String? = null
-                var currentStart = -1L
+            val statsMap = usageStatsManager.queryAndAggregateUsageStats(startOfDay, now)
+            if (!statsMap.isNullOrEmpty()) {
                 var totalMillis = 0L
-
-                while (usageEvents.hasNextEvent()) {
-                    usageEvents.getNextEvent(event)
-                    val pkg = event.packageName ?: continue
-                    val timestamp = event.timeStamp
-                    if (timestamp < startOfDay) continue
-
-                    val isIgnored = ignoredPackages.contains(pkg)
-
-                    when (event.eventType) {
-                        UsageEvents.Event.ACTIVITY_RESUMED -> {
-                            if (currentStart != -1L) {
-                                val delta = timestamp - currentStart
-                                if (delta in 1 until (6 * 3600 * 1000L)) {
-                                    totalMillis += delta
-                                }
-                                currentStart = -1L
-                                currentPkg = null
-                            }
-                            if (!isIgnored) {
-                                currentStart = timestamp
-                                currentPkg = pkg
-                            }
-                        }
-                        UsageEvents.Event.ACTIVITY_PAUSED,
-                        UsageEvents.Event.ACTIVITY_STOPPED -> {
-                            if (currentStart != -1L && pkg == currentPkg) {
-                                val delta = timestamp - currentStart
-                                if (delta in 1 until (6 * 3600 * 1000L)) {
-                                    totalMillis += delta
-                                }
-                                currentStart = -1L
-                                currentPkg = null
-                            }
-                        }
-                        UsageEvents.Event.SCREEN_NON_INTERACTIVE,
-                        UsageEvents.Event.KEYGUARD_SHOWN -> {
-                            if (currentStart != -1L) {
-                                val delta = timestamp - currentStart
-                                if (delta in 1 until (6 * 3600 * 1000L)) {
-                                    totalMillis += delta
-                                }
-                                currentStart = -1L
-                                currentPkg = null
-                            }
-                        }
+                for ((pkg, stats) in statsMap) {
+                    if (ignoredPackages.contains(pkg)) continue
+                    val time = stats.totalTimeInForeground
+                    if (time > 0L) {
+                        totalMillis += time
                     }
                 }
-
-                if (currentStart != -1L && now > currentStart) {
-                    val delta = now - currentStart
-                    if (delta in 1 until (6 * 3600 * 1000L)) {
-                        totalMillis += delta
-                    }
-                }
-
                 return (totalMillis / 60_000L).toInt()
             }
         } catch (e: Exception) {

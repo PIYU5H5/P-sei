@@ -1096,8 +1096,8 @@ class MainActivity : AppCompatActivity(), AppRepository.OnAppsChangedListener {
         }
 
         val now = System.currentTimeMillis()
-        if (!force && (now - lastScreenTimeQueryTime < 180_000L)) {
-            // Already up-to-date within 3 minutes; prevent background system_server query thrashing
+        if (!force && (now - lastScreenTimeQueryTime < 60_000L)) {
+            // Already up-to-date within 1 minute; prevent background system_server query thrashing
             return
         }
         lastScreenTimeQueryTime = now
@@ -1248,6 +1248,8 @@ class MainActivity : AppCompatActivity(), AppRepository.OnAppsChangedListener {
 
     override fun onDestroy() {
         super.onDestroy()
+        activeDialog?.dismiss()
+        activeDialog = null
         appRepo.onStop(this)
         mindfulTimer?.cancel()
         mindfulTimer = null

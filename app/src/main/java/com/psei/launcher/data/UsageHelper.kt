@@ -118,7 +118,7 @@ object UsageHelper {
 
     /**
      * Returns total active foreground time spent on a specific app today (strictly since local midnight) in minutes.
-     * Mimics Android System Settings / Digital Wellbeing by querying native aggregated stats directly.
+     * Selects the active daily bucket, eliminating 24h bucket-merging distortion from yesterday's sealed bucket.
      */
     fun getTodayUsageMinutes(context: Context, packageName: String): Int {
         if (!hasUsagePermission(context)) return 0
@@ -134,28 +134,18 @@ object UsageHelper {
         val now = System.currentTimeMillis()
         if (now <= startOfDay) return 0
 
-        // Primary: Query aggregated stats
-        try {
-            val statsMap = usageStatsManager.queryAndAggregateUsageStats(startOfDay, now)
-            val stats = statsMap[packageName]
-            if (stats != null && stats.totalTimeInForeground > 0L) {
-                return (stats.totalTimeInForeground / 60_000L).toInt()
-            }
-        } catch (e: Exception) {
-            // Fallback
-        }
-
-        // Secondary fallback
         try {
             val statsList = usageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_DAILY, startOfDay, now)
             if (!statsList.isNullOrEmpty()) {
-                val stats = statsList.firstOrNull { it.packageName == packageName && it.lastTimeUsed >= startOfDay }
-                if (stats != null && stats.totalTimeInForeground > 0L) {
-                    return (stats.totalTimeInForeground / 60_000L).toInt()
+                val latest = statsList
+                    .filter { it.packageName == packageName && it.lastTimeUsed >= startOfDay }
+                    .maxByOrNull { it.lastTimeStamp }
+                if (latest != null && latest.totalTimeInForeground > 0L) {
+                    return (latest.totalTimeInForeground / 60_000L).toInt()
                 }
             }
         } catch (e: Exception) {
-            // Ignored
+            // Fallback
         }
 
         return 0
@@ -165,11 +155,15 @@ object UsageHelper {
      * Returns the total active screen time spent across all user applications today
      * (since midnight 00:00:00) in minutes. Returns -1 if usage permission is not granted.
      *
-     * Precision Design:
-     * - Uses Android's native aggregated usage stats (queryAndAggregateUsageStats) to directly mimic
-     *   the exact values displayed in System Settings / Google Digital Wellbeing.
-     * - Dynamically excludes all OEM stock home launchers and system overlays so only actual app usage counts.
-     * - Avoids custom event timestamp stitching, eliminating discrepancies.
+     * Production Architecture:
+     * - Uses Android's native INTERVAL_DAILY usage stats.
+     * - Filters for usage strictly used today (lastTimeUsed >= startOfDay).
+     * - Groups by package and selects the latest active bucket for each package, eliminating
+     *   the distortion where queryUsageStats or queryAndAggregateUsageStats returns yesterday's
+     *   overlapping 24h bucket alongside today's bucket.
+     * - Dynamically excludes all OEM stock home launchers (Samsung One UI, Pixel Launcher,
+     *   Xiaomi MIUI/HyperOS, Vivo/Oppo/OnePlus launchers) and system overlays so only actual app usage counts.
+     * - Directly matches Google Digital Wellbeing and Android System Settings.
      */
     fun getTotalScreenTimeTodayMinutes(context: Context): Int {
         if (!hasUsagePermission(context)) return -1
@@ -187,13 +181,17 @@ object UsageHelper {
 
         val ignoredPackages = getIgnoredPackages(context)
 
-        // Primary: Query system aggregated usage stats directly (matches Android System Settings)
         try {
-            val statsMap = usageStatsManager.queryAndAggregateUsageStats(startOfDay, now)
-            if (!statsMap.isNullOrEmpty()) {
+            val statsList = usageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_DAILY, startOfDay, now)
+            if (!statsList.isNullOrEmpty()) {
+                val latestStats = statsList
+                    .filter { it.lastTimeUsed >= startOfDay }
+                    .groupBy { it.packageName }
+                    .mapValues { (_, list) -> list.maxByOrNull { it.lastTimeStamp } }
+
                 var totalMillis = 0L
-                for ((pkg, stats) in statsMap) {
-                    if (ignoredPackages.contains(pkg)) continue
+                for ((pkg, stats) in latestStats) {
+                    if (stats == null || ignoredPackages.contains(pkg)) continue
                     val time = stats.totalTimeInForeground
                     if (time > 0L) {
                         totalMillis += time
@@ -203,23 +201,6 @@ object UsageHelper {
             }
         } catch (e: Exception) {
             // Fallback
-        }
-
-        // Secondary fallback
-        try {
-            val statsList = usageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_DAILY, startOfDay, now)
-            if (!statsList.isNullOrEmpty()) {
-                var fallbackMillis = 0L
-                for (s in statsList) {
-                    if (ignoredPackages.contains(s.packageName)) continue
-                    if (s.lastTimeUsed >= startOfDay && s.totalTimeInForeground > 0L) {
-                        fallbackMillis += s.totalTimeInForeground
-                    }
-                }
-                return (fallbackMillis / 60_000L).toInt()
-            }
-        } catch (e: Exception) {
-            // Ignored
         }
 
         return 0

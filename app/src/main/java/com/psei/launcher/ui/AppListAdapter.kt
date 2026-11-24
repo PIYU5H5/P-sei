@@ -2,13 +2,14 @@ package com.psei.launcher.ui
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.psei.launcher.data.AppModel
 import com.psei.launcher.databinding.ItemAppBinding
 
 /**
  * High-performance, text-only RecyclerView Adapter.
- * Uses stable IDs and ViewBinding with zero image decoding overhead.
+ * Uses DiffUtil, stable IDs, and ViewBinding with zero image decoding overhead.
  */
 class AppListAdapter(
     private val onAppClick: (AppModel) -> Unit,
@@ -18,6 +19,10 @@ class AppListAdapter(
     private var allApps: List<AppModel> = emptyList()
     private var displayedApps: List<AppModel> = emptyList()
     private var currentTextSizeSp: Float = 20f
+
+    init {
+        setHasStableIds(true)
+    }
 
     fun submitList(apps: List<AppModel>, currentQuery: String = "") {
         allApps = apps
@@ -40,8 +45,28 @@ class AppListAdapter(
                 app.label.contains(trimmed, ignoreCase = true)
             }
         }
+
+        val oldList = displayedApps
         displayedApps = newList
-        notifyDataSetChanged()
+
+        if (oldList.isEmpty()) {
+            notifyDataSetChanged()
+            return
+        }
+
+        val diffResult = DiffUtil.calculateDiff(object : DiffUtil.Callback() {
+            override fun getOldListSize(): Int = oldList.size
+            override fun getNewListSize(): Int = newList.size
+            override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+                return oldList[oldItemPosition].componentKey == newList[newItemPosition].componentKey
+            }
+            override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+                val old = oldList[oldItemPosition]
+                val new = newList[newItemPosition]
+                return old.label == new.label
+            }
+        })
+        diffResult.dispatchUpdatesTo(this)
     }
 
     fun getDisplayedApps(): List<AppModel> = displayedApps

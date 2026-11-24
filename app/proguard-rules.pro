@@ -15,10 +15,13 @@
 -keep public class com.psei.launcher.service.LauncherAdminReceiver
 
 # Keep data models used in serialization or state
--keepclassmembers class com.psei.launcher.data.AppModel {
+-keepclassmembers class com.psei.launcher.data.** {
     <fields>;
     <methods>;
 }
+
+# Google Play Billing Library
+-keep class com.android.billingclient.api.** { *; }
 
 # Strip all android.util.Log calls in release builds for maximum speed and zero information leakage
 -assumenosideeffects class android.util.Log {

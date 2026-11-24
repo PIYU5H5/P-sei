@@ -1357,6 +1357,8 @@ class MainActivity : AppCompatActivity(), AppRepository.OnAppsChangedListener {
     }
 
     fun showProShowcaseDialog(reason: String? = null) {
+        if (activeDialog?.isShowing == true) return
+
         val dialog = Dialog(this)
         val dialogBinding = DialogKansoProBinding.inflate(layoutInflater)
         dialog.setContentView(dialogBinding.root)
@@ -1443,6 +1445,9 @@ class MainActivity : AppCompatActivity(), AppRepository.OnAppsChangedListener {
 
         dialog.setOnDismissListener {
             billing.setCallback(null)
+            if (activeDialog == dialog) {
+                activeDialog = null
+            }
         }
 
         dialogBinding.btnCloseProDialog.setOnClickListener {

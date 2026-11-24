@@ -51,6 +51,8 @@ class SettingsActivity : AppCompatActivity() {
     private lateinit var prefs: Prefs
     private lateinit var appRepo: AppRepository
     private var currentAppliedTheme: String = ""
+    private var isBindingUiState = false
+    private var activeProDialog: Dialog? = null
 
     private val hiddenAppsAuthLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
@@ -94,6 +96,12 @@ class SettingsActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         updateUiState()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        activeProDialog?.dismiss()
+        activeProDialog = null
     }
 
     private fun setupInsets() {
@@ -150,6 +158,7 @@ class SettingsActivity : AppCompatActivity() {
 
         // Widgets: Calendar Toggle (Pro)
         binding.switchCalendarWidget.setOnCheckedChangeListener { buttonView, isChecked ->
+            if (isBindingUiState) return@setOnCheckedChangeListener
             if (isChecked && !prefs.isProUser) {
                 buttonView.isChecked = false
                 showProShowcaseDialog("Google Calendar events widget is a P-Sei Pro feature.")
@@ -168,6 +177,7 @@ class SettingsActivity : AppCompatActivity() {
 
         // Widgets: Duolingo Toggle (Pro)
         binding.switchDuolingoWidget.setOnCheckedChangeListener { buttonView, isChecked ->
+            if (isBindingUiState) return@setOnCheckedChangeListener
             if (isChecked && !prefs.isProUser) {
                 buttonView.isChecked = false
                 showProShowcaseDialog("Duolingo streak widget is a P-Sei Pro feature.")
@@ -208,6 +218,7 @@ class SettingsActivity : AppCompatActivity() {
 
         // Widgets: Daily Focus / Intent
         binding.switchDailyIntent.setOnCheckedChangeListener { _, isChecked ->
+            if (isBindingUiState) return@setOnCheckedChangeListener
             prefs.showDailyIntent = isChecked
             updateUiState()
         }
@@ -217,6 +228,7 @@ class SettingsActivity : AppCompatActivity() {
 
         // Widgets: Daily Screen-Time Glance
         binding.switchScreenTimeGlance.setOnCheckedChangeListener { _, isChecked ->
+            if (isBindingUiState) return@setOnCheckedChangeListener
             if (isChecked && !UsageHelper.hasUsagePermission(this)) {
                 Toast.makeText(this, R.string.screen_time_permission_toast, Toast.LENGTH_LONG).show()
                 UsageHelper.openUsageAccessSettings(this)
@@ -230,6 +242,7 @@ class SettingsActivity : AppCompatActivity() {
 
         // Auto Open Keyboard
         binding.switchAutoKeyboard.setOnCheckedChangeListener { _, isChecked ->
+            if (isBindingUiState) return@setOnCheckedChangeListener
             prefs.autoOpenKeyboard = isChecked
         }
         binding.rowAutoKeyboard.setOnClickListener {
@@ -238,6 +251,7 @@ class SettingsActivity : AppCompatActivity() {
 
         // Auto Launch Single Result (Pro)
         binding.switchAutoLaunch.setOnCheckedChangeListener { buttonView, isChecked ->
+            if (isBindingUiState) return@setOnCheckedChangeListener
             if (isChecked && !prefs.isProUser) {
                 buttonView.isChecked = false
                 showProShowcaseDialog("Auto-launch single search result is a P-Sei Pro feature.")
@@ -274,6 +288,7 @@ class SettingsActivity : AppCompatActivity() {
 
         // Biometric Lock Toggle (Pro)
         binding.switchBiometricLock.setOnCheckedChangeListener { buttonView, isChecked ->
+            if (isBindingUiState) return@setOnCheckedChangeListener
             if (isChecked && !prefs.isProUser) {
                 buttonView.isChecked = false
                 showProShowcaseDialog("Biometric Lock on Hidden Apps is a P-Sei Pro feature.")
@@ -296,6 +311,7 @@ class SettingsActivity : AppCompatActivity() {
 
         // Mindful Delay Toggle (Pro)
         binding.switchMindfulDelay.setOnCheckedChangeListener { buttonView, isChecked ->
+            if (isBindingUiState) return@setOnCheckedChangeListener
             if (isChecked && !prefs.isProUser) {
                 buttonView.isChecked = false
                 showProShowcaseDialog("Mindful Delay is a P-Sei Pro feature.")
@@ -386,83 +402,85 @@ class SettingsActivity : AppCompatActivity() {
     }
 
     private fun updateUiState() {
-        // Pro Status Badge
-        if (prefs.isProUser) {
-            binding.tvProBadge.text = "PRO"
-            binding.tvProBadge.setBackgroundResource(R.drawable.bg_pro_badge)
-            binding.tvProSubtitle.text = "All Pro features unlocked (Preview Mode) ⭐"
-        } else {
-            binding.tvProBadge.text = "FREE"
-            binding.tvProBadge.setBackgroundColor(Color.parseColor("#444444"))
-            binding.tvProSubtitle.text = "Widgets, Mindful Delay, Screen Limits, Auto-Launch, Pro Themes & Biometrics"
-        }
-
-        binding.tvHomeSlotsSummary.text = getString(R.string.pref_home_slots_count_summary, prefs.homeSlotsCount)
-
-        binding.tvThemeSummary.text = if (!prefs.isProUser) {
-            getString(R.string.pref_theme_dark)
-        } else {
-            when (prefs.theme) {
-                Prefs.THEME_LIGHT -> "Light (Clean White) ⭐ PRO"
-                Prefs.THEME_SYSTEM -> "System default ⭐ PRO"
-                Prefs.THEME_SEPIA -> "Warm Paper (Sepia / E-Ink) ⭐ PRO"
-                Prefs.THEME_FOREST -> "Forest Night (Botanical Dark) ⭐ PRO"
-                Prefs.THEME_CHARCOAL -> "Charcoal Slate ⭐ PRO"
-                Prefs.THEME_CYBER -> "Cyberpunk Midnight ⭐ PRO"
-                else -> getString(R.string.pref_theme_dark)
+        isBindingUiState = true
+        try {
+            // Pro Status Badge
+            if (prefs.isProUser) {
+                binding.tvProBadge.text = "PRO"
+                binding.tvProBadge.setBackgroundResource(R.drawable.bg_pro_badge)
+                binding.tvProSubtitle.text = "All Pro features unlocked (Preview Mode) ⭐"
+            } else {
+                binding.tvProBadge.text = "FREE"
+                binding.tvProBadge.setBackgroundColor(Color.parseColor("#444444"))
+                binding.tvProSubtitle.text = "Widgets, Mindful Delay, Screen Limits, Auto-Launch, Pro Themes & Biometrics"
             }
-        }
 
-        binding.tvTextSizeSummary.text = when (prefs.textSize) {
-            Prefs.TEXT_SIZE_SMALL -> getString(R.string.pref_text_size_small)
-            Prefs.TEXT_SIZE_LARGE -> getString(R.string.pref_text_size_large)
-            else -> getString(R.string.pref_text_size_medium)
-        }
+            binding.tvHomeSlotsSummary.text = getString(R.string.pref_home_slots_count_summary, prefs.homeSlotsCount)
 
-        binding.switchAutoKeyboard.isChecked = prefs.autoOpenKeyboard
-        binding.switchAutoLaunch.isChecked = prefs.isProUser && prefs.autoLaunchSingleResult
-        binding.tvHiddenAppsSummary.text = getString(R.string.pref_manage_hidden_summary, prefs.hiddenPackages.size)
-
-        // Widgets state (Pro)
-        binding.switchCalendarWidget.isChecked = prefs.isProUser && prefs.showCalendarWidget
-        binding.switchDuolingoWidget.isChecked = prefs.isProUser && prefs.showDuolingoWidget
-        val statusText = if (prefs.isDuolingoPracticedToday) "Practiced today (Streak safe)" else "Streak at risk (Not practiced today)"
-        binding.tvDuolingoStreakSummary.text = "${prefs.duolingoStreak} days • $statusText"
-        binding.switchDailyIntent.isChecked = prefs.showDailyIntent
-        binding.switchScreenTimeGlance.isChecked = prefs.showScreenTimeGlance
-
-        // Digital Detox (Pro) state
-        binding.switchMindfulDelay.isChecked = prefs.isMindfulDelayEnabled
-        binding.tvMindfulDurationSummary.text = "${prefs.mindfulDelaySeconds} seconds"
-        val installedApps = appRepo.getCachedApps()
-        if (installedApps.isNotEmpty()) {
-            val installedPackageNames = installedApps.map { it.packageName }.toSet()
-            val validMindful = prefs.mindfulPackages.filter { installedPackageNames.contains(it) }.toSet()
-            if (validMindful != prefs.mindfulPackages) {
-                prefs.mindfulPackages = validMindful
+            binding.tvThemeSummary.text = if (!prefs.isProUser) {
+                getString(R.string.pref_theme_dark)
+            } else {
+                when (prefs.theme) {
+                    Prefs.THEME_LIGHT -> "Light (Clean White) ⭐ PRO"
+                    Prefs.THEME_SYSTEM -> "System default ⭐ PRO"
+                    Prefs.THEME_SEPIA -> "Warm Paper (Sepia / E-Ink) ⭐ PRO"
+                    Prefs.THEME_FOREST -> "Forest Night (Botanical Dark) ⭐ PRO"
+                    Prefs.THEME_CHARCOAL -> "Charcoal Slate ⭐ PRO"
+                    Prefs.THEME_CYBER -> "Cyberpunk Midnight ⭐ PRO"
+                    else -> getString(R.string.pref_theme_dark)
+                }
             }
-        }
-        val mindfulCount = prefs.mindfulPackages.size
-        binding.tvMindfulAppsSummary.text = if (mindfulCount == 1) {
-            "1 app configured with pause"
-        } else {
-            "$mindfulCount apps configured with pause"
-        }
-        val configuredLimitsCount = prefs.getAllConfiguredLimits().size
-        binding.tvAppLimitsSummary.text = if (configuredLimitsCount > 0) {
-            "$configuredLimitsCount apps with daily caps"
-        } else {
-            "In-app daily usage caps with gentle lockouts"
-        }
-        binding.switchBiometricLock.isChecked = prefs.isBiometricLockEnabled
 
-        val isAccessibilityActive = LockAccessibilityService.isServiceRunning
-        binding.cardAccessibilityWarning.isVisible = isAccessibilityActive
+            binding.tvTextSizeSummary.text = when (prefs.textSize) {
+                Prefs.TEXT_SIZE_SMALL -> getString(R.string.pref_text_size_small)
+                Prefs.TEXT_SIZE_LARGE -> getString(R.string.pref_text_size_large)
+                else -> getString(R.string.pref_text_size_medium)
+            }
 
-        binding.tvLockMethodSummary.text = if (prefs.lockMethod == Prefs.LOCK_METHOD_DEVICE_ADMIN) {
-            "Device Administrator (Recommended • Google Pay Safe)"
-        } else {
-            if (isAccessibilityActive) {
+            binding.switchAutoKeyboard.isChecked = prefs.autoOpenKeyboard
+            binding.switchAutoLaunch.isChecked = prefs.isProUser && prefs.autoLaunchSingleResult
+            binding.tvHiddenAppsSummary.text = getString(R.string.pref_manage_hidden_summary, prefs.hiddenPackages.size)
+
+            // Widgets state (Pro)
+            binding.switchCalendarWidget.isChecked = prefs.isProUser && prefs.showCalendarWidget
+            binding.switchDuolingoWidget.isChecked = prefs.isProUser && prefs.showDuolingoWidget
+            val statusText = if (prefs.isDuolingoPracticedToday) "Practiced today (Streak safe)" else "Streak at risk (Not practiced today)"
+            binding.tvDuolingoStreakSummary.text = "${prefs.duolingoStreak} days • $statusText"
+            binding.switchDailyIntent.isChecked = prefs.showDailyIntent
+            binding.switchScreenTimeGlance.isChecked = prefs.showScreenTimeGlance
+
+            // Digital Detox (Pro) state
+            binding.switchMindfulDelay.isChecked = prefs.isProUser && prefs.isMindfulDelayEnabled
+            binding.tvMindfulDurationSummary.text = "${prefs.mindfulDelaySeconds} seconds"
+            val installedApps = appRepo.getCachedApps()
+            if (installedApps.isNotEmpty()) {
+                val installedPackageNames = installedApps.map { it.packageName }.toSet()
+                val validMindful = prefs.mindfulPackages.filter { installedPackageNames.contains(it) }.toSet()
+                if (validMindful != prefs.mindfulPackages) {
+                    prefs.mindfulPackages = validMindful
+                }
+            }
+            val mindfulCount = prefs.mindfulPackages.size
+            binding.tvMindfulAppsSummary.text = if (mindfulCount == 1) {
+                "1 app configured with pause"
+            } else {
+                "$mindfulCount apps configured with pause"
+            }
+            val configuredLimitsCount = prefs.getAllConfiguredLimits().size
+            binding.tvAppLimitsSummary.text = if (configuredLimitsCount > 0) {
+                "$configuredLimitsCount apps with daily caps"
+            } else {
+                "In-app daily usage caps with gentle lockouts"
+            }
+            binding.switchBiometricLock.isChecked = prefs.isProUser && prefs.isBiometricLockEnabled
+
+            val isAccessibilityActive = LockAccessibilityService.isServiceRunning
+            binding.cardAccessibilityWarning.isVisible = isAccessibilityActive
+
+            binding.tvLockMethodSummary.text = if (prefs.lockMethod == Prefs.LOCK_METHOD_DEVICE_ADMIN) {
+                "Device Administrator (Recommended • Google Pay Safe)"
+            } else {
+                if (isAccessibilityActive) {
                 "Accessibility Service (⚠️ Active • Blocks Google Pay)"
             } else {
                 "Accessibility Service (⚠️ Incompatible with Google Pay)"
@@ -497,7 +515,10 @@ class SettingsActivity : AppCompatActivity() {
         } else {
             appRepo.findApp(swipeRightKey)?.label ?: getString(R.string.none_assigned)
         }
+    } finally {
+        isBindingUiState = false
     }
+}
 
     private fun openDefaultLauncherSettings() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -651,6 +672,8 @@ class SettingsActivity : AppCompatActivity() {
     }
 
     private fun showProShowcaseDialog(reason: String? = null) {
+        if (activeProDialog?.isShowing == true) return
+
         val dialog = Dialog(this)
         val dialogBinding = DialogKansoProBinding.inflate(layoutInflater)
         dialog.setContentView(dialogBinding.root)
@@ -731,12 +754,16 @@ class SettingsActivity : AppCompatActivity() {
 
         dialog.setOnDismissListener {
             billing.setCallback(null)
+            if (activeProDialog == dialog) {
+                activeProDialog = null
+            }
         }
 
         dialogBinding.btnCloseProDialog.setOnClickListener {
             dialog.dismiss()
         }
 
+        activeProDialog = dialog
         dialog.show()
     }
 

@@ -21,6 +21,10 @@ object UsageHelper {
     private val SYSTEM_IGNORED_PACKAGES = setOf(
         "com.android.systemui",
         "android",
+        "com.google.android.permissioncontroller",
+        "com.android.permissioncontroller",
+        "com.google.android.packageinstaller",
+        "com.android.packageinstaller",
         "com.vivo.upslide",
         "com.bbk.launcher2",
         "com.vivo.floatingball",
@@ -31,7 +35,12 @@ object UsageHelper {
         "com.sec.android.app.launcher",
         "com.miui.home",
         "com.oppo.launcher",
-        "com.oneplus.launcher"
+        "com.oneplus.launcher",
+        "com.huawei.android.launcher",
+        "com.hihonor.android.launcher",
+        "com.transsion.hilauncher",
+        "com.transsion.XOSLauncher",
+        "com.motorola.launcher3"
     )
 
     @Volatile
@@ -47,6 +56,7 @@ object UsageHelper {
         }
 
         val allIgnored = SYSTEM_IGNORED_PACKAGES.toMutableSet()
+        allIgnored.add(context.packageName)
 
         try {
             val intent = Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_HOME)
@@ -61,7 +71,7 @@ object UsageHelper {
             }
             for (resolveInfo in activities) {
                 val pkg = resolveInfo.activityInfo?.packageName
-                if (pkg != null && pkg != context.packageName) {
+                if (pkg != null) {
                     allIgnored.add(pkg)
                 }
             }
@@ -118,7 +128,8 @@ object UsageHelper {
 
     /**
      * Returns total active foreground time spent on a specific app today (strictly since local midnight) in minutes.
-     * Selects the active daily bucket, eliminating 24h bucket-merging distortion from yesterday's sealed bucket.
+     * Aggregates active daily bucket(s) since midnight, correctly handling device reboots and eliminating
+     * 24h bucket-merging distortion from yesterday across all Android OEMs.
      */
     fun getTodayUsageMinutes(context: Context, packageName: String): Int {
         if (!hasUsagePermission(context)) return 0
@@ -137,11 +148,17 @@ object UsageHelper {
         try {
             val statsList = usageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_DAILY, startOfDay, now)
             if (!statsList.isNullOrEmpty()) {
-                val latest = statsList
-                    .filter { it.packageName == packageName && it.lastTimeUsed >= startOfDay }
-                    .maxByOrNull { it.lastTimeStamp }
-                if (latest != null && latest.totalTimeInForeground > 0L) {
-                    return (latest.totalTimeInForeground / 60_000L).toInt()
+                val pkgStats = statsList.filter { it.packageName == packageName && it.lastTimeUsed >= startOfDay }
+                if (pkgStats.isNotEmpty()) {
+                    val todayBuckets = pkgStats.filter { it.firstTimeStamp >= startOfDay }
+                    val totalTime = if (todayBuckets.isNotEmpty()) {
+                        todayBuckets.sumOf { it.totalTimeInForeground }
+                    } else {
+                        pkgStats.maxByOrNull { it.lastTimeStamp }?.totalTimeInForeground ?: 0L
+                    }
+                    if (totalTime > 0L) {
+                        return (totalTime / 60_000L).toInt()
+                    }
                 }
             }
         } catch (e: Exception) {
@@ -155,14 +172,14 @@ object UsageHelper {
      * Returns the total active screen time spent across all user applications today
      * (since midnight 00:00:00) in minutes. Returns -1 if usage permission is not granted.
      *
-     * Production Architecture:
+     * Production Multi-OEM Architecture:
      * - Uses Android's native INTERVAL_DAILY usage stats.
      * - Filters for usage strictly used today (lastTimeUsed >= startOfDay).
-     * - Groups by package and selects the latest active bucket for each package, eliminating
-     *   the distortion where queryUsageStats or queryAndAggregateUsageStats returns yesterday's
-     *   overlapping 24h bucket alongside today's bucket.
+     * - Groups by package and aggregates all buckets started today (firstTimeStamp >= startOfDay)
+     *   which captures full usage even if the phone rebooted or updated today.
+     * - For non-standard OEM daily buckets that straddle midnight, falls back to the latest active bucket.
      * - Dynamically excludes all OEM stock home launchers (Samsung One UI, Pixel Launcher,
-     *   Xiaomi MIUI/HyperOS, Vivo/Oppo/OnePlus launchers) and system overlays so only actual app usage counts.
+     *   Xiaomi HyperOS/MIUI, Vivo, Oppo, OnePlus, Motorola, etc.) and P-Sei itself so only actual app usage counts.
      * - Directly matches Google Digital Wellbeing and Android System Settings.
      */
     fun getTotalScreenTimeTodayMinutes(context: Context): Int {
@@ -184,17 +201,20 @@ object UsageHelper {
         try {
             val statsList = usageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_DAILY, startOfDay, now)
             if (!statsList.isNullOrEmpty()) {
-                val latestStats = statsList
-                    .filter { it.lastTimeUsed >= startOfDay }
+                val statsByPackage = statsList
+                    .filter { it.lastTimeUsed >= startOfDay && !ignoredPackages.contains(it.packageName) }
                     .groupBy { it.packageName }
-                    .mapValues { (_, list) -> list.maxByOrNull { it.lastTimeStamp } }
 
                 var totalMillis = 0L
-                for ((pkg, stats) in latestStats) {
-                    if (stats == null || ignoredPackages.contains(pkg)) continue
-                    val time = stats.totalTimeInForeground
-                    if (time > 0L) {
-                        totalMillis += time
+                for ((_, list) in statsByPackage) {
+                    val todayBuckets = list.filter { it.firstTimeStamp >= startOfDay }
+                    val appTime = if (todayBuckets.isNotEmpty()) {
+                        todayBuckets.sumOf { it.totalTimeInForeground }
+                    } else {
+                        list.maxByOrNull { it.lastTimeStamp }?.totalTimeInForeground ?: 0L
+                    }
+                    if (appTime > 0L) {
+                        totalMillis += appTime
                     }
                 }
                 return (totalMillis / 60_000L).toInt()

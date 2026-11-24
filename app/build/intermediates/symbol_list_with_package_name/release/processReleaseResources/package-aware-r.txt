@@ -772,6 +772,7 @@ id actionHide
 id actionInfo
 id actionRemoveFromHome
 id actionRename
+id actionSetLimit
 id actionUninstall
 id action_bar
 id action_bar_activity_content

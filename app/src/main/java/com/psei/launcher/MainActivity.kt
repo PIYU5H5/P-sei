@@ -259,7 +259,7 @@ class MainActivity : AppCompatActivity(), AppRepository.OnAppsChangedListener {
                     prefs.duolingoStreak += 1
                 }
                 prefs.isDuolingoPracticedToday = true
-                Toast.makeText(this, "Duolingo streak extended! 🔥", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Duolingo streak extended", Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -826,12 +826,12 @@ class MainActivity : AppCompatActivity(), AppRepository.OnAppsChangedListener {
 
                 itemBinding.tvFocusText.text = item.text
                 if (item.isCompleted) {
-                    itemBinding.tvFocusIcon.text = "✅"
+                    itemBinding.tvFocusIcon.text = "✓"
                     itemBinding.tvFocusText.alpha = 0.45f
                     itemBinding.tvFocusText.paintFlags = itemBinding.tvFocusText.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
                     itemBinding.btnFocusDone.text = getString(R.string.daily_intent_reset)
                 } else {
-                    itemBinding.tvFocusIcon.text = "🎯"
+                    itemBinding.tvFocusIcon.text = "•"
                     itemBinding.tvFocusText.alpha = 1.0f
                     itemBinding.tvFocusText.paintFlags = itemBinding.tvFocusText.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
                     itemBinding.btnFocusDone.text = getString(R.string.daily_intent_done)
@@ -1317,14 +1317,14 @@ class MainActivity : AppCompatActivity(), AppRepository.OnAppsChangedListener {
             dialogBinding.btnSnoozeEmergency.setOnClickListener {
                 dialog.dismiss()
                 prefs.useEmergencySnooze(app.packageName, 5)
-                Toast.makeText(this, "Emergency 5 minutes granted for ${app.label}. Make it count! ⏳", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Emergency 5 minutes granted for ${app.label}", Toast.LENGTH_SHORT).show()
                 executeLaunch(app)
             }
         }
 
         dialogBinding.btnStepAway.setOnClickListener {
             dialog.dismiss()
-            Toast.makeText(this, "Great choice stepping away! 🌿", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Good choice stepping away", Toast.LENGTH_SHORT).show()
         }
 
         dialog.setOnDismissListener {
@@ -1377,7 +1377,7 @@ class MainActivity : AppCompatActivity(), AppRepository.OnAppsChangedListener {
         dialogBinding.btnCancelMindful.setOnClickListener {
             mindfulTimer?.cancel()
             dialog.dismiss()
-            Toast.makeText(this, "Good job stepping away! 🌿", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Stepped away", Toast.LENGTH_SHORT).show()
         }
 
         dialog.setOnDismissListener {
@@ -1462,7 +1462,7 @@ class MainActivity : AppCompatActivity(), AppRepository.OnAppsChangedListener {
                 updateTextSizes()
                 renderDuolingoWidget()
                 loadTodayCalendarEvents(force = true)
-                Toast.makeText(this@MainActivity, "Welcome to P-Sei Pro! ⭐ Enjoy intentional living.", Toast.LENGTH_LONG).show()
+                Toast.makeText(this@MainActivity, "Welcome to P-Sei Pro", Toast.LENGTH_LONG).show()
             }
 
             override fun onPurchaseFailed(errorMessage: String) {
@@ -1495,7 +1495,7 @@ class MainActivity : AppCompatActivity(), AppRepository.OnAppsChangedListener {
                 renderDuolingoWidget()
                 loadTodayCalendarEvents(force = true)
                 if (isPro) {
-                    Toast.makeText(this, "Pro purchase restored! 🎉", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Pro purchase restored", Toast.LENGTH_SHORT).show()
                 } else {
                     Toast.makeText(this, "No active subscription found for this Google account.", Toast.LENGTH_SHORT).show()
                 }
@@ -1659,9 +1659,9 @@ class MainActivity : AppCompatActivity(), AppRepository.OnAppsChangedListener {
         // Daily Limit
         val currentLimit = prefs.getAppScreenTimeLimit(app.packageName)
         dialogBinding.actionSetLimit.text = if (currentLimit > 0) {
-            "Daily limit: ${currentLimit}m ⏳"
+            "Daily limit: ${currentLimit}m"
         } else {
-            "Daily limit ⏳"
+            "Daily limit"
         }
         dialogBinding.actionSetLimit.setOnClickListener {
             dialog.dismiss()
@@ -1919,7 +1919,7 @@ class MainActivity : AppCompatActivity(), AppRepository.OnAppsChangedListener {
         val currentIdx = limits.indexOf(currentLimit).let { if (it >= 0) it else 0 }
 
         AlertDialog.Builder(this)
-            .setTitle("Daily Limit for ${app.label} ⏳")
+            .setTitle("Daily Limit: ${app.label}")
             .setSingleChoiceItems(options, currentIdx) { dialog, which ->
                 val chosen = limits[which]
                 prefs.setAppScreenTimeLimit(app.packageName, chosen)

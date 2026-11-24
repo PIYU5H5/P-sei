@@ -9623,8 +9623,6 @@ com.psei.launcher.R$drawable:
     public static int ic_launcher_foreground
     private void <init>()
 com.psei.launcher.R$id:
-    public static int btnSnoozeEmergency
-    public static int btnStepAway
     public static int hiddenAppsRoot
     public static int pathFlameInner
     public static int pathFlameOuter
@@ -9632,10 +9630,8 @@ com.psei.launcher.R$id:
     public static int rowDailyFocus
     public static int settingsRoot
     public static int tvAppName
-    public static int tvLockoutMessage
     private void <init>()
 com.psei.launcher.R$layout:
-    public static int dialog_gentle_lockout
     private void <init>()
 com.psei.launcher.R$mipmap
 com.psei.launcher.R$string:
@@ -9728,7 +9724,8 @@ com.psei.launcher.databinding.DialogDailyIntentBinding:
     public synthetic bridge android.view.View getRoot()
 com.psei.launcher.databinding.DialogDuolingoEditBinding:
     public synthetic bridge android.view.View getRoot()
-com.psei.launcher.databinding.DialogGentleLockoutBinding
+com.psei.launcher.databinding.DialogGentleLockoutBinding:
+    public synthetic bridge android.view.View getRoot()
 com.psei.launcher.databinding.DialogKansoProBinding:
     public synthetic bridge android.view.View getRoot()
 com.psei.launcher.databinding.DialogMindfulDelayBinding:
@@ -22258,8 +22255,10 @@ com.psei.launcher.MainActivity:
     public static void setupScreenTimeGlance()
     public static void setupSearch()
     public static void setupShortcuts()
+    public static void showGentleLockoutDialog()
     public static void showMindfulDelayDialog()
     public static void showRenameDialog()
+    public static void showSetAppLimitDialog()
     public static void showSingleFocusActionMenu()
     public static void unregisterCalendarObserver()
 com.psei.launcher.MinimalLauncherApp:
@@ -22294,7 +22293,7 @@ com.psei.launcher.SettingsActivity:
     public static void showMindfulAppsDialog()
     public static void showMindfulDurationDialog()
     public static void showSecretRedeemDialog()
-    public static void showSetAppLimitDialog()
+    public static void showSetAppLimitDialog$1()
     public static void showSlotsCountDialog()
     public static void showTextSizeDialog()
     public static void showThemeDialog()
@@ -22326,6 +22325,8 @@ com.psei.launcher.databinding.DialogDailyIntentBinding:
     public static android.widget.LinearLayout getRoot()
 com.psei.launcher.databinding.DialogDuolingoEditBinding:
     public final android.widget.TextView tvPracticedStatus
+    public static android.widget.LinearLayout getRoot()
+com.psei.launcher.databinding.DialogGentleLockoutBinding:
     public static android.widget.LinearLayout getRoot()
 com.psei.launcher.databinding.DialogKansoProBinding:
     public static android.widget.LinearLayout getRoot()
@@ -22420,7 +22421,9 @@ kotlin.collections.AbstractList:
 kotlin.collections.ArrayAsCollection:
     public final boolean isVarargs
     public static int getSize()
-kotlin.collections.ArraysKt
+kotlin.collections.ArraysKt:
+    public static java.lang.Object getOrNull(java.lang.Object[],int)
+    public static char single(char[])
 kotlin.collections.ArraysKt___ArraysJvmKt:
     public static final java.util.List asList(java.lang.Object[])
     public static final void sortWith(java.lang.Object[],java.util.Comparator)

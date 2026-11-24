@@ -13,13 +13,6 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="⏳"
-        android:textSize="36sp" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
         android:text="Daily Limit Reached"
         android:textColor="?attr/primaryTextColor"
         android:textSize="22sp"
@@ -44,7 +37,7 @@
         android:layout_marginTop="28dp"
         android:background="?attr/searchBackground"
         android:gravity="center"
-        android:text="Step Away (Recharge 🌿)"
+        android:text="Step Away"
         android:textColor="?attr/primaryTextColor"
         android:textSize="15sp"
         android:textStyle="bold" />

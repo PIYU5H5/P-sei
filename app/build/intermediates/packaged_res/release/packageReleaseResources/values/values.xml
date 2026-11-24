@@ -39,7 +39,7 @@
     <string name="daily_intent_add_more">+ Add another focus (%1$d/3)</string>
     <string name="daily_intent_clear">Clear</string>
     <string name="daily_intent_clear_all">Clear all</string>
-    <string name="daily_intent_completed">Focus completed! 🎉</string>
+    <string name="daily_intent_completed">Focus completed</string>
     <string name="daily_intent_delete_item">Delete this focus</string>
     <string name="daily_intent_dialog_subtitle">Set up to 3 priority goals for today</string>
     <string name="daily_intent_dialog_title">Today\'s Focus</string>

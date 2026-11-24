@@ -73,6 +73,17 @@
         android:textSize="17sp" />
 
     <TextView
+        android:id="@+id/actionSetLimit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?android:attr/selectableItemBackground"
+        android:paddingTop="14dp"
+        android:paddingBottom="14dp"
+        android:text="Daily limit"
+        android:textColor="?attr/primaryTextColor"
+        android:textSize="17sp" />
+
+    <TextView
         android:id="@+id/actionInfo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

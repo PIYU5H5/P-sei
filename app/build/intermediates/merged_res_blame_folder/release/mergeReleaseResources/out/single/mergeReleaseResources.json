@@ -136,6 +136,10 @@
         "source": "C:\\Users\\PIYUSH\\.gradle\\daemon\\8.9\\com.psei.launcher.app-billing-7.1.1-4:\\xml\\com_android_billingclient_phenotype.xml"
     },
     {
+        "merged": "com.psei.launcher.app-release-26:/layout_activity_settings.xml.flat",
+        "source": "com.psei.launcher.app-main-27:/layout/activity_settings.xml"
+    },
+    {
         "merged": "C:\\Users\\PIYUSH\\.gradle\\daemon\\8.9\\com.psei.launcher.app-release-26:\\drawable-xhdpi-v4_ic_call_decline_low.png.flat",
         "source": "C:\\Users\\PIYUSH\\.gradle\\daemon\\8.9\\com.psei.launcher.app-core-1.12.0-17:\\drawable-xhdpi-v4\\ic_call_decline_low.png"
     },
@@ -832,6 +836,10 @@
         "source": "C:\\Users\\PIYUSH\\.gradle\\daemon\\8.9\\com.psei.launcher.app-appcompat-1.6.1-11:\\drawable-mdpi-v4\\abc_btn_switch_to_on_mtrl_00012.9.png"
     },
     {
+        "merged": "com.psei.launcher.app-release-26:/layout_dialog_kanso_pro.xml.flat",
+        "source": "com.psei.launcher.app-main-27:/layout/dialog_kanso_pro.xml"
+    },
+    {
         "merged": "C:\\Users\\PIYUSH\\.gradle\\daemon\\8.9\\com.psei.launcher.app-release-26:\\drawable-xxhdpi-v4_common_google_signin_btn_icon_dark_normal_background.9.png.flat",
         "source": "C:\\Users\\PIYUSH\\.gradle\\daemon\\8.9\\com.psei.launcher.app-play-services-base-18.5.0-12:\\drawable-xxhdpi-v4\\common_google_signin_btn_icon_dark_normal_background.9.png"
     },
@@ -870,6 +878,10 @@
     {
         "merged": "C:\\Users\\PIYUSH\\.gradle\\daemon\\8.9\\com.psei.launcher.app-release-26:\\drawable-mdpi-v4_abc_scrubber_track_mtrl_alpha.9.png.flat",
         "source": "C:\\Users\\PIYUSH\\.gradle\\daemon\\8.9\\com.psei.launcher.app-appcompat-1.6.1-11:\\drawable-mdpi-v4\\abc_scrubber_track_mtrl_alpha.9.png"
+    },
+    {
+        "merged": "com.psei.launcher.app-release-26:/layout_activity_main.xml.flat",
+        "source": "com.psei.launcher.app-main-27:/layout/activity_main.xml"
     },
     {
         "merged": "C:\\Users\\PIYUSH\\.gradle\\daemon\\8.9\\com.psei.launcher.app-release-26:\\layout-v21_notification_template_custom_big.xml.flat",
@@ -926,6 +938,10 @@
     {
         "merged": "C:\\Users\\PIYUSH\\.gradle\\daemon\\8.9\\com.psei.launcher.app-release-26:\\drawable-xhdpi-v4_googleg_standard_color_18.png.flat",
         "source": "C:\\Users\\PIYUSH\\.gradle\\daemon\\8.9\\com.psei.launcher.app-play-services-base-18.5.0-12:\\drawable-xhdpi-v4\\googleg_standard_color_18.png"
+    },
+    {
+        "merged": "com.psei.launcher.app-release-26:/layout_dialog_secret_vip.xml.flat",
+        "source": "com.psei.launcher.app-main-27:/layout/dialog_secret_vip.xml"
     },
     {
         "merged": "C:\\Users\\PIYUSH\\.gradle\\daemon\\8.9\\com.psei.launcher.app-release-26:\\drawable_abc_ic_menu_paste_mtrl_am_alpha.xml.flat",
@@ -1380,6 +1396,10 @@
         "source": "C:\\Users\\PIYUSH\\.gradle\\daemon\\8.9\\com.psei.launcher.app-appcompat-1.6.1-11:\\anim\\abc_fade_out.xml"
     },
     {
+        "merged": "com.psei.launcher.app-release-26:/layout_dialog_mindful_delay.xml.flat",
+        "source": "com.psei.launcher.app-main-27:/layout/dialog_mindful_delay.xml"
+    },
+    {
         "merged": "C:\\Users\\PIYUSH\\.gradle\\daemon\\8.9\\com.psei.launcher.app-release-26:\\layout_abc_action_mode_bar.xml.flat",
         "source": "C:\\Users\\PIYUSH\\.gradle\\daemon\\8.9\\com.psei.launcher.app-appcompat-1.6.1-11:\\layout\\abc_action_mode_bar.xml"
     },
@@ -1520,6 +1540,10 @@
         "source": "C:\\Users\\PIYUSH\\.gradle\\daemon\\8.9\\com.psei.launcher.app-appcompat-1.6.1-11:\\interpolator\\btn_radio_to_on_mtrl_animation_interpolator_0.xml"
     },
     {
+        "merged": "com.psei.launcher.app-release-26:/layout_item_daily_focus.xml.flat",
+        "source": "com.psei.launcher.app-main-27:/layout/item_daily_focus.xml"
+    },
+    {
         "merged": "C:\\Users\\PIYUSH\\.gradle\\daemon\\8.9\\com.psei.launcher.app-release-26:\\drawable-xhdpi-v4_notification_bg_low_normal.9.png.flat",
         "source": "C:\\Users\\PIYUSH\\.gradle\\daemon\\8.9\\com.psei.launcher.app-core-1.12.0-17:\\drawable-xhdpi-v4\\notification_bg_low_normal.9.png"
     },
@@ -1542,6 +1566,10 @@
     {
         "merged": "C:\\Users\\PIYUSH\\.gradle\\daemon\\8.9\\com.psei.launcher.app-release-26:\\drawable-hdpi-v4_notification_bg_normal.9.png.flat",
         "source": "C:\\Users\\PIYUSH\\.gradle\\daemon\\8.9\\com.psei.launcher.app-core-1.12.0-17:\\drawable-hdpi-v4\\notification_bg_normal.9.png"
+    },
+    {
+        "merged": "com.psei.launcher.app-release-26:/layout_dialog_gentle_lockout.xml.flat",
+        "source": "com.psei.launcher.app-main-27:/layout/dialog_gentle_lockout.xml"
     },
     {
         "merged": "C:\\Users\\PIYUSH\\.gradle\\daemon\\8.9\\com.psei.launcher.app-release-26:\\color-v23_abc_btn_colored_borderless_text_material.xml.flat",

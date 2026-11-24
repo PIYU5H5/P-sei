@@ -145,7 +145,7 @@ class SettingsActivity : AppCompatActivity() {
             val success = WallpaperHelper.setPureBlackWallpaper(this)
             if (success) {
                 prefs.isBlackWallpaperSynced = true
-                Toast.makeText(this, "Pure Black Wallpaper synced! Recents blur lag eliminated. 🌿", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Pure Black Wallpaper synced", Toast.LENGTH_SHORT).show()
             } else {
                 Toast.makeText(this, "Could not set wallpaper.", Toast.LENGTH_SHORT).show()
             }
@@ -367,7 +367,7 @@ class SettingsActivity : AppCompatActivity() {
                 LauncherAdminReceiver.requestAdmin(this)
             }
             if (disabled) {
-                Toast.makeText(this, "Accessibility disabled. Google Pay is now safe to use! 💳", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, "Accessibility disabled. Google Pay is safe to use.", Toast.LENGTH_LONG).show()
             } else {
                 Toast.makeText(this, "Please turn off P-Sei in Accessibility settings to unblock Google Pay.", Toast.LENGTH_LONG).show()
                 LockAccessibilityService.openSettings(this)
@@ -408,7 +408,7 @@ class SettingsActivity : AppCompatActivity() {
             if (prefs.isProUser) {
                 binding.tvProBadge.text = "PRO"
                 binding.tvProBadge.setBackgroundResource(R.drawable.bg_pro_badge)
-                binding.tvProSubtitle.text = "All Pro features unlocked (Preview Mode) ⭐"
+                binding.tvProSubtitle.text = "All Pro features unlocked (Preview Mode)"
             } else {
                 binding.tvProBadge.text = "FREE"
                 binding.tvProBadge.setBackgroundColor(Color.parseColor("#444444"))
@@ -421,12 +421,12 @@ class SettingsActivity : AppCompatActivity() {
                 getString(R.string.pref_theme_dark)
             } else {
                 when (prefs.theme) {
-                    Prefs.THEME_LIGHT -> "Light (Clean White) ⭐ PRO"
-                    Prefs.THEME_SYSTEM -> "System default ⭐ PRO"
-                    Prefs.THEME_SEPIA -> "Warm Paper (Sepia / E-Ink) ⭐ PRO"
-                    Prefs.THEME_FOREST -> "Forest Night (Botanical Dark) ⭐ PRO"
-                    Prefs.THEME_CHARCOAL -> "Charcoal Slate ⭐ PRO"
-                    Prefs.THEME_CYBER -> "Cyberpunk Midnight ⭐ PRO"
+                    Prefs.THEME_LIGHT -> "Light (Clean White) (Pro)"
+                    Prefs.THEME_SYSTEM -> "System default (Pro)"
+                    Prefs.THEME_SEPIA -> "Warm Paper (Sepia / E-Ink) (Pro)"
+                    Prefs.THEME_FOREST -> "Forest Night (Botanical Dark) (Pro)"
+                    Prefs.THEME_CHARCOAL -> "Charcoal Slate (Pro)"
+                    Prefs.THEME_CYBER -> "Cyberpunk Midnight (Pro)"
                     else -> getString(R.string.pref_theme_dark)
                 }
             }
@@ -481,9 +481,9 @@ class SettingsActivity : AppCompatActivity() {
                 "Device Administrator (Recommended • Google Pay Safe)"
             } else {
                 if (isAccessibilityActive) {
-                "Accessibility Service (⚠️ Active • Blocks Google Pay)"
+                "Accessibility Service (Active • Blocks Google Pay)"
             } else {
-                "Accessibility Service (⚠️ Incompatible with Google Pay)"
+                "Accessibility Service (Incompatible with Google Pay)"
             }
         }
 
@@ -549,7 +549,7 @@ class SettingsActivity : AppCompatActivity() {
 
     private fun showSlotsCountDialog() {
         val options = (0..10).map { count ->
-            if (count > 6) "$count apps ⭐ PRO" else "$count apps"
+            if (count > 6) "$count apps (Pro)" else "$count apps"
         }.toTypedArray()
         val currentIndex = prefs.homeSlotsCount.coerceIn(0, 10)
 
@@ -572,12 +572,12 @@ class SettingsActivity : AppCompatActivity() {
     private fun showThemeDialog() {
         val options = arrayOf(
             getString(R.string.pref_theme_dark) + " (Free)",
-            "Light (Clean White) ⭐ PRO",
-            "System default ⭐ PRO",
-            "Warm Paper (Sepia / E-Ink) ⭐ PRO",
-            "Forest Night (Botanical Dark) ⭐ PRO",
-            "Charcoal Slate (Soft Slate) ⭐ PRO",
-            "Cyberpunk Midnight (Neon Cyan) ⭐ PRO"
+            "Light (Clean White) (Pro)",
+            "System default (Pro)",
+            "Warm Paper (Sepia / E-Ink) (Pro)",
+            "Forest Night (Botanical Dark) (Pro)",
+            "Charcoal Slate (Soft Slate) (Pro)",
+            "Cyberpunk Midnight (Neon Cyan) (Pro)"
         )
         val currentIndex = if (!prefs.isProUser) 0 else when (prefs.theme) {
             Prefs.THEME_LIGHT -> 1
@@ -631,7 +631,7 @@ class SettingsActivity : AppCompatActivity() {
         val currentIdx = durations.indexOf(prefs.mindfulDelaySeconds).let { if (it >= 0) it else 1 }
 
         AlertDialog.Builder(this)
-            .setTitle("Pause Duration 🧘")
+            .setTitle("Pause Duration")
             .setSingleChoiceItems(options, currentIdx) { dialog, which ->
                 prefs.mindfulDelaySeconds = durations[which]
                 updateUiState()
@@ -654,7 +654,7 @@ class SettingsActivity : AppCompatActivity() {
         val checked = allApps.map { validCurrent.contains(it.packageName) }.toBooleanArray()
 
         AlertDialog.Builder(this)
-            .setTitle("Select Mindful Apps 🧘")
+            .setTitle("Select Mindful Apps")
             .setMultiChoiceItems(labels, checked) { _, which, isChecked ->
                 val app = allApps[which]
                 val current = prefs.mindfulPackages.toMutableSet()
@@ -715,7 +715,7 @@ class SettingsActivity : AppCompatActivity() {
             override fun onPurchaseSuccess() {
                 updateUi()
                 updateUiState()
-                Toast.makeText(this@SettingsActivity, "Welcome to P-Sei Pro! ⭐ Enjoy intentional living.", Toast.LENGTH_LONG).show()
+                Toast.makeText(this@SettingsActivity, "Welcome to P-Sei Pro", Toast.LENGTH_LONG).show()
             }
 
             override fun onPurchaseFailed(errorMessage: String) {
@@ -745,7 +745,7 @@ class SettingsActivity : AppCompatActivity() {
                 updateUi()
                 updateUiState()
                 if (isPro) {
-                    Toast.makeText(this, "Pro purchase restored! 🎉", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Pro purchase restored", Toast.LENGTH_SHORT).show()
                 } else {
                     Toast.makeText(this, "No active subscription found for this Google account.", Toast.LENGTH_SHORT).show()
                 }
@@ -769,7 +769,7 @@ class SettingsActivity : AppCompatActivity() {
 
     private fun showUsageAccessPromptDialog() {
         AlertDialog.Builder(this)
-            .setTitle("Usage Access Required ⏳")
+            .setTitle("Usage Access Required")
             .setMessage("To track daily screen time and enforce gentle lockouts, P-Sei needs Usage Access permission.")
             .setPositiveButton("Open Settings") { _, _ ->
                 UsageHelper.openUsageAccessSettings(this)
@@ -783,7 +783,7 @@ class SettingsActivity : AppCompatActivity() {
         val pickerBinding = DialogAppPickerBinding.inflate(layoutInflater)
         dialog.setContentView(pickerBinding.root)
 
-        pickerBinding.tvPickerTitle.text = "App Screen-Time Limits ⏳"
+        pickerBinding.tvPickerTitle.text = "App Screen-Time Limits"
         pickerBinding.btnClearOption.isVisible = false
 
         val pickerAdapter = AppListAdapter(
@@ -829,7 +829,7 @@ class SettingsActivity : AppCompatActivity() {
         val currentIdx = limits.indexOf(currentLimit).let { if (it >= 0) it else 0 }
 
         AlertDialog.Builder(this)
-            .setTitle("Daily Limit for ${app.label} ⏳")
+            .setTitle("Daily Limit: ${app.label}")
             .setSingleChoiceItems(options, currentIdx) { dialog, which ->
                 val chosen = limits[which]
                 prefs.setAppScreenTimeLimit(app.packageName, chosen)
@@ -877,7 +877,7 @@ class SettingsActivity : AppCompatActivity() {
     private fun showLockMethodDialog() {
         val options = arrayOf(
             "Device Administrator (Recommended • Google Pay & Banking Safe)",
-            "Accessibility Service (⚠️ Incompatible with Google Pay & UPI)"
+            "Accessibility Service (Incompatible with Google Pay & UPI)"
         )
         val currentIndex = if (prefs.lockMethod == Prefs.LOCK_METHOD_DEVICE_ADMIN) 0 else 1
 
@@ -896,7 +896,7 @@ class SettingsActivity : AppCompatActivity() {
                     updateUiState()
                 } else {
                     AlertDialog.Builder(this)
-                        .setTitle("⚠️ Google Pay & UPI Notice")
+                        .setTitle("Google Pay & UPI Notice")
                         .setMessage("Enabling Accessibility Service may cause Google Pay, PhonePe, and other UPI banking apps in India to block payments for security.\n\nDo you still want to enable Accessibility?")
                         .setPositiveButton("Enable Anyway") { _, _ ->
                             prefs.lockMethod = Prefs.LOCK_METHOD_ACCESSIBILITY
@@ -1184,7 +1184,7 @@ class SettingsActivity : AppCompatActivity() {
                 prefs.isProUser = true
                 updateUiState()
                 dialog.dismiss()
-                Toast.makeText(this, "🎉 VIP Access Granted! P-Sei Pro Unlocked.", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, "VIP Access Granted. P-Sei Pro Unlocked.", Toast.LENGTH_LONG).show()
             } else {
                 vibrateTick()
                 Toast.makeText(this, "Invalid VIP passcode", Toast.LENGTH_SHORT).show()

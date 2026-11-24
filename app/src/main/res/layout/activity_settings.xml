@@ -86,7 +86,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="⭐ P-Sei Pro"
+                        android:text="P-Sei Pro"
                         android:textColor="#FFB800"
                         android:textSize="18sp"
                         android:textStyle="bold" />
@@ -289,7 +289,7 @@
                 android:paddingTop="12dp"
                 android:paddingEnd="24dp"
                 android:paddingBottom="8dp"
-                android:text="Widgets ⭐ PRO"
+                android:text="Widgets (Pro)"
                 android:textColor="#FFB800"
                 android:textSize="14sp"
                 android:textStyle="bold" />
@@ -598,7 +598,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Auto-launch Single Result ⭐ PRO"
+                        android:text="Auto-launch Single Result (Pro)"
                         android:textColor="?attr/primaryTextColor"
                         android:textSize="18sp" />
 
@@ -668,7 +668,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Lock Hidden Apps with Fingerprint / PIN ⭐"
+                        android:text="Lock Hidden Apps with Fingerprint / PIN (Pro)"
                         android:textColor="?attr/primaryTextColor"
                         android:textSize="18sp" />
 
@@ -702,7 +702,7 @@
                 android:paddingTop="12dp"
                 android:paddingEnd="24dp"
                 android:paddingBottom="8dp"
-                android:text="Digital Detox ⭐ PRO"
+                android:text="Digital Detox (Pro)"
                 android:textColor="#FFB800"
                 android:textSize="14sp"
                 android:textStyle="bold" />
@@ -901,7 +901,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="⚠️ Google Pay / UPI Issue Detected"
+                    android:text="Google Pay / UPI Issue Detected"
                     android:textColor="#FFB800"
                     android:textSize="14sp"
                     android:textStyle="bold" />

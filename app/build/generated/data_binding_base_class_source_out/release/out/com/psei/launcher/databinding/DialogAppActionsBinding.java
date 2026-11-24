@@ -35,6 +35,9 @@ public final class DialogAppActionsBinding implements ViewBinding {
   public final TextView actionRename;
 
   @NonNull
+  public final TextView actionSetLimit;
+
+  @NonNull
   public final TextView actionUninstall;
 
   @NonNull
@@ -43,14 +46,15 @@ public final class DialogAppActionsBinding implements ViewBinding {
   private DialogAppActionsBinding(@NonNull LinearLayout rootView,
       @NonNull TextView actionChangeSlot, @NonNull TextView actionHide,
       @NonNull TextView actionInfo, @NonNull TextView actionRemoveFromHome,
-      @NonNull TextView actionRename, @NonNull TextView actionUninstall,
-      @NonNull TextView tvActionAppTitle) {
+      @NonNull TextView actionRename, @NonNull TextView actionSetLimit,
+      @NonNull TextView actionUninstall, @NonNull TextView tvActionAppTitle) {
     this.rootView = rootView;
     this.actionChangeSlot = actionChangeSlot;
     this.actionHide = actionHide;
     this.actionInfo = actionInfo;
     this.actionRemoveFromHome = actionRemoveFromHome;
     this.actionRename = actionRename;
+    this.actionSetLimit = actionSetLimit;
     this.actionUninstall = actionUninstall;
     this.tvActionAppTitle = tvActionAppTitle;
   }
@@ -112,6 +116,12 @@ public final class DialogAppActionsBinding implements ViewBinding {
         break missingId;
       }
 
+      id = R.id.actionSetLimit;
+      TextView actionSetLimit = ViewBindings.findChildViewById(rootView, id);
+      if (actionSetLimit == null) {
+        break missingId;
+      }
+
       id = R.id.actionUninstall;
       TextView actionUninstall = ViewBindings.findChildViewById(rootView, id);
       if (actionUninstall == null) {
@@ -125,7 +135,8 @@ public final class DialogAppActionsBinding implements ViewBinding {
       }
 
       return new DialogAppActionsBinding((LinearLayout) rootView, actionChangeSlot, actionHide,
-          actionInfo, actionRemoveFromHome, actionRename, actionUninstall, tvActionAppTitle);
+          actionInfo, actionRemoveFromHome, actionRename, actionSetLimit, actionUninstall,
+          tvActionAppTitle);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));

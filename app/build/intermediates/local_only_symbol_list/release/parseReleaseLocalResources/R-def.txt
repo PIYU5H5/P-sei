@@ -40,6 +40,7 @@ id actionHide
 id actionInfo
 id actionRemoveFromHome
 id actionRename
+id actionSetLimit
 id actionUninstall
 id bottomShortcutsContainer
 id btnAddFocusItem

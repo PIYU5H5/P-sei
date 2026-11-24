@@ -1269,13 +1269,72 @@ class MainActivity : AppCompatActivity(), AppRepository.OnAppsChangedListener {
     private var mindfulTimer: CountDownTimer? = null
 
     fun launchApp(app: AppModel) {
-        // Mindful Delay Check (if configured by user)
+        // 1. App Screen-Time Limit Check
+        val limitMinutes = prefs.getAppScreenTimeLimit(app.packageName)
+        if (limitMinutes > 0 && UsageHelper.hasUsagePermission(this)) {
+            val isSnoozed = prefs.isAppSnoozed(app.packageName)
+            if (!isSnoozed) {
+                val usedMinutes = UsageHelper.getTodayUsageMinutes(this, app.packageName)
+                if (usedMinutes >= limitMinutes) {
+                    showGentleLockoutDialog(app, usedMinutes, limitMinutes)
+                    return
+                }
+            }
+        }
+
+        // 2. Mindful Delay Check (if configured by user)
         if (prefs.isMindfulApp(app.packageName)) {
             showMindfulDelayDialog(app)
             return
         }
 
         executeLaunch(app)
+    }
+
+    private fun showGentleLockoutDialog(app: AppModel, usedMinutes: Int, limitMinutes: Int) {
+        if (activeDialog?.isShowing == true) return
+
+        val dialog = Dialog(this)
+        val dialogBinding = DialogGentleLockoutBinding.inflate(layoutInflater)
+        dialog.setContentView(dialogBinding.root)
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog.window?.setLayout(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT
+        )
+
+        dialogBinding.tvLockoutMessage.text = "You've reached your ${limitMinutes}m daily limit for ${app.label} (${usedMinutes}m used today).\nTake a gentle break and recharge."
+
+        val hasUsedSnoozeToday = prefs.hasUsedEmergencySnoozeToday(app.packageName)
+        if (hasUsedSnoozeToday) {
+            dialogBinding.btnSnoozeEmergency.text = "Emergency +5m already used today"
+            dialogBinding.btnSnoozeEmergency.isEnabled = false
+            dialogBinding.btnSnoozeEmergency.alpha = 0.4f
+        } else {
+            dialogBinding.btnSnoozeEmergency.text = "Emergency +5 Minutes (Once today)"
+            dialogBinding.btnSnoozeEmergency.isEnabled = true
+            dialogBinding.btnSnoozeEmergency.alpha = 1.0f
+            dialogBinding.btnSnoozeEmergency.setOnClickListener {
+                dialog.dismiss()
+                prefs.useEmergencySnooze(app.packageName, 5)
+                Toast.makeText(this, "Emergency 5 minutes granted for ${app.label}. Make it count! ⏳", Toast.LENGTH_SHORT).show()
+                executeLaunch(app)
+            }
+        }
+
+        dialogBinding.btnStepAway.setOnClickListener {
+            dialog.dismiss()
+            Toast.makeText(this, "Great choice stepping away! 🌿", Toast.LENGTH_SHORT).show()
+        }
+
+        dialog.setOnDismissListener {
+            if (activeDialog == dialog) {
+                activeDialog = null
+            }
+        }
+
+        activeDialog = dialog
+        dialog.show()
     }
 
     private fun executeLaunch(app: AppModel) {
@@ -1597,6 +1656,27 @@ class MainActivity : AppCompatActivity(), AppRepository.OnAppsChangedListener {
             Toast.makeText(this, R.string.app_hidden_toast, Toast.LENGTH_SHORT).show()
         }
 
+        // Daily Limit
+        val currentLimit = prefs.getAppScreenTimeLimit(app.packageName)
+        dialogBinding.actionSetLimit.text = if (currentLimit > 0) {
+            "Daily limit: ${currentLimit}m ⏳"
+        } else {
+            "Daily limit ⏳"
+        }
+        dialogBinding.actionSetLimit.setOnClickListener {
+            dialog.dismiss()
+            if (!prefs.isProUser) {
+                showProShowcaseDialog("App Screen-Time Limits are a P-Sei Pro feature.")
+                return@setOnClickListener
+            }
+            if (!UsageHelper.hasUsagePermission(this)) {
+                UsageHelper.openUsageAccessSettings(this)
+                Toast.makeText(this, "Please grant Usage Access to set app limits.", Toast.LENGTH_LONG).show()
+                return@setOnClickListener
+            }
+            showSetAppLimitDialog(app)
+        }
+
         // 3. App Info
         dialogBinding.actionInfo.setOnClickListener {
             dialog.dismiss()
@@ -1822,6 +1902,37 @@ class MainActivity : AppCompatActivity(), AppRepository.OnAppsChangedListener {
         } catch (e: Exception) {
             // Ignored
         }
+    }
+
+    private fun showSetAppLimitDialog(app: AppModel) {
+        val currentLimit = prefs.getAppScreenTimeLimit(app.packageName)
+        val limits = intArrayOf(0, 15, 30, 45, 60, 90, 120)
+        val options = arrayOf(
+            "None (No limit)",
+            "15 minutes",
+            "30 minutes",
+            "45 minutes",
+            "1 hour (60m)",
+            "1.5 hours (90m)",
+            "2 hours (120m)"
+        )
+        val currentIdx = limits.indexOf(currentLimit).let { if (it >= 0) it else 0 }
+
+        AlertDialog.Builder(this)
+            .setTitle("Daily Limit for ${app.label} ⏳")
+            .setSingleChoiceItems(options, currentIdx) { dialog, which ->
+                val chosen = limits[which]
+                prefs.setAppScreenTimeLimit(app.packageName, chosen)
+                if (chosen > 0) {
+                    Toast.makeText(this, "Daily limit set to ${chosen}m for ${app.label}", Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(this, "Daily limit removed for ${app.label}", Toast.LENGTH_SHORT).show()
+                }
+                renderHomeSlots()
+                dialog.dismiss()
+            }
+            .setNegativeButton(R.string.cancel, null)
+            .show()
     }
 
     private fun getThemeColor(attrId: Int): Int {

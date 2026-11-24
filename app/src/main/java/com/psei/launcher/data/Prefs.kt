@@ -2,6 +2,7 @@ package com.psei.launcher.data
 
 import android.content.Context
 import android.content.SharedPreferences
+import java.util.Calendar
 import org.json.JSONArray
 import org.json.JSONObject
 
@@ -71,6 +72,7 @@ class Prefs private constructor(context: Context) {
         private const val KEY_BIOMETRIC_LOCK = "pref_biometric_lock"
         private const val KEY_APP_LIMIT_PREFIX = "pref_app_limit_"
         private const val KEY_APP_SNOOZE_PREFIX = "pref_app_snooze_"
+        private const val KEY_APP_SNOOZE_DATE_PREFIX = "pref_app_snooze_date_"
 
         const val SPECIAL_SHORTCUT_PHONE = "__DEFAULT_PHONE__"
         const val SPECIAL_SHORTCUT_CAMERA = "__DEFAULT_CAMERA__"
@@ -426,9 +428,22 @@ class Prefs private constructor(context: Context) {
         return result
     }
 
-    fun snoozeAppLimit(packageName: String, minutes: Int = 5) {
+    fun hasUsedEmergencySnoozeToday(packageName: String): Boolean {
+        val usedDate = sp.getString(KEY_APP_SNOOZE_DATE_PREFIX + packageName, null)
+        return usedDate == getTodayDateString()
+    }
+
+    fun useEmergencySnooze(packageName: String, minutes: Int = 5) {
+        val today = getTodayDateString()
         val snoozeUntil = System.currentTimeMillis() + (minutes * 60_000L)
-        sp.edit().putLong(KEY_APP_SNOOZE_PREFIX + packageName, snoozeUntil).apply()
+        sp.edit()
+            .putLong(KEY_APP_SNOOZE_PREFIX + packageName, snoozeUntil)
+            .putString(KEY_APP_SNOOZE_DATE_PREFIX + packageName, today)
+            .apply()
+    }
+
+    fun snoozeAppLimit(packageName: String, minutes: Int = 5) {
+        useEmergencySnooze(packageName, minutes)
     }
 
     fun isAppSnoozed(packageName: String): Boolean {

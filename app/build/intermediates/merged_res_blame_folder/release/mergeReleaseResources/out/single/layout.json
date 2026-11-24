@@ -4,64 +4,20 @@
         "source": "C:\\Users\\PIYUSH\\.gradle\\daemon\\8.9\\com.psei.launcher.app-main-27:\\layout\\item_home_slot.xml"
     },
     {
-        "merged": "com.psei.launcher.app-mergeReleaseResources-24:/layout/dialog_secret_vip.xml",
-        "source": "com.psei.launcher.app-main-27:/layout/dialog_secret_vip.xml"
-    },
-    {
-        "merged": "com.psei.launcher.app-mergeReleaseResources-24:/layout/dialog_app_actions.xml",
-        "source": "com.psei.launcher.app-main-27:/layout/dialog_app_actions.xml"
-    },
-    {
-        "merged": "C:\\Users\\PIYUSH\\.gradle\\daemon\\8.9\\com.psei.launcher.app-mergeReleaseResources-24:\\layout\\dialog_gentle_lockout.xml",
-        "source": "C:\\Users\\PIYUSH\\.gradle\\daemon\\8.9\\com.psei.launcher.app-main-27:\\layout\\dialog_gentle_lockout.xml"
-    },
-    {
-        "merged": "C:\\Users\\PIYUSH\\.gradle\\daemon\\8.9\\com.psei.launcher.app-mergeReleaseResources-24:\\layout\\item_hidden_app.xml",
-        "source": "C:\\Users\\PIYUSH\\.gradle\\daemon\\8.9\\com.psei.launcher.app-main-27:\\layout\\item_hidden_app.xml"
-    },
-    {
-        "merged": "C:\\Users\\PIYUSH\\.gradle\\daemon\\8.9\\com.psei.launcher.app-mergeReleaseResources-24:\\layout\\activity_main.xml",
-        "source": "C:\\Users\\PIYUSH\\.gradle\\daemon\\8.9\\com.psei.launcher.app-main-27:\\layout\\activity_main.xml"
-    },
-    {
-        "merged": "C:\\Users\\PIYUSH\\.gradle\\daemon\\8.9\\com.psei.launcher.app-mergeReleaseResources-24:\\layout\\item_app.xml",
-        "source": "C:\\Users\\PIYUSH\\.gradle\\daemon\\8.9\\com.psei.launcher.app-main-27:\\layout\\item_app.xml"
-    },
-    {
-        "merged": "C:\\Users\\PIYUSH\\.gradle\\daemon\\8.9\\com.psei.launcher.app-mergeReleaseResources-24:\\layout\\item_calendar_event.xml",
-        "source": "C:\\Users\\PIYUSH\\.gradle\\daemon\\8.9\\com.psei.launcher.app-main-27:\\layout\\item_calendar_event.xml"
-    },
-    {
-        "merged": "C:\\Users\\PIYUSH\\.gradle\\daemon\\8.9\\com.psei.launcher.app-mergeReleaseResources-24:\\layout\\dialog_app_actions.xml",
-        "source": "C:\\Users\\PIYUSH\\.gradle\\daemon\\8.9\\com.psei.launcher.app-main-27:\\layout\\dialog_app_actions.xml"
-    },
-    {
-        "merged": "com.psei.launcher.app-mergeReleaseResources-24:/layout/dialog_gentle_lockout.xml",
-        "source": "com.psei.launcher.app-main-27:/layout/dialog_gentle_lockout.xml"
-    },
-    {
-        "merged": "com.psei.launcher.app-mergeReleaseResources-24:/layout/dialog_mindful_delay.xml",
-        "source": "com.psei.launcher.app-main-27:/layout/dialog_mindful_delay.xml"
-    },
-    {
         "merged": "C:\\Users\\PIYUSH\\.gradle\\daemon\\8.9\\com.psei.launcher.app-mergeReleaseResources-24:\\layout\\dialog_app_picker.xml",
         "source": "C:\\Users\\PIYUSH\\.gradle\\daemon\\8.9\\com.psei.launcher.app-main-27:\\layout\\dialog_app_picker.xml"
-    },
-    {
-        "merged": "com.psei.launcher.app-mergeReleaseResources-24:/layout/dialog_kanso_pro.xml",
-        "source": "com.psei.launcher.app-main-27:/layout/dialog_kanso_pro.xml"
     },
     {
         "merged": "C:\\Users\\PIYUSH\\.gradle\\daemon\\8.9\\com.psei.launcher.app-mergeReleaseResources-24:\\layout\\item_daily_focus.xml",
         "source": "C:\\Users\\PIYUSH\\.gradle\\daemon\\8.9\\com.psei.launcher.app-main-27:\\layout\\item_daily_focus.xml"
     },
     {
-        "merged": "C:\\Users\\PIYUSH\\.gradle\\daemon\\8.9\\com.psei.launcher.app-mergeReleaseResources-24:\\layout\\dialog_rename.xml",
-        "source": "C:\\Users\\PIYUSH\\.gradle\\daemon\\8.9\\com.psei.launcher.app-main-27:\\layout\\dialog_rename.xml"
+        "merged": "C:\\Users\\PIYUSH\\.gradle\\daemon\\8.9\\com.psei.launcher.app-mergeReleaseResources-24:\\layout\\dialog_gentle_lockout.xml",
+        "source": "C:\\Users\\PIYUSH\\.gradle\\daemon\\8.9\\com.psei.launcher.app-main-27:\\layout\\dialog_gentle_lockout.xml"
     },
     {
-        "merged": "com.psei.launcher.app-mergeReleaseResources-24:/layout/item_daily_focus.xml",
-        "source": "com.psei.launcher.app-main-27:/layout/item_daily_focus.xml"
+        "merged": "C:\\Users\\PIYUSH\\.gradle\\daemon\\8.9\\com.psei.launcher.app-mergeReleaseResources-24:\\layout\\dialog_rename.xml",
+        "source": "C:\\Users\\PIYUSH\\.gradle\\daemon\\8.9\\com.psei.launcher.app-main-27:\\layout\\dialog_rename.xml"
     },
     {
         "merged": "C:\\Users\\PIYUSH\\.gradle\\daemon\\8.9\\com.psei.launcher.app-mergeReleaseResources-24:\\layout\\dialog_kanso_pro.xml",
@@ -80,6 +36,14 @@
         "source": "C:\\Users\\PIYUSH\\.gradle\\daemon\\8.9\\com.psei.launcher.app-main-27:\\layout\\activity_hidden_apps.xml"
     },
     {
+        "merged": "C:\\Users\\PIYUSH\\.gradle\\daemon\\8.9\\com.psei.launcher.app-mergeReleaseResources-24:\\layout\\item_hidden_app.xml",
+        "source": "C:\\Users\\PIYUSH\\.gradle\\daemon\\8.9\\com.psei.launcher.app-main-27:\\layout\\item_hidden_app.xml"
+    },
+    {
+        "merged": "C:\\Users\\PIYUSH\\.gradle\\daemon\\8.9\\com.psei.launcher.app-mergeReleaseResources-24:\\layout\\activity_main.xml",
+        "source": "C:\\Users\\PIYUSH\\.gradle\\daemon\\8.9\\com.psei.launcher.app-main-27:\\layout\\activity_main.xml"
+    },
+    {
         "merged": "C:\\Users\\PIYUSH\\.gradle\\daemon\\8.9\\com.psei.launcher.app-mergeReleaseResources-24:\\layout\\dialog_mindful_delay.xml",
         "source": "C:\\Users\\PIYUSH\\.gradle\\daemon\\8.9\\com.psei.launcher.app-main-27:\\layout\\dialog_mindful_delay.xml"
     },
@@ -88,15 +52,23 @@
         "source": "C:\\Users\\PIYUSH\\.gradle\\daemon\\8.9\\com.psei.launcher.app-main-27:\\layout\\dialog_daily_intent.xml"
     },
     {
+        "merged": "C:\\Users\\PIYUSH\\.gradle\\daemon\\8.9\\com.psei.launcher.app-mergeReleaseResources-24:\\layout\\item_app.xml",
+        "source": "C:\\Users\\PIYUSH\\.gradle\\daemon\\8.9\\com.psei.launcher.app-main-27:\\layout\\item_app.xml"
+    },
+    {
+        "merged": "C:\\Users\\PIYUSH\\.gradle\\daemon\\8.9\\com.psei.launcher.app-mergeReleaseResources-24:\\layout\\dialog_app_actions.xml",
+        "source": "C:\\Users\\PIYUSH\\.gradle\\daemon\\8.9\\com.psei.launcher.app-main-27:\\layout\\dialog_app_actions.xml"
+    },
+    {
+        "merged": "C:\\Users\\PIYUSH\\.gradle\\daemon\\8.9\\com.psei.launcher.app-mergeReleaseResources-24:\\layout\\item_calendar_event.xml",
+        "source": "C:\\Users\\PIYUSH\\.gradle\\daemon\\8.9\\com.psei.launcher.app-main-27:\\layout\\item_calendar_event.xml"
+    },
+    {
         "merged": "com.psei.launcher.app-mergeReleaseResources-24:/layout/activity_settings.xml",
         "source": "com.psei.launcher.app-main-27:/layout/activity_settings.xml"
     },
     {
         "merged": "C:\\Users\\PIYUSH\\.gradle\\daemon\\8.9\\com.psei.launcher.app-mergeReleaseResources-24:\\layout\\dialog_secret_vip.xml",
         "source": "C:\\Users\\PIYUSH\\.gradle\\daemon\\8.9\\com.psei.launcher.app-main-27:\\layout\\dialog_secret_vip.xml"
-    },
-    {
-        "merged": "com.psei.launcher.app-mergeReleaseResources-24:/layout/activity_main.xml",
-        "source": "com.psei.launcher.app-main-27:/layout/activity_main.xml"
     }
 ]

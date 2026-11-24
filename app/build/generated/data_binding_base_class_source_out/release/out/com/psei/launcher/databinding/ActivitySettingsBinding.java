@@ -33,6 +33,9 @@ public final class ActivitySettingsBinding implements ViewBinding {
   public final LinearLayout cardPSeiPro;
 
   @NonNull
+  public final LinearLayout rowAppAlignment;
+
+  @NonNull
   public final LinearLayout rowAppLimits;
 
   @NonNull
@@ -141,6 +144,9 @@ public final class ActivitySettingsBinding implements ViewBinding {
   public final SwitchCompat switchScreenTimeGlance;
 
   @NonNull
+  public final TextView tvAppAlignmentSummary;
+
+  @NonNull
   public final TextView tvAppLimitsSummary;
 
   @NonNull
@@ -190,25 +196,26 @@ public final class ActivitySettingsBinding implements ViewBinding {
 
   private ActivitySettingsBinding(@NonNull LinearLayout rootView, @NonNull TextView btnBack,
       @NonNull TextView btnDisableAccessibility, @NonNull LinearLayout cardAccessibilityWarning,
-      @NonNull LinearLayout cardPSeiPro, @NonNull LinearLayout rowAppLimits,
-      @NonNull LinearLayout rowAutoKeyboard, @NonNull LinearLayout rowAutoLaunch,
-      @NonNull LinearLayout rowBiometricLock, @NonNull LinearLayout rowBlackWallpaper,
-      @NonNull LinearLayout rowCalendarWidget, @NonNull LinearLayout rowDailyIntent,
-      @NonNull LinearLayout rowDefaultLauncher, @NonNull LinearLayout rowDuolingoAutoSync,
-      @NonNull LinearLayout rowDuolingoStreak, @NonNull LinearLayout rowDuolingoWidget,
-      @NonNull LinearLayout rowFuntouchHelp, @NonNull LinearLayout rowHiddenApps,
-      @NonNull LinearLayout rowHomeSlotsCount, @NonNull LinearLayout rowLockMethod,
-      @NonNull LinearLayout rowMindfulApps, @NonNull LinearLayout rowMindfulDelay,
-      @NonNull LinearLayout rowMindfulDuration, @NonNull LinearLayout rowScreenTimeGlance,
-      @NonNull LinearLayout rowShortcutBottomLeft, @NonNull LinearLayout rowShortcutBottomRight,
-      @NonNull LinearLayout rowShortcutSwipeLeft, @NonNull LinearLayout rowShortcutSwipeRight,
-      @NonNull LinearLayout rowTextSize, @NonNull LinearLayout rowTheme,
-      @NonNull LinearLayout settingsContent, @NonNull LinearLayout settingsHeader,
-      @NonNull LinearLayout settingsRoot, @NonNull SwitchCompat switchAutoKeyboard,
-      @NonNull SwitchCompat switchAutoLaunch, @NonNull SwitchCompat switchBiometricLock,
-      @NonNull SwitchCompat switchCalendarWidget, @NonNull SwitchCompat switchDailyIntent,
-      @NonNull SwitchCompat switchDuolingoWidget, @NonNull SwitchCompat switchMindfulDelay,
-      @NonNull SwitchCompat switchScreenTimeGlance, @NonNull TextView tvAppLimitsSummary,
+      @NonNull LinearLayout cardPSeiPro, @NonNull LinearLayout rowAppAlignment,
+      @NonNull LinearLayout rowAppLimits, @NonNull LinearLayout rowAutoKeyboard,
+      @NonNull LinearLayout rowAutoLaunch, @NonNull LinearLayout rowBiometricLock,
+      @NonNull LinearLayout rowBlackWallpaper, @NonNull LinearLayout rowCalendarWidget,
+      @NonNull LinearLayout rowDailyIntent, @NonNull LinearLayout rowDefaultLauncher,
+      @NonNull LinearLayout rowDuolingoAutoSync, @NonNull LinearLayout rowDuolingoStreak,
+      @NonNull LinearLayout rowDuolingoWidget, @NonNull LinearLayout rowFuntouchHelp,
+      @NonNull LinearLayout rowHiddenApps, @NonNull LinearLayout rowHomeSlotsCount,
+      @NonNull LinearLayout rowLockMethod, @NonNull LinearLayout rowMindfulApps,
+      @NonNull LinearLayout rowMindfulDelay, @NonNull LinearLayout rowMindfulDuration,
+      @NonNull LinearLayout rowScreenTimeGlance, @NonNull LinearLayout rowShortcutBottomLeft,
+      @NonNull LinearLayout rowShortcutBottomRight, @NonNull LinearLayout rowShortcutSwipeLeft,
+      @NonNull LinearLayout rowShortcutSwipeRight, @NonNull LinearLayout rowTextSize,
+      @NonNull LinearLayout rowTheme, @NonNull LinearLayout settingsContent,
+      @NonNull LinearLayout settingsHeader, @NonNull LinearLayout settingsRoot,
+      @NonNull SwitchCompat switchAutoKeyboard, @NonNull SwitchCompat switchAutoLaunch,
+      @NonNull SwitchCompat switchBiometricLock, @NonNull SwitchCompat switchCalendarWidget,
+      @NonNull SwitchCompat switchDailyIntent, @NonNull SwitchCompat switchDuolingoWidget,
+      @NonNull SwitchCompat switchMindfulDelay, @NonNull SwitchCompat switchScreenTimeGlance,
+      @NonNull TextView tvAppAlignmentSummary, @NonNull TextView tvAppLimitsSummary,
       @NonNull TextView tvDuolingoStreakSummary, @NonNull TextView tvHiddenAppsSummary,
       @NonNull TextView tvHomeSlotsSummary, @NonNull TextView tvLockMethodSummary,
       @NonNull TextView tvMindfulAppsSummary, @NonNull TextView tvMindfulDurationSummary,
@@ -222,6 +229,7 @@ public final class ActivitySettingsBinding implements ViewBinding {
     this.btnDisableAccessibility = btnDisableAccessibility;
     this.cardAccessibilityWarning = cardAccessibilityWarning;
     this.cardPSeiPro = cardPSeiPro;
+    this.rowAppAlignment = rowAppAlignment;
     this.rowAppLimits = rowAppLimits;
     this.rowAutoKeyboard = rowAutoKeyboard;
     this.rowAutoLaunch = rowAutoLaunch;
@@ -258,6 +266,7 @@ public final class ActivitySettingsBinding implements ViewBinding {
     this.switchDuolingoWidget = switchDuolingoWidget;
     this.switchMindfulDelay = switchMindfulDelay;
     this.switchScreenTimeGlance = switchScreenTimeGlance;
+    this.tvAppAlignmentSummary = tvAppAlignmentSummary;
     this.tvAppLimitsSummary = tvAppLimitsSummary;
     this.tvDuolingoStreakSummary = tvDuolingoStreakSummary;
     this.tvHiddenAppsSummary = tvHiddenAppsSummary;
@@ -324,6 +333,12 @@ public final class ActivitySettingsBinding implements ViewBinding {
       id = R.id.cardPSeiPro;
       LinearLayout cardPSeiPro = ViewBindings.findChildViewById(rootView, id);
       if (cardPSeiPro == null) {
+        break missingId;
+      }
+
+      id = R.id.rowAppAlignment;
+      LinearLayout rowAppAlignment = ViewBindings.findChildViewById(rootView, id);
+      if (rowAppAlignment == null) {
         break missingId;
       }
 
@@ -539,6 +554,12 @@ public final class ActivitySettingsBinding implements ViewBinding {
         break missingId;
       }
 
+      id = R.id.tvAppAlignmentSummary;
+      TextView tvAppAlignmentSummary = ViewBindings.findChildViewById(rootView, id);
+      if (tvAppAlignmentSummary == null) {
+        break missingId;
+      }
+
       id = R.id.tvAppLimitsSummary;
       TextView tvAppLimitsSummary = ViewBindings.findChildViewById(rootView, id);
       if (tvAppLimitsSummary == null) {
@@ -636,19 +657,19 @@ public final class ActivitySettingsBinding implements ViewBinding {
       }
 
       return new ActivitySettingsBinding((LinearLayout) rootView, btnBack, btnDisableAccessibility,
-          cardAccessibilityWarning, cardPSeiPro, rowAppLimits, rowAutoKeyboard, rowAutoLaunch,
-          rowBiometricLock, rowBlackWallpaper, rowCalendarWidget, rowDailyIntent,
+          cardAccessibilityWarning, cardPSeiPro, rowAppAlignment, rowAppLimits, rowAutoKeyboard,
+          rowAutoLaunch, rowBiometricLock, rowBlackWallpaper, rowCalendarWidget, rowDailyIntent,
           rowDefaultLauncher, rowDuolingoAutoSync, rowDuolingoStreak, rowDuolingoWidget,
           rowFuntouchHelp, rowHiddenApps, rowHomeSlotsCount, rowLockMethod, rowMindfulApps,
           rowMindfulDelay, rowMindfulDuration, rowScreenTimeGlance, rowShortcutBottomLeft,
           rowShortcutBottomRight, rowShortcutSwipeLeft, rowShortcutSwipeRight, rowTextSize,
           rowTheme, settingsContent, settingsHeader, settingsRoot, switchAutoKeyboard,
           switchAutoLaunch, switchBiometricLock, switchCalendarWidget, switchDailyIntent,
-          switchDuolingoWidget, switchMindfulDelay, switchScreenTimeGlance, tvAppLimitsSummary,
-          tvDuolingoStreakSummary, tvHiddenAppsSummary, tvHomeSlotsSummary, tvLockMethodSummary,
-          tvMindfulAppsSummary, tvMindfulDurationSummary, tvProBadge, tvProSubtitle,
-          tvSettingsTitle, tvShortcutBottomLeft, tvShortcutBottomRight, tvShortcutSwipeLeft,
-          tvShortcutSwipeRight, tvTextSizeSummary, tvThemeSummary);
+          switchDuolingoWidget, switchMindfulDelay, switchScreenTimeGlance, tvAppAlignmentSummary,
+          tvAppLimitsSummary, tvDuolingoStreakSummary, tvHiddenAppsSummary, tvHomeSlotsSummary,
+          tvLockMethodSummary, tvMindfulAppsSummary, tvMindfulDurationSummary, tvProBadge,
+          tvProSubtitle, tvSettingsTitle, tvShortcutBottomLeft, tvShortcutBottomRight,
+          tvShortcutSwipeLeft, tvShortcutSwipeRight, tvTextSizeSummary, tvThemeSummary);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));

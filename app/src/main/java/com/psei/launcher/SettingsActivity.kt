@@ -156,6 +156,11 @@ class SettingsActivity : AppCompatActivity() {
             showTextSizeDialog()
         }
 
+        // Text Alignment
+        binding.rowAppAlignment.setOnClickListener {
+            showAppAlignmentDialog()
+        }
+
         // Widgets: Calendar Toggle (Pro)
         binding.switchCalendarWidget.setOnCheckedChangeListener { buttonView, isChecked ->
             if (isBindingUiState) return@setOnCheckedChangeListener
@@ -435,6 +440,12 @@ class SettingsActivity : AppCompatActivity() {
                 Prefs.TEXT_SIZE_SMALL -> getString(R.string.pref_text_size_small)
                 Prefs.TEXT_SIZE_LARGE -> getString(R.string.pref_text_size_large)
                 else -> getString(R.string.pref_text_size_medium)
+            }
+
+            binding.tvAppAlignmentSummary.text = when (prefs.appAlignment) {
+                Prefs.ALIGNMENT_CENTER -> "Center"
+                Prefs.ALIGNMENT_RIGHT -> "Right"
+                else -> "Left (Default)"
             }
 
             binding.switchAutoKeyboard.isChecked = prefs.autoOpenKeyboard
@@ -867,6 +878,34 @@ class SettingsActivity : AppCompatActivity() {
                     else -> Prefs.TEXT_SIZE_MEDIUM
                 }
                 prefs.textSize = newSize
+                updateUiState()
+                dialog.dismiss()
+            }
+            .setNegativeButton(R.string.cancel, null)
+            .show()
+    }
+
+    private fun showAppAlignmentDialog() {
+        val options = arrayOf(
+            "Left (Default)",
+            "Center",
+            "Right"
+        )
+        val currentIndex = when (prefs.appAlignment) {
+            Prefs.ALIGNMENT_CENTER -> 1
+            Prefs.ALIGNMENT_RIGHT -> 2
+            else -> 0
+        }
+
+        AlertDialog.Builder(this)
+            .setTitle("Text Alignment")
+            .setSingleChoiceItems(options, currentIndex) { dialog, which ->
+                val newAlignment = when (which) {
+                    1 -> Prefs.ALIGNMENT_CENTER
+                    2 -> Prefs.ALIGNMENT_RIGHT
+                    else -> Prefs.ALIGNMENT_LEFT
+                }
+                prefs.appAlignment = newAlignment
                 updateUiState()
                 dialog.dismiss()
             }

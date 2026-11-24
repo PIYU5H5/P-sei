@@ -110,6 +110,7 @@ id layoutProActive
 id pathFlameInner
 id pathFlameOuter
 id rootLayout
+id rowAppAlignment
 id rowAppLimits
 id rowAutoKeyboard
 id rowAutoLaunch
@@ -156,6 +157,7 @@ id switchMindfulDelay
 id switchPracticedToday
 id switchScreenTimeGlance
 id tvActionAppTitle
+id tvAppAlignmentSummary
 id tvAppLimitsSummary
 id tvAppName
 id tvDailyIntentDialogSubtitle

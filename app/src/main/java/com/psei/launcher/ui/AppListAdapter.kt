@@ -1,5 +1,6 @@
 package com.psei.launcher.ui
 
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -19,6 +20,7 @@ class AppListAdapter(
     private var allApps: List<AppModel> = emptyList()
     private var displayedApps: List<AppModel> = emptyList()
     private var currentTextSizeSp: Float = 20f
+    private var currentGravity: Int = Gravity.START or Gravity.CENTER_VERTICAL
 
     init {
         setHasStableIds(true)
@@ -32,6 +34,13 @@ class AppListAdapter(
     fun setTextSizeSp(sizeSp: Float) {
         if (currentTextSizeSp != sizeSp) {
             currentTextSizeSp = sizeSp
+            notifyDataSetChanged()
+        }
+    }
+
+    fun setTextAlignmentGravity(gravity: Int) {
+        if (currentGravity != gravity) {
+            currentGravity = gravity
             notifyDataSetChanged()
         }
     }
@@ -95,6 +104,7 @@ class AppListAdapter(
 
         fun bind(app: AppModel) {
             binding.tvAppName.textSize = currentTextSizeSp
+            binding.tvAppName.gravity = currentGravity
             binding.tvAppName.text = app.label
 
             binding.root.setOnClickListener {

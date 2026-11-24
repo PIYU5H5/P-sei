@@ -30,6 +30,10 @@ class Prefs private constructor(context: Context) {
         const val TEXT_SIZE_MEDIUM = "medium"
         const val TEXT_SIZE_LARGE = "large"
 
+        const val ALIGNMENT_LEFT = "left"
+        const val ALIGNMENT_CENTER = "center"
+        const val ALIGNMENT_RIGHT = "right"
+
         const val LOCK_METHOD_ACCESSIBILITY = "accessibility"
         const val LOCK_METHOD_DEVICE_ADMIN = "device_admin"
 
@@ -39,6 +43,7 @@ class Prefs private constructor(context: Context) {
         private const val KEY_HOME_SLOTS_COUNT = "pref_home_slots_count"
         private const val KEY_SLOT_PREFIX = "pref_slot_"
         private const val KEY_TEXT_SIZE = "pref_text_size"
+        private const val KEY_APP_ALIGNMENT = "pref_app_alignment"
         private const val KEY_AUTO_KEYBOARD = "pref_auto_keyboard"
         private const val KEY_AUTO_LAUNCH = "pref_auto_launch"
         private const val KEY_HIDDEN_PACKAGES = "pref_hidden_packages"
@@ -126,6 +131,10 @@ class Prefs private constructor(context: Context) {
     var textSize: String
         get() = sp.getString(KEY_TEXT_SIZE, TEXT_SIZE_MEDIUM) ?: TEXT_SIZE_MEDIUM
         set(value) = sp.edit().putString(KEY_TEXT_SIZE, value).apply()
+
+    var appAlignment: String
+        get() = sp.getString(KEY_APP_ALIGNMENT, ALIGNMENT_LEFT) ?: ALIGNMENT_LEFT
+        set(value) = sp.edit().putString(KEY_APP_ALIGNMENT, value).apply()
 
     var autoOpenKeyboard: Boolean
         get() = sp.getBoolean(KEY_AUTO_KEYBOARD, false)

@@ -274,6 +274,35 @@
                     tools:text="Medium (Default)" />
             </LinearLayout>
 
+            <!-- App Alignment Item -->
+            <LinearLayout
+                android:id="@+id/rowAppAlignment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?android:attr/selectableItemBackground"
+                android:orientation="vertical"
+                android:paddingStart="24dp"
+                android:paddingTop="14dp"
+                android:paddingEnd="24dp"
+                android:paddingBottom="14dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Text Alignment"
+                    android:textColor="?attr/primaryTextColor"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/tvAppAlignmentSummary"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:textColor="?attr/secondaryTextColor"
+                    android:textSize="13sp"
+                    tools:text="Left (Default)" />
+            </LinearLayout>
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"

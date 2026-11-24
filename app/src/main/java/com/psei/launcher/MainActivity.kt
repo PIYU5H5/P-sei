@@ -97,6 +97,7 @@ class MainActivity : AppCompatActivity(), AppRepository.OnAppsChangedListener {
     // UI state trackers to prevent unnecessary layout passes and IPC churn on gesture transitions
     private var lastAppliedSlotCount: Int = -1
     private var lastAppliedTextSize: String? = null
+    private var lastAppliedAlignment: String? = null
     private var lastAppliedShortcutLeft: String? = null
     private var lastAppliedShortcutRight: String? = null
     private var lastAppliedShowDuolingo: Boolean? = null
@@ -276,9 +277,11 @@ class MainActivity : AppCompatActivity(), AppRepository.OnAppsChangedListener {
         val currentShowDailyIntent = prefs.showDailyIntent
         val currentDailyFocusHash = prefs.getDailyFocusItems().hashCode()
         val currentShowScreenTime = prefs.showScreenTimeGlance
+        val currentAlignment = prefs.appAlignment
 
         val slotsChanged = (currentSlotCount != lastAppliedSlotCount)
         val textChanged = (currentTextSize != lastAppliedTextSize)
+        val alignmentChanged = (currentAlignment != lastAppliedAlignment)
         val shortcutsChanged = (currentShortcutLeft != lastAppliedShortcutLeft) || (currentShortcutRight != lastAppliedShortcutRight)
         val duolingoChanged = (currentShowDuolingo != lastAppliedShowDuolingo) ||
                 (currentIsPro != lastAppliedIsPro) ||
@@ -297,9 +300,10 @@ class MainActivity : AppCompatActivity(), AppRepository.OnAppsChangedListener {
             drawerAdapter.submitList(visibleApps, binding.etSearch.text?.toString().orEmpty())
         }
 
-        if (slotsChanged || textChanged) {
+        if (slotsChanged || textChanged || alignmentChanged) {
             renderHomeSlots()
             updateTextSizes()
+            applyAppAlignment()
         }
 
         if (shortcutsChanged) {
@@ -381,6 +385,8 @@ class MainActivity : AppCompatActivity(), AppRepository.OnAppsChangedListener {
             setHasFixedSize(true)
             itemAnimator = null // Disable animations for instant rendering
         }
+
+        applyAppAlignment()
 
         // Immediately populate from persistent disk cache so apps are visible on frame zero
         val cached = appRepo.getCachedApps()
@@ -519,6 +525,24 @@ class MainActivity : AppCompatActivity(), AppRepository.OnAppsChangedListener {
             tv?.textSize = slotSize
             tv?.setPadding(horizPadPx, padPx, horizPadPx, padPx)
         }
+    }
+
+    private fun applyAppAlignment() {
+        val alignment = prefs.appAlignment
+        lastAppliedAlignment = alignment
+        val gravity = when (alignment) {
+            Prefs.ALIGNMENT_CENTER -> Gravity.CENTER
+            Prefs.ALIGNMENT_RIGHT -> Gravity.END or Gravity.CENTER_VERTICAL
+            else -> Gravity.START or Gravity.CENTER_VERTICAL
+        }
+
+        for (i in 0 until binding.slotsContainer.childCount) {
+            val tv = binding.slotsContainer.getChildAt(i)?.findViewById<TextView>(R.id.tvSlotName)
+            tv?.gravity = gravity
+        }
+
+        drawerAdapter.setTextAlignmentGravity(gravity)
+        binding.etSearch.gravity = gravity
     }
 
     // =========================================================================
@@ -1122,6 +1146,7 @@ class MainActivity : AppCompatActivity(), AppRepository.OnAppsChangedListener {
     private fun renderHomeSlots() {
         lastAppliedSlotCount = prefs.homeSlotsCount
         lastAppliedTextSize = prefs.textSize
+        lastAppliedAlignment = prefs.appAlignment
         val container = binding.slotsContainer
         val slotCount = prefs.homeSlotsCount
         if (slotCount == 0) {
@@ -1133,6 +1158,12 @@ class MainActivity : AppCompatActivity(), AppRepository.OnAppsChangedListener {
             Prefs.TEXT_SIZE_SMALL -> 22f
             Prefs.TEXT_SIZE_LARGE -> 30f
             else -> 26f
+        }
+
+        val slotGravity = when (prefs.appAlignment) {
+            Prefs.ALIGNMENT_CENTER -> Gravity.CENTER
+            Prefs.ALIGNMENT_RIGHT -> Gravity.END or Gravity.CENTER_VERTICAL
+            else -> Gravity.START or Gravity.CENTER_VERTICAL
         }
 
         val verticalPaddingDp = if (slotCount > 7) 6 else if (slotCount > 5) 8 else 12
@@ -1157,6 +1188,7 @@ class MainActivity : AppCompatActivity(), AppRepository.OnAppsChangedListener {
             val assignedApp = appRepo.findApp(assignedKey)
 
             tvSlotName.textSize = slotTextSize
+            tvSlotName.gravity = slotGravity
             tvSlotName.setPadding(horizPadPx, padPx, horizPadPx, padPx)
 
             if (assignedApp != null) {

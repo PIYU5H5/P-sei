@@ -929,6 +929,7 @@ id radio
 id right_icon
 id right_side
 id rootLayout
+id rowAppAlignment
 id rowAppLimits
 id rowAutoKeyboard
 id rowAutoLaunch
@@ -1027,6 +1028,7 @@ id title_template
 id top
 id topPanel
 id tvActionAppTitle
+id tvAppAlignmentSummary
 id tvAppLimitsSummary
 id tvAppName
 id tvDailyIntentDialogSubtitle

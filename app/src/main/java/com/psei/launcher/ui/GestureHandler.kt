@@ -1,4 +1,4 @@
-﻿package com.psei.launcher.ui
+package com.psei.launcher.ui
 
 import android.content.Context
 import android.view.GestureDetector

@@ -13220,7 +13220,6 @@ kotlin.jvm.internal.Ref$DoubleRef
 kotlin.jvm.internal.Ref$FloatRef
 kotlin.jvm.internal.Ref$IntRef
 kotlin.jvm.internal.Ref$LongRef
-kotlin.jvm.internal.Ref$ObjectRef
 kotlin.jvm.internal.Ref$ShortRef
 kotlin.jvm.internal.Ref
 kotlin.jvm.internal.Reflection:
@@ -22227,10 +22226,9 @@ com.psei.launcher.MainActivity$renderScreenTimeGlance$1:
     public final void invoke$1()
 com.psei.launcher.MainActivity$setupGestures$gestureCallbacks$1:
     public static void onDoubleTap()
-    public static void onSwipeDown()
-    public static void onSwipeLeft()
-    public static void onSwipeRight()
-    public static void onSwipeUp()
+    public final void onSwipeLeft()
+    public final void onSwipeRight()
+    public final void onSwipeUp()
 com.psei.launcher.MainActivity$setupRecyclerView$1:
     public final void invoke()
 com.psei.launcher.MainActivity$setupRecyclerView$2:

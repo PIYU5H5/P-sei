@@ -28,13 +28,22 @@ class GestureHandler(
     }
 
     private val gestureDetector: GestureDetector
+    private val swipeThreshold = (60 * context.resources.displayMetrics.density).toInt().coerceAtLeast(80)
+    private val swipeVelocityThreshold = 150
+
+    private var downX: Float = 0f
+    private var downY: Float = 0f
+    private var flingHandled: Boolean = false
 
     init {
         val listener = object : GestureDetector.SimpleOnGestureListener() {
-            private val SWIPE_THRESHOLD = 120
-            private val SWIPE_VELOCITY_THRESHOLD = 200
 
-            override fun onDown(e: MotionEvent): Boolean = true
+            override fun onDown(e: MotionEvent): Boolean {
+                downX = e.x
+                downY = e.y
+                flingHandled = false
+                return true
+            }
 
             override fun onDoubleTap(e: MotionEvent): Boolean {
                 callbacks.onDoubleTap()
@@ -53,7 +62,8 @@ class GestureHandler(
 
                 return if (abs(diffX) > abs(diffY)) {
                     // Horizontal swipe
-                    if (abs(diffX) > SWIPE_THRESHOLD && abs(velocityX) > SWIPE_VELOCITY_THRESHOLD) {
+                    if (abs(diffX) > swipeThreshold && abs(velocityX) > swipeVelocityThreshold) {
+                        flingHandled = true
                         if (diffX > 0) {
                             callbacks.onSwipeRight()
                         } else {
@@ -65,7 +75,8 @@ class GestureHandler(
                     }
                 } else {
                     // Vertical swipe
-                    if (abs(diffY) > SWIPE_THRESHOLD && abs(velocityY) > SWIPE_VELOCITY_THRESHOLD) {
+                    if (abs(diffY) > swipeThreshold && (abs(velocityY) > swipeVelocityThreshold || abs(diffY) > swipeThreshold * 1.5f)) {
+                        flingHandled = true
                         if (diffY > 0) {
                             callbacks.onSwipeDown()
                         } else {
@@ -83,7 +94,28 @@ class GestureHandler(
     }
 
     override fun onTouch(v: View, event: MotionEvent): Boolean {
-        return gestureDetector.onTouchEvent(event)
+        if (event.actionMasked == MotionEvent.ACTION_DOWN) {
+            downX = event.x
+            downY = event.y
+            flingHandled = false
+        }
+        val handled = gestureDetector.onTouchEvent(event)
+        if (event.actionMasked == MotionEvent.ACTION_UP && !flingHandled) {
+            val diffX = event.x - downX
+            val diffY = event.y - downY
+            if (abs(diffX) > abs(diffY)) {
+                if (abs(diffX) > swipeThreshold * 1.5f) {
+                    if (diffX > 0) callbacks.onSwipeRight() else callbacks.onSwipeLeft()
+                    return true
+                }
+            } else {
+                if (abs(diffY) > swipeThreshold * 1.5f) {
+                    if (diffY > 0) callbacks.onSwipeDown() else callbacks.onSwipeUp()
+                    return true
+                }
+            }
+        }
+        return handled
     }
 }
 

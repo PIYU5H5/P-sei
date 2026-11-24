@@ -923,6 +923,7 @@ id parentPanel
 id pathFlameInner
 id pathFlameOuter
 id pooling_container_listener_holder_tag
+id progressEmergencyCooldown
 id progress_circular
 id progress_horizontal
 id radio

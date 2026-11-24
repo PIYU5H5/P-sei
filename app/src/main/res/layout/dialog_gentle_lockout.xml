@@ -54,5 +54,17 @@
         android:textColor="?attr/secondaryTextColor"
         android:textSize="13sp" />
 
+    <!-- Minimal smooth progress line for 10-second emergency cooldown -->
+    <ProgressBar
+        android:id="@+id/progressEmergencyCooldown"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="140dp"
+        android:layout_height="2dp"
+        android:layout_marginTop="2dp"
+        android:max="1000"
+        android:progress="0"
+        android:indeterminate="false"
+        android:visibility="gone" />
+
 </LinearLayout>
 

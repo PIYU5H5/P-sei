@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -26,14 +27,18 @@ public final class DialogGentleLockoutBinding implements ViewBinding {
   public final TextView btnStepAway;
 
   @NonNull
+  public final ProgressBar progressEmergencyCooldown;
+
+  @NonNull
   public final TextView tvLockoutMessage;
 
   private DialogGentleLockoutBinding(@NonNull LinearLayout rootView,
       @NonNull TextView btnSnoozeEmergency, @NonNull TextView btnStepAway,
-      @NonNull TextView tvLockoutMessage) {
+      @NonNull ProgressBar progressEmergencyCooldown, @NonNull TextView tvLockoutMessage) {
     this.rootView = rootView;
     this.btnSnoozeEmergency = btnSnoozeEmergency;
     this.btnStepAway = btnStepAway;
+    this.progressEmergencyCooldown = progressEmergencyCooldown;
     this.tvLockoutMessage = tvLockoutMessage;
   }
 
@@ -76,6 +81,12 @@ public final class DialogGentleLockoutBinding implements ViewBinding {
         break missingId;
       }
 
+      id = R.id.progressEmergencyCooldown;
+      ProgressBar progressEmergencyCooldown = ViewBindings.findChildViewById(rootView, id);
+      if (progressEmergencyCooldown == null) {
+        break missingId;
+      }
+
       id = R.id.tvLockoutMessage;
       TextView tvLockoutMessage = ViewBindings.findChildViewById(rootView, id);
       if (tvLockoutMessage == null) {
@@ -83,7 +94,7 @@ public final class DialogGentleLockoutBinding implements ViewBinding {
       }
 
       return new DialogGentleLockoutBinding((LinearLayout) rootView, btnSnoozeEmergency,
-          btnStepAway, tvLockoutMessage);
+          btnStepAway, progressEmergencyCooldown, tvLockoutMessage);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));

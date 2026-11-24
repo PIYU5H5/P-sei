@@ -13,6 +13,7 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
+import android.animation.ObjectAnimator
 import android.os.Build
 import android.os.Bundle
 import android.os.VibrationEffect
@@ -25,14 +26,18 @@ import android.text.TextWatcher
 import android.view.Gravity
 import android.view.KeyEvent
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
+import android.view.ViewConfiguration
 import android.view.ViewGroup
 import android.view.Window
 import android.view.WindowManager
+import android.view.animation.LinearInterpolator
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import android.widget.Toast
+import kotlin.math.abs
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
@@ -93,6 +98,11 @@ class MainActivity : AppCompatActivity(), AppRepository.OnAppsChangedListener {
     private var duolingoLaunchTime: Long = 0L
     private var lastCalendarQueryTime: Long = 0L
     private var calendarObserver: android.database.ContentObserver? = null
+
+    private var touchStartX = 0f
+    private var touchStartY = 0f
+    private var isInterceptingSwipe = false
+    private var gestureHandler: GestureHandler? = null
 
     // UI state trackers to prevent unnecessary layout passes and IPC churn on gesture transitions
     private var lastAppliedSlotCount: Int = -1
@@ -445,12 +455,68 @@ class MainActivity : AppCompatActivity(), AppRepository.OnAppsChangedListener {
             }
         }
 
-        val gestureHandler = GestureHandler(this, gestureCallbacks)
+        gestureHandler = GestureHandler(this, gestureCallbacks)
         binding.homeContainer.setOnTouchListener(gestureHandler)
 
         // Tapping the clock/date area also opens the app drawer
         binding.clockArea.setOnClickListener {
             openDrawer()
+        }
+    }
+
+    override fun dispatchTouchEvent(ev: MotionEvent): Boolean {
+        // When app drawer is open or an in-launcher dialog is showing, let native dispatch handle it
+        if (binding.drawerContainer.isVisible || activeDialog != null) {
+            return super.dispatchTouchEvent(ev)
+        }
+
+        val handler = gestureHandler ?: return super.dispatchTouchEvent(ev)
+        val slop = ViewConfiguration.get(this).scaledTouchSlop.toFloat()
+
+        when (ev.actionMasked) {
+            MotionEvent.ACTION_DOWN -> {
+                touchStartX = ev.x
+                touchStartY = ev.y
+                isInterceptingSwipe = false
+                handler.onTouch(binding.homeContainer, ev)
+                return super.dispatchTouchEvent(ev)
+            }
+            MotionEvent.ACTION_MOVE -> {
+                val dx = ev.x - touchStartX
+                val dy = ev.y - touchStartY
+                if (!isInterceptingSwipe && (abs(dx) > slop * 1.5f || abs(dy) > slop * 1.5f)) {
+                    isInterceptingSwipe = true
+                    // Cancel child views' click/ripple/long-click state so swiping never accidentally launches apps
+                    val cancel = MotionEvent.obtain(ev).apply { action = MotionEvent.ACTION_CANCEL }
+                    super.dispatchTouchEvent(cancel)
+                    cancel.recycle()
+                }
+
+                if (isInterceptingSwipe) {
+                    handler.onTouch(binding.homeContainer, ev)
+                    return true
+                } else {
+                    handler.onTouch(binding.homeContainer, ev)
+                    return super.dispatchTouchEvent(ev)
+                }
+            }
+            MotionEvent.ACTION_UP -> {
+                handler.onTouch(binding.homeContainer, ev)
+                if (isInterceptingSwipe) {
+                    isInterceptingSwipe = false
+                    return true
+                }
+                return super.dispatchTouchEvent(ev)
+            }
+            MotionEvent.ACTION_CANCEL -> {
+                isInterceptingSwipe = false
+                handler.onTouch(binding.homeContainer, ev)
+                return super.dispatchTouchEvent(ev)
+            }
+            else -> {
+                handler.onTouch(binding.homeContainer, ev)
+                return super.dispatchTouchEvent(ev)
+            }
         }
     }
 
@@ -1251,7 +1317,11 @@ class MainActivity : AppCompatActivity(), AppRepository.OnAppsChangedListener {
 
         binding.drawerContainer.alpha = 0f
         binding.drawerContainer.visibility = View.VISIBLE
-        binding.drawerContainer.animate().alpha(1f).setDuration(120).start()
+        binding.drawerContainer.animate()
+            .alpha(1f)
+            .setDuration(120)
+            .withLayer()
+            .start()
 
         if (prefs.autoOpenKeyboard) {
             binding.etSearch.requestFocus()
@@ -1272,6 +1342,7 @@ class MainActivity : AppCompatActivity(), AppRepository.OnAppsChangedListener {
         binding.drawerContainer.animate()
             .alpha(0f)
             .setDuration(100)
+            .withLayer()
             .withEndAction {
                 binding.drawerContainer.visibility = View.GONE
             }
@@ -1338,15 +1409,59 @@ class MainActivity : AppCompatActivity(), AppRepository.OnAppsChangedListener {
         dialogBinding.tvLockoutMessage.text = "You've reached your ${limitMinutes}m daily limit for ${app.label} (${usedMinutes}m used today).\nTake a gentle break and recharge."
 
         val hasUsedSnoozeToday = prefs.hasUsedEmergencySnoozeToday(app.packageName)
+        var cooldownTimer: CountDownTimer? = null
+        var cooldownAnimator: ObjectAnimator? = null
+
         if (hasUsedSnoozeToday) {
             dialogBinding.btnSnoozeEmergency.text = "Emergency +5m already used today"
             dialogBinding.btnSnoozeEmergency.isEnabled = false
             dialogBinding.btnSnoozeEmergency.alpha = 0.4f
+            dialogBinding.progressEmergencyCooldown.isVisible = false
         } else {
-            dialogBinding.btnSnoozeEmergency.text = "Emergency +5 Minutes (Once today)"
-            dialogBinding.btnSnoozeEmergency.isEnabled = true
-            dialogBinding.btnSnoozeEmergency.alpha = 1.0f
+            dialogBinding.btnSnoozeEmergency.isEnabled = false
+            dialogBinding.btnSnoozeEmergency.alpha = 0.4f
+            dialogBinding.btnSnoozeEmergency.text = "Emergency +5m (10s)"
+            dialogBinding.progressEmergencyCooldown.isVisible = true
+            dialogBinding.progressEmergencyCooldown.progress = 0
+
+            cooldownAnimator = ObjectAnimator.ofInt(dialogBinding.progressEmergencyCooldown, "progress", 0, 1000).apply {
+                duration = 10_000L
+                interpolator = LinearInterpolator()
+                start()
+            }
+
+            cooldownTimer = object : CountDownTimer(10_000L, 100L) {
+                override fun onTick(millisUntilFinished: Long) {
+                    val secondsLeft = (millisUntilFinished + 999) / 1000
+                    dialogBinding.btnSnoozeEmergency.text = "Emergency +5m (${secondsLeft}s)"
+                    val fraction = (10_000L - millisUntilFinished).toFloat() / 10_000f
+                    dialogBinding.btnSnoozeEmergency.alpha = 0.4f + (0.35f * fraction)
+                }
+
+                override fun onFinish() {
+                    dialogBinding.progressEmergencyCooldown.isVisible = false
+                    dialogBinding.btnSnoozeEmergency.isEnabled = true
+                    dialogBinding.btnSnoozeEmergency.text = "Emergency +5 Minutes (Once today)"
+                    vibrateTick()
+                    dialogBinding.btnSnoozeEmergency.animate()
+                        .alpha(1.0f)
+                        .scaleX(1.06f)
+                        .scaleY(1.06f)
+                        .setDuration(180)
+                        .withEndAction {
+                            dialogBinding.btnSnoozeEmergency.animate()
+                                .scaleX(1.0f)
+                                .scaleY(1.0f)
+                                .setDuration(120)
+                                .start()
+                        }
+                        .start()
+                }
+            }.start()
+
             dialogBinding.btnSnoozeEmergency.setOnClickListener {
+                cooldownTimer?.cancel()
+                cooldownAnimator?.cancel()
                 dialog.dismiss()
                 prefs.useEmergencySnooze(app.packageName, 5)
                 Toast.makeText(this, "Emergency 5 minutes granted for ${app.label}", Toast.LENGTH_SHORT).show()
@@ -1355,11 +1470,15 @@ class MainActivity : AppCompatActivity(), AppRepository.OnAppsChangedListener {
         }
 
         dialogBinding.btnStepAway.setOnClickListener {
+            cooldownTimer?.cancel()
+            cooldownAnimator?.cancel()
             dialog.dismiss()
             Toast.makeText(this, "Good choice stepping away", Toast.LENGTH_SHORT).show()
         }
 
         dialog.setOnDismissListener {
+            cooldownTimer?.cancel()
+            cooldownAnimator?.cancel()
             if (activeDialog == dialog) {
                 activeDialog = null
             }

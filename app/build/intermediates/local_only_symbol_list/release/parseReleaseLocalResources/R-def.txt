@@ -109,6 +109,7 @@ id layoutPlans
 id layoutProActive
 id pathFlameInner
 id pathFlameOuter
+id progressEmergencyCooldown
 id rootLayout
 id rowAppAlignment
 id rowAppLimits

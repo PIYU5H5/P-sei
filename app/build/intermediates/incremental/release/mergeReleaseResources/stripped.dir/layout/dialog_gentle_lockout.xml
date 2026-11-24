@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?attr/launcherBackground"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:paddingStart="24dp"
+    android:paddingTop="32dp"
+    android:paddingEnd="24dp"
+    android:paddingBottom="28dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Daily Limit Reached"
+        android:textColor="?attr/primaryTextColor"
+        android:textSize="22sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tvLockoutMessage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:gravity="center"
+        android:lineSpacingExtra="3dp"
+        android:text="You've reached your daily limit for this app.\nTake a gentle break and recharge."
+        android:textColor="?attr/secondaryTextColor"
+        android:textSize="14sp" />
+
+    <!-- Button 1: Step away (Mindful choice) -->
+    <TextView
+        android:id="@+id/btnStepAway"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginTop="28dp"
+        android:background="?attr/searchBackground"
+        android:gravity="center"
+        android:text="Step Away"
+        android:textColor="?attr/primaryTextColor"
+        android:textSize="15sp"
+        android:textStyle="bold" />
+
+    <!-- Button 2: Emergency 5 mins snooze -->
+    <TextView
+        android:id="@+id/btnSnoozeEmergency"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="14dp"
+        android:background="?android:attr/selectableItemBackground"
+        android:padding="8dp"
+        android:text="Emergency +5 Minutes"
+        android:textColor="?attr/secondaryTextColor"
+        android:textSize="13sp" />
+
+    <!-- Minimal smooth progress line for 10-second emergency cooldown -->
+    <ProgressBar
+        android:id="@+id/progressEmergencyCooldown"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="140dp"
+        android:layout_height="2dp"
+        android:layout_marginTop="2dp"
+        android:max="1000"
+        android:progress="0"
+        android:indeterminate="false"
+        android:visibility="gone" />
+
+</LinearLayout>
+

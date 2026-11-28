@@ -3344,7 +3344,8 @@ androidx.core.content.ContextCompat$Api21Impl:
 androidx.core.content.ContextCompat$Api23Impl:
     private void <init>()
 androidx.core.content.ContextCompat$Api24Impl
-androidx.core.content.ContextCompat$Api26Impl
+androidx.core.content.ContextCompat$Api26Impl:
+    private void <init>()
 androidx.core.content.ContextCompat$Api28Impl
 androidx.core.content.ContextCompat$Api30Impl
 androidx.core.content.ContextCompat$Api33Impl
@@ -3373,11 +3374,9 @@ androidx.core.content.ContextCompat:
     public static java.lang.Object getSystemService(android.content.Context,java.lang.Class)
     public static java.lang.String getSystemServiceName(android.content.Context,java.lang.Class)
     public static boolean isDeviceProtectedStorage(android.content.Context)
-    static java.lang.String obtainAndCheckReceiverPermission(android.content.Context)
     public static android.content.Intent registerReceiver(android.content.Context,android.content.BroadcastReceiver,android.content.IntentFilter,int)
     public static android.content.Intent registerReceiver(android.content.Context,android.content.BroadcastReceiver,android.content.IntentFilter,java.lang.String,android.os.Handler,int)
     public static boolean startActivities(android.content.Context,android.content.Intent[])
-    public static void startForegroundService(android.content.Context,android.content.Intent)
 androidx.core.content.ContextKt
 androidx.core.content.FileProvider$Api21Impl
 androidx.core.content.FileProvider$PathStrategy
@@ -3566,23 +3565,19 @@ androidx.core.graphics.ColorUtils:
     public static int M3HCTToColor(float,float,float)
     public static void RGBToHSL(int,int,int,float[])
     public static void RGBToLAB(int,int,int,double[])
-    public static void RGBToXYZ(int,int,int,double[])
     public static void XYZToLAB(double,double,double,double[])
     public static int blendARGB(int,int,float)
     public static void blendHSL(float[],float[],float,float[])
     public static void blendLAB(double[],double[],double,double[])
     public static double calculateContrast(int,int)
-    public static double calculateLuminance(int)
     public static int calculateMinimumAlpha(int,int,float)
     static float circularInterpolate(float,float,float)
     public static void colorToHSL(int,float[])
     public static void colorToLAB(int,double[])
     public static void colorToM3HCT(int,float[])
-    public static void colorToXYZ(int,double[])
     public static android.graphics.Color compositeColors(android.graphics.Color,android.graphics.Color)
     private static float constrain(float,float,float)
     public static double distanceEuclidean(double[],double[])
-    private static double[] getTempDouble3Array()
     private static double pivotXyzComponent(double)
 androidx.core.graphics.ImageDecoderKt$decodeBitmap$1
 androidx.core.graphics.ImageDecoderKt$decodeDrawable$1
@@ -4417,10 +4412,23 @@ androidx.core.view.PointerIconCompat
 androidx.core.view.ScaleGestureDetectorCompat$Api19Impl
 androidx.core.view.ScaleGestureDetectorCompat
 androidx.core.view.ScrollingView
-androidx.core.view.SoftwareKeyboardControllerCompat$Impl20
-androidx.core.view.SoftwareKeyboardControllerCompat$Impl30
-androidx.core.view.SoftwareKeyboardControllerCompat$Impl
-androidx.core.view.SoftwareKeyboardControllerCompat
+androidx.core.view.SoftwareKeyboardControllerCompat$Impl20:
+    void hide()
+    private static synthetic void lambda$show$0(android.view.View)
+    void show()
+androidx.core.view.SoftwareKeyboardControllerCompat$Impl30:
+    private android.view.WindowInsetsController mWindowInsetsController
+    void <init>(android.view.WindowInsetsController)
+    void hide()
+    private static synthetic void lambda$hide$0(java.util.concurrent.atomic.AtomicBoolean,android.view.WindowInsetsController,int)
+    void show()
+androidx.core.view.SoftwareKeyboardControllerCompat$Impl:
+    void hide()
+    void show()
+androidx.core.view.SoftwareKeyboardControllerCompat:
+    void <init>(android.view.WindowInsetsController)
+    public void hide()
+    public void show()
 androidx.core.view.VelocityTrackerCompat$Api34Impl
 androidx.core.view.VelocityTrackerCompat$VelocityTrackableMotionEventAxis
 androidx.core.view.VelocityTrackerCompat
@@ -4883,14 +4891,59 @@ androidx.core.view.WindowInsetsCompat:
     public boolean isRound()
     public boolean isVisible(int)
     public androidx.core.view.WindowInsetsCompat replaceSystemWindowInsets(android.graphics.Rect)
-androidx.core.view.WindowInsetsControllerCompat$Impl20
-androidx.core.view.WindowInsetsControllerCompat$Impl23
-androidx.core.view.WindowInsetsControllerCompat$Impl26
+androidx.core.view.WindowInsetsControllerCompat$Impl20:
+    void addOnControllableInsetsChangedListener(androidx.core.view.WindowInsetsControllerCompat$OnControllableInsetsChangedListener)
+    void controlWindowInsetsAnimation(int,long,android.view.animation.Interpolator,android.os.CancellationSignal,androidx.core.view.WindowInsetsAnimationControlListenerCompat)
+    int getSystemBarsBehavior()
+    void hide(int)
+    private void hideForType(int)
+    void removeOnControllableInsetsChangedListener(androidx.core.view.WindowInsetsControllerCompat$OnControllableInsetsChangedListener)
+    void setSystemBarsBehavior(int)
+    void show(int)
+    private void showForType(int)
+androidx.core.view.WindowInsetsControllerCompat$Impl23:
+    public boolean isAppearanceLightStatusBars()
+androidx.core.view.WindowInsetsControllerCompat$Impl26:
+    public boolean isAppearanceLightNavigationBars()
 androidx.core.view.WindowInsetsControllerCompat$Impl30$1
-androidx.core.view.WindowInsetsControllerCompat$Impl30
-androidx.core.view.WindowInsetsControllerCompat$Impl
+androidx.core.view.WindowInsetsControllerCompat$Impl30:
+    void addOnControllableInsetsChangedListener(androidx.core.view.WindowInsetsControllerCompat$OnControllableInsetsChangedListener)
+    void controlWindowInsetsAnimation(int,long,android.view.animation.Interpolator,android.os.CancellationSignal,androidx.core.view.WindowInsetsAnimationControlListenerCompat)
+    int getSystemBarsBehavior()
+    void hide(int)
+    public boolean isAppearanceLightNavigationBars()
+    public boolean isAppearanceLightStatusBars()
+    private synthetic void lambda$addOnControllableInsetsChangedListener$0(androidx.core.view.WindowInsetsControllerCompat$OnControllableInsetsChangedListener,android.view.WindowInsetsController,int)
+    void removeOnControllableInsetsChangedListener(androidx.core.view.WindowInsetsControllerCompat$OnControllableInsetsChangedListener)
+    void setSystemBarsBehavior(int)
+    void show(int)
+androidx.core.view.WindowInsetsControllerCompat$Impl:
+    void addOnControllableInsetsChangedListener(androidx.core.view.WindowInsetsControllerCompat$OnControllableInsetsChangedListener)
+    void controlWindowInsetsAnimation(int,long,android.view.animation.Interpolator,android.os.CancellationSignal,androidx.core.view.WindowInsetsAnimationControlListenerCompat)
+    int getSystemBarsBehavior()
+    void hide(int)
+    public boolean isAppearanceLightNavigationBars()
+    public boolean isAppearanceLightStatusBars()
+    void removeOnControllableInsetsChangedListener(androidx.core.view.WindowInsetsControllerCompat$OnControllableInsetsChangedListener)
+    void setSystemBarsBehavior(int)
+    void show(int)
 androidx.core.view.WindowInsetsControllerCompat$OnControllableInsetsChangedListener
-androidx.core.view.WindowInsetsControllerCompat
+androidx.core.view.WindowInsetsControllerCompat:
+    public static final int BEHAVIOR_DEFAULT
+    public static final int BEHAVIOR_SHOW_BARS_BY_SWIPE
+    public static final int BEHAVIOR_SHOW_BARS_BY_TOUCH
+    public static final int BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+    private void <init>(android.view.WindowInsetsController)
+    public void addOnControllableInsetsChangedListener(androidx.core.view.WindowInsetsControllerCompat$OnControllableInsetsChangedListener)
+    public void controlWindowInsetsAnimation(int,long,android.view.animation.Interpolator,android.os.CancellationSignal,androidx.core.view.WindowInsetsAnimationControlListenerCompat)
+    public int getSystemBarsBehavior()
+    public void hide(int)
+    public boolean isAppearanceLightNavigationBars()
+    public boolean isAppearanceLightStatusBars()
+    public void removeOnControllableInsetsChangedListener(androidx.core.view.WindowInsetsControllerCompat$OnControllableInsetsChangedListener)
+    public void setSystemBarsBehavior(int)
+    public void show(int)
+    public static androidx.core.view.WindowInsetsControllerCompat toWindowInsetsControllerCompat(android.view.WindowInsetsController)
 androidx.core.view.accessibility.AccessibilityClickableSpanCompat:
     public static final java.lang.String SPAN_ID
 androidx.core.view.accessibility.AccessibilityEventCompat$Api16Impl
@@ -9596,6 +9649,9 @@ com.google.firebase.encoders.proto.ProtobufValueEncoderContext:
     public com.google.firebase.encoders.ValueEncoderContext add(long)
     public com.google.firebase.encoders.ValueEncoderContext add(byte[])
 com.psei.launcher.MainActivity:
+    public static final java.lang.String EXTRA_LOCKOUT_LIMIT_MINUTES
+    public static final java.lang.String EXTRA_LOCKOUT_PACKAGE
+    public static final java.lang.String EXTRA_LOCKOUT_USED_MINUTES
     private java.lang.Boolean lastAppliedDailyIntentCompleted
     private java.lang.String lastAppliedDailyIntentText
     static synthetic void loadTodayCalendarEvents$default(com.psei.launcher.MainActivity,boolean,int,java.lang.Object)
@@ -9624,6 +9680,8 @@ com.psei.launcher.R$drawable:
     private void <init>()
 com.psei.launcher.R$id:
     public static int hiddenAppsRoot
+    public static int lockoutRoot
+    public static int mindfulRoot
     public static int pathFlameInner
     public static int pathFlameOuter
     public static int rootLayout
@@ -9703,8 +9761,6 @@ com.psei.launcher.R$style:
     private void <init>()
 com.psei.launcher.R$xml
 com.psei.launcher.R
-com.psei.launcher.SettingsActivity:
-    static synthetic void showSetAppLimitDialog$default(com.psei.launcher.SettingsActivity,com.psei.launcher.data.AppModel,kotlin.jvm.functions.Function0,int,java.lang.Object)
 com.psei.launcher.billing.BillingManager:
     public static final java.lang.String PRODUCT_LIFETIME
     public static final java.lang.String PRODUCT_MONTHLY
@@ -9745,11 +9801,25 @@ com.psei.launcher.databinding.ItemHiddenAppBinding:
     public synthetic bridge android.view.View getRoot()
 com.psei.launcher.databinding.ItemHomeSlotBinding:
     public synthetic bridge android.view.View getRoot()
+com.psei.launcher.service.AppLimitMonitorService:
+    private static final java.lang.String ACTION_APP_LAUNCHED
+    private static final java.lang.String ACTION_LAUNCHER_RESUMED
+    private static final java.lang.String ACTION_SYNC
+    private static final java.lang.String CHANNEL_ID
+    private static final java.lang.String EXTRA_PACKAGE_NAME
+    private static final int NOTIFICATION_ID
+    private static final long POLL_INTERVAL_MS
 com.psei.launcher.service.DuolingoNotificationListener:
     public static final java.lang.String ACTION_DUOLINGO_UPDATED
     private static final java.lang.String DUOLINGO_PACKAGE
 com.psei.launcher.service.LockAccessibilityService$Companion:
     public final void openAccessibilitySettings(android.content.Context)
+com.psei.launcher.ui.AppLimitDialogHelper$CooldownHandle:
+    public void <init>()
+com.psei.launcher.ui.AppLimitDialogHelper:
+    public static synthetic void showSetAppLimitDialog$default(com.psei.launcher.ui.AppLimitDialogHelper,android.content.Context,com.psei.launcher.data.AppModel,kotlin.jvm.functions.Function0,int,java.lang.Object)
+com.psei.launcher.ui.BreathingBackdropView:
+    public void <init>(android.content.Context)
 javax.inject.Inject
 javax.inject.Named
 javax.inject.Qualifier
@@ -13220,6 +13290,7 @@ kotlin.jvm.internal.Ref$DoubleRef
 kotlin.jvm.internal.Ref$FloatRef
 kotlin.jvm.internal.Ref$IntRef
 kotlin.jvm.internal.Ref$LongRef
+kotlin.jvm.internal.Ref$ObjectRef
 kotlin.jvm.internal.Ref$ShortRef
 kotlin.jvm.internal.Ref
 kotlin.jvm.internal.Reflection:
@@ -16466,9 +16537,8 @@ androidx.appcompat.app.AlertDialog$Builder:
     public static androidx.appcompat.app.AlertDialog$Builder setItems()
     public static androidx.appcompat.app.AlertDialog$Builder setMessage()
     public static androidx.appcompat.app.AlertDialog$Builder setMultiChoiceItems()
-    public final void setNegativeButton(java.lang.String,com.psei.launcher.SettingsActivity$$InternalSyntheticLambda$3$1afbc8deb32ff8970f6f9b1b025986803ab3c9068d7019e4721dc168fb4a41d3$1)
+    public final void setNegativeButton(java.lang.String,android.content.DialogInterface$OnClickListener)
     public static androidx.appcompat.app.AlertDialog$Builder setOnKeyListener()
-    public final void setPositiveButton(java.lang.String,android.content.DialogInterface$OnClickListener)
     public static androidx.appcompat.app.AlertDialog$Builder setSingleChoiceItems()
     public static androidx.appcompat.app.AlertDialog$Builder setTitle()
     public final void setTitle(int)
@@ -17931,7 +18001,6 @@ androidx.core.content.res.ViewingConditions:
     public static float[] getRgbD()
     public static float getZ()
 androidx.core.graphics.ColorUtils:
-    public static final java.lang.ThreadLocal TEMP_ARRAY
     public static int constrain(int)
 androidx.core.graphics.Insets:
     public static androidx.core.graphics.Insets max(androidx.core.graphics.Insets,androidx.core.graphics.Insets)
@@ -18071,7 +18140,7 @@ androidx.core.os.LocaleListCompat:
     public final java.lang.String toLanguageTags()
     public static java.lang.Object unwrap()
     public static androidx.core.os.LocaleListCompat wrap(android.os.LocaleList)
-androidx.core.os.LocaleListCompatWrapper$$InternalSyntheticThrowCCEIfNotNull$196$eabde584e09f5dbef5e5c77b987ffae1119ec566c4556bde1e78e256d6ae9d7b$0
+androidx.core.os.LocaleListCompatWrapper$$InternalSyntheticThrowCCEIfNotNull$194$eabde584e09f5dbef5e5c77b987ffae1119ec566c4556bde1e78e256d6ae9d7b$0
 androidx.core.os.LocaleListCompatWrapper
 androidx.core.os.LocaleListInterface:
     public abstract java.util.Locale get()
@@ -18227,6 +18296,10 @@ androidx.core.view.NestedScrollingParentHelper:
 androidx.core.view.OnReceiveContentListener:
     public abstract androidx.core.view.ContentInfoCompat onReceiveContent(android.view.View,androidx.core.view.ContentInfoCompat)
 androidx.core.view.OneShotPreDrawListener
+androidx.core.view.SoftwareKeyboardControllerCompat$Impl20
+androidx.core.view.SoftwareKeyboardControllerCompat$Impl30
+androidx.core.view.SoftwareKeyboardControllerCompat$Impl
+androidx.core.view.SoftwareKeyboardControllerCompat
 androidx.core.view.TintableBackgroundView
 androidx.core.view.ViewCompat$1:
     public final java.lang.Boolean frameworkGet()
@@ -18312,7 +18385,6 @@ androidx.core.view.ViewPropertyAnimatorCompat:
     public final void setUpdateListener(androidx.appcompat.app.WindowDecorActionBar$3)
     public static void start()
 androidx.core.view.ViewPropertyAnimatorUpdateListener
-androidx.core.view.WindowCompat
 androidx.core.view.WindowInsetsCompat$Builder
 androidx.core.view.WindowInsetsCompat$BuilderImpl20:
     static void <clinit>()
@@ -18364,6 +18436,19 @@ androidx.core.view.WindowInsetsCompat:
     public static void setRootViewData()
     public final void setRootWindowInsets(androidx.core.view.WindowInsetsCompat)
     public static void setStableInsets()
+androidx.core.view.WindowInsetsControllerCompat$Impl20:
+    public final androidx.core.view.SoftwareKeyboardControllerCompat mSoftwareKeyboardControllerCompat
+    public final void setSystemUiFlag(int)
+    public final void setWindowFlag()
+    public final void unsetSystemUiFlag(int)
+    public final void unsetWindowFlag(int)
+androidx.core.view.WindowInsetsControllerCompat$Impl30:
+    public final androidx.core.view.WindowInsetsControllerCompat mCompatController
+    public final androidx.collection.SimpleArrayMap mListeners
+    public final androidx.core.view.SoftwareKeyboardControllerCompat mSoftwareKeyboardControllerCompat
+    public final void setSystemUiFlag(int)
+    public final void unsetSystemUiFlag(int)
+androidx.core.view.WindowInsetsControllerCompat
 androidx.core.view.accessibility.AccessibilityEventCompat
 androidx.core.view.accessibility.AccessibilityNodeInfoCompat$AccessibilityActionCompat$$InternalSyntheticThrowCCEIfNotNull$14$51a518e2562bdd83f1a37db6273eca8c40d29d82445ffc5c9314f2450daba410$0
 androidx.core.view.accessibility.AccessibilityNodeInfoCompat$AccessibilityActionCompat:
@@ -19445,7 +19530,7 @@ androidx.lifecycle.ProcessLifecycleOwner:
     public static void attach()
     public static void dispatchPauseIfNeeded()
     public final void dispatchStopIfNeeded()
-androidx.lifecycle.ReportFragment$$InternalSyntheticThrowCCEIfNotNull$106$0773915ba46c1dc6e587156d4f592f290c7c8a402dec6cec9554f95dc3f9b7b3$0
+androidx.lifecycle.ReportFragment$$InternalSyntheticThrowCCEIfNotNull$110$0773915ba46c1dc6e587156d4f592f290c7c8a402dec6cec9554f95dc3f9b7b3$0
 androidx.lifecycle.ReportFragment$ActivityInitializationListener
 androidx.lifecycle.ReportFragment:
     public static void dispatchCreate()
@@ -21032,10 +21117,10 @@ com.google.android.gms.common.api.ApiException:
     public final com.google.android.gms.common.api.Status mStatus
     public static com.google.android.gms.common.api.Status getStatus()
 com.google.android.gms.common.api.CommonStatusCodes
-com.google.android.gms.common.api.GoogleApi$$InternalSyntheticThrowCCEIfNotNull$116$daa842e2bcf2f19cc0f90a7d36350410075fb86372360aff956ed17b5fc08fc9$0
-com.google.android.gms.common.api.GoogleApi$$InternalSyntheticThrowCCEIfNotNull$116$daa842e2bcf2f19cc0f90a7d36350410075fb86372360aff956ed17b5fc08fc9$1
-com.google.android.gms.common.api.GoogleApi$$InternalSyntheticThrowCCEIfNotNull$116$daa842e2bcf2f19cc0f90a7d36350410075fb86372360aff956ed17b5fc08fc9$2
-com.google.android.gms.common.api.GoogleApi$$InternalSyntheticThrowCCEIfNotNull$118$cbd6e37ea8225c7e7b675d4c0db7054199d7019f9410f22dd419e488a84996a0$0
+com.google.android.gms.common.api.GoogleApi$$InternalSyntheticThrowCCEIfNotNull$52$daa842e2bcf2f19cc0f90a7d36350410075fb86372360aff956ed17b5fc08fc9$0
+com.google.android.gms.common.api.GoogleApi$$InternalSyntheticThrowCCEIfNotNull$52$daa842e2bcf2f19cc0f90a7d36350410075fb86372360aff956ed17b5fc08fc9$1
+com.google.android.gms.common.api.GoogleApi$$InternalSyntheticThrowCCEIfNotNull$52$daa842e2bcf2f19cc0f90a7d36350410075fb86372360aff956ed17b5fc08fc9$2
+com.google.android.gms.common.api.GoogleApi$$InternalSyntheticThrowCCEIfNotNull$54$cbd6e37ea8225c7e7b675d4c0db7054199d7019f9410f22dd419e488a84996a0$0
 com.google.android.gms.common.api.GoogleApi$Settings$Builder
 com.google.android.gms.common.api.GoogleApi$Settings:
     public final android.os.Looper zab
@@ -21907,10 +21992,10 @@ com.google.android.gms.internal.play_billing.zzip$$InternalSyntheticThrowCCEIfNo
 com.google.android.gms.internal.play_billing.zzip$$InternalSyntheticThrowCCEIfNotNull$44$7a54793d849f337cf642a7536eda085d53ac9bc767aee98c8fa37ef11c481b72$4
 com.google.android.gms.internal.play_billing.zzip$$InternalSyntheticThrowCCEIfNotNull$44$7a54793d849f337cf642a7536eda085d53ac9bc767aee98c8fa37ef11c481b72$5
 com.google.android.gms.internal.play_billing.zzip$$InternalSyntheticThrowCCEIfNotNull$44$7c543c7c9e8659ea2acc94f0bde1c929d2530a8a347ef0bffe296ec6f8b5f276$1
-com.google.android.gms.internal.play_billing.zzip$$InternalSyntheticThrowCCEIfNotNull$55$83281c81720dd6b2b3772248e4488c676a72a7f22cb5d296e062f62d20044b19$13
-com.google.android.gms.internal.play_billing.zzip$$InternalSyntheticThrowCCEIfNotNull$57$cb90dc6a51759d016fed677367e254fcd06b3c9ae6e25948aa6df77a2bd16099$0
-com.google.android.gms.internal.play_billing.zzip$$InternalSyntheticThrowCCEIfNotNull$57$cb90dc6a51759d016fed677367e254fcd06b3c9ae6e25948aa6df77a2bd16099$2
-com.google.android.gms.internal.play_billing.zzip$$InternalSyntheticThrowCCEIfNotNull$57$cb90dc6a51759d016fed677367e254fcd06b3c9ae6e25948aa6df77a2bd16099$3
+com.google.android.gms.internal.play_billing.zzip$$InternalSyntheticThrowCCEIfNotNull$56$83281c81720dd6b2b3772248e4488c676a72a7f22cb5d296e062f62d20044b19$13
+com.google.android.gms.internal.play_billing.zzip$$InternalSyntheticThrowCCEIfNotNull$58$cb90dc6a51759d016fed677367e254fcd06b3c9ae6e25948aa6df77a2bd16099$0
+com.google.android.gms.internal.play_billing.zzip$$InternalSyntheticThrowCCEIfNotNull$58$cb90dc6a51759d016fed677367e254fcd06b3c9ae6e25948aa6df77a2bd16099$2
+com.google.android.gms.internal.play_billing.zzip$$InternalSyntheticThrowCCEIfNotNull$58$cb90dc6a51759d016fed677367e254fcd06b3c9ae6e25948aa6df77a2bd16099$3
 com.google.android.gms.internal.play_billing.zzip:
     public final boolean zzh
     public final com.google.android.gms.internal.play_billing.zzgy zzm
@@ -22214,6 +22299,7 @@ com.psei.launcher.HiddenAppsActivity:
     public static void applyCustomTheme$1()
     public static void setupInsets$1()
     public static void setupRecyclerView$1()
+com.psei.launcher.MainActivity$Companion
 com.psei.launcher.MainActivity$loadTodayCalendarEvents$1:
     public final void invoke$1()
 com.psei.launcher.MainActivity$onCreate$1:
@@ -22233,11 +22319,19 @@ com.psei.launcher.MainActivity$setupRecyclerView$1:
     public final void invoke()
 com.psei.launcher.MainActivity$setupRecyclerView$2:
     public final void invoke()
+com.psei.launcher.MainActivity$showAppActionsDialog$5$1:
+    public final void invoke$1()
+com.psei.launcher.MainActivity$showGentleLockoutDialog$cooldownHandle$1:
+    public final void invoke$1()
+com.psei.launcher.MainActivity$showGentleLockoutDialog$cooldownHandle$2:
+    public final void invoke$1()
 com.psei.launcher.MainActivity$showProShowcaseDialog$5$1:
     public final void invoke$2()
 com.psei.launcher.MainActivity$showRenameDialog$saveAction$1:
     public final void invoke$1()
 com.psei.launcher.MainActivity:
+    public static final com.psei.launcher.MainActivity$Companion Companion
+    static void <clinit>()
     public static void applyCustomTheme()
     public static void handleCustomShortcut()
     public static void handleDoubleTapLock()
@@ -22253,10 +22347,8 @@ com.psei.launcher.MainActivity:
     public static void setupScreenTimeGlance()
     public static void setupSearch()
     public static void setupShortcuts()
-    public static void showGentleLockoutDialog()
     public static void showMindfulDelayDialog()
     public static void showRenameDialog()
-    public static void showSetAppLimitDialog()
     public static void showSingleFocusActionMenu()
     public static void unregisterCalendarObserver()
 com.psei.launcher.MinimalLauncherApp:
@@ -22271,6 +22363,8 @@ com.psei.launcher.SettingsActivity$openShortcutPicker$pickerAdapter$1:
     public final void invoke()
 com.psei.launcher.SettingsActivity$openSwipeShortcutPicker$pickerAdapter$1:
     public final void invoke()
+com.psei.launcher.SettingsActivity$setupListeners$31$1:
+    public final void invoke$1()
 com.psei.launcher.SettingsActivity$showAppLimitsManagerDialog$pickerAdapter$1$1:
     public final void invoke$1()
 com.psei.launcher.SettingsActivity$showAppLimitsManagerDialog$pickerAdapter$1:
@@ -22285,18 +22379,15 @@ com.psei.launcher.SettingsActivity:
     public static void setupInsets$2()
     public static void setupListeners()
     public static void showAppAlignmentDialog()
-    public static void showAppLimitsManagerDialog()
     public static void showDuolingoEditDialog$1()
     public static void showFuntouchHelpDialog()
     public static void showLockMethodDialog()
     public static void showMindfulAppsDialog()
     public static void showMindfulDurationDialog()
     public static void showSecretRedeemDialog()
-    public static void showSetAppLimitDialog$1()
     public static void showSlotsCountDialog()
     public static void showTextSizeDialog()
     public static void showThemeDialog()
-    public static void showUsageAccessPromptDialog()
     public static void tryOpenAutostartSettings()
 com.psei.launcher.billing.BillingManager:
     public final android.content.Context context
@@ -22326,11 +22417,15 @@ com.psei.launcher.databinding.DialogDuolingoEditBinding:
     public final android.widget.TextView tvPracticedStatus
     public static android.widget.LinearLayout getRoot()
 com.psei.launcher.databinding.DialogGentleLockoutBinding:
-    public static android.widget.LinearLayout getRoot()
+    public final android.widget.FrameLayout lockoutRoot
+    public final android.widget.TextView tvLockoutTitle
+    public static android.widget.FrameLayout getRoot()
 com.psei.launcher.databinding.DialogKansoProBinding:
     public static android.widget.LinearLayout getRoot()
 com.psei.launcher.databinding.DialogMindfulDelayBinding:
-    public static android.widget.LinearLayout getRoot()
+    public final android.widget.FrameLayout mindfulRoot
+    public final android.widget.TextView tvMindfulTitle
+    public static android.widget.FrameLayout getRoot()
 com.psei.launcher.databinding.DialogRenameBinding:
     public final android.widget.TextView tvRenameDialogTitle
     public static android.widget.LinearLayout getRoot()
@@ -22348,6 +22443,28 @@ com.psei.launcher.databinding.ItemHiddenAppBinding:
 com.psei.launcher.databinding.ItemHomeSlotBinding:
     public final android.widget.TextView tvSlotName
     public static android.widget.TextView getRoot()
+com.psei.launcher.service.AppLimitMonitorService$Companion:
+    public static void onAccessibilityPackageEntered()
+    public static void onAppLaunchedFromLauncher()
+    public static void onLauncherResumed()
+com.psei.launcher.service.AppLimitMonitorService$showLockoutOverlay$1:
+    public final void invoke$1()
+com.psei.launcher.service.AppLimitMonitorService$showLockoutOverlay$2:
+    public final void invoke$1()
+com.psei.launcher.service.AppLimitMonitorService:
+    public static final com.psei.launcher.service.AppLimitMonitorService$Companion Companion
+    static void <clinit>()
+    public static void createNotificationChannel()
+    public static void enforceLockout()
+    public static void evaluateCurrentForeground()
+    public static java.lang.String resolveAppLabel()
+    public static int resolveOverlayThemeRes()
+    public final void scheduleNextPoll(long)
+    public static void showLockoutOverlay()
+    public static void silentlyPauseMediaAudio()
+    public final void stopPolling()
+    public static void tryMoveBlockedAppToBackground()
+    public static void vibrateTick()
 com.psei.launcher.service.DuolingoNotificationListener$Companion
 com.psei.launcher.service.DuolingoNotificationListener:
     public static final com.psei.launcher.service.DuolingoNotificationListener$Companion Companion
@@ -22365,6 +22482,13 @@ com.psei.launcher.service.LockAccessibilityService$Companion:
 com.psei.launcher.service.LockAccessibilityService:
     public static final com.psei.launcher.service.LockAccessibilityService$Companion Companion
     static void <clinit>()
+com.psei.launcher.ui.AppLimitDialogHelper$attachBreathingGuidance$1:
+    public final void invoke$2()
+com.psei.launcher.ui.AppLimitDialogHelper:
+    public static final com.psei.launcher.ui.AppLimitDialogHelper INSTANCE
+    public static void attachBreathingGuidance(com.psei.launcher.ui.BreathingBackdropView,android.widget.TextView)
+    public static void showOverlayPermissionPromptDialog()
+    public static void showUsageAccessPromptDialog()
 com.psei.launcher.ui.AppListAdapter$AppViewHolder:
     public final void bind()
 com.psei.launcher.ui.AppListAdapter$filter$diffResult$1:
@@ -22380,6 +22504,8 @@ com.psei.launcher.ui.AppListAdapter:
     public static void setTextAlignmentGravity()
     public static void setTextSizeSp()
     public static synthetic void submitList$default(com.psei.launcher.ui.AppListAdapter,java.util.ArrayList)
+com.psei.launcher.ui.BreathingBackdropView:
+    public final void stopAnimation()
 com.psei.launcher.ui.GestureHandler$Callbacks
 com.psei.launcher.ui.HiddenAppsAdapter$HiddenAppViewHolder:
     public final void bind()
@@ -22421,9 +22547,7 @@ kotlin.collections.AbstractList:
 kotlin.collections.ArrayAsCollection:
     public final boolean isVarargs
     public static int getSize()
-kotlin.collections.ArraysKt:
-    public static java.lang.Object getOrNull(java.lang.Object[],int)
-    public static char single(char[])
+kotlin.collections.ArraysKt
 kotlin.collections.ArraysKt___ArraysJvmKt:
     public static final java.util.List asList(java.lang.Object[])
     public static final void sortWith(java.lang.Object[],java.util.Comparator)
@@ -22469,7 +22593,6 @@ kotlin.collections.SetsKt__SetsJVMKt
 kotlin.collections.SetsKt__SetsKt
 kotlin.collections.SetsKt___SetsKt
 kotlin.comparisons.ComparisonsKt
-kotlin.comparisons.ComparisonsKt__ComparisonsKt
 kotlin.comparisons.ComparisonsKt___ComparisonsJvmKt
 kotlin.comparisons.ComparisonsKt___ComparisonsKt
 kotlin.coroutines.AbstractCoroutineContextKey:
@@ -22608,6 +22731,8 @@ kotlin.ranges.IntRange:
     public static final kotlin.ranges.IntRange EMPTY
     public static boolean contains()
     public static java.lang.Integer getStart()
+kotlin.ranges.RangesKt:
+    public static long coerceAtLeast(long,long)
 kotlin.ranges.RangesKt___RangesKt
 kotlin.reflect.KCallable
 kotlin.reflect.KDeclarationContainer
@@ -22638,7 +22763,7 @@ kotlin.text.Charsets:
     public static final java.nio.charset.Charset UTF_16
     public static final java.nio.charset.Charset UTF_16BE
     public static final java.nio.charset.Charset UTF_16LE
-kotlin.text.MatchGroup$$InternalSyntheticThrowCCEIfNotNull$196$234763b2e86aa24b21e9c77784c4f15975906d739ef3459d1bafd5e0e45fea34$0
+kotlin.text.MatchGroup$$InternalSyntheticThrowCCEIfNotNull$194$234763b2e86aa24b21e9c77784c4f15975906d739ef3459d1bafd5e0e45fea34$0
 kotlin.text.MatchGroup
 kotlin.text.MatchGroupCollection
 kotlin.text.MatchResult

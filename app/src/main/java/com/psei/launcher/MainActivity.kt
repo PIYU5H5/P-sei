@@ -13,7 +13,6 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
-import android.animation.ObjectAnimator
 import android.os.Build
 import android.os.Bundle
 import android.os.VibrationEffect
@@ -32,7 +31,6 @@ import android.view.ViewConfiguration
 import android.view.ViewGroup
 import android.view.Window
 import android.view.WindowManager
-import android.view.animation.LinearInterpolator
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
@@ -70,9 +68,11 @@ import com.psei.launcher.databinding.DialogRenameBinding
 import com.psei.launcher.databinding.ItemCalendarEventBinding
 import com.psei.launcher.databinding.ItemDailyFocusBinding
 import com.psei.launcher.databinding.ItemHomeSlotBinding
+import com.psei.launcher.service.AppLimitMonitorService
 import com.psei.launcher.service.DuolingoNotificationListener
 import com.psei.launcher.service.LauncherAdminReceiver
 import com.psei.launcher.service.LockAccessibilityService
+import com.psei.launcher.ui.AppLimitDialogHelper
 import com.psei.launcher.ui.AppListAdapter
 import com.psei.launcher.ui.GestureHandler
 import com.psei.launcher.ui.InsetsUtils
@@ -88,6 +88,16 @@ import java.lang.reflect.Method
  * - Full edge-to-edge support for vivo Y53s notch and gesture pill.
  */
 class MainActivity : AppCompatActivity(), AppRepository.OnAppsChangedListener {
+
+    companion object {
+        const val EXTRA_LOCKOUT_PACKAGE = "extra_lockout_package"
+        const val EXTRA_LOCKOUT_USED_MINUTES = "extra_lockout_used_minutes"
+        const val EXTRA_LOCKOUT_LIMIT_MINUTES = "extra_lockout_limit_minutes"
+
+        @Volatile
+        var isForeground: Boolean = false
+            private set
+    }
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var prefs: Prefs
@@ -242,6 +252,8 @@ class MainActivity : AppCompatActivity(), AppRepository.OnAppsChangedListener {
         } catch (e: Exception) {
             // Ignored
         }
+
+        handleLockoutIntent(intent)
     }
 
     override fun onStart() {
@@ -256,6 +268,11 @@ class MainActivity : AppCompatActivity(), AppRepository.OnAppsChangedListener {
 
     override fun onResume() {
         super.onResume()
+        isForeground = true
+        AppLimitMonitorService.onLauncherResumed(this)
+        AppLimitMonitorService.syncMonitoringState(this)
+        LockAccessibilityService.syncEventSubscription(this)
+
         if (prefs.theme != currentAppliedTheme) {
             recreate()
             return
@@ -348,6 +365,7 @@ class MainActivity : AppCompatActivity(), AppRepository.OnAppsChangedListener {
     }
 
     override fun onPause() {
+        isForeground = false
         super.onPause()
     }
 
@@ -359,6 +377,18 @@ class MainActivity : AppCompatActivity(), AppRepository.OnAppsChangedListener {
         if (binding.drawerContainer.isVisible) {
             closeDrawer()
         }
+        handleLockoutIntent(intent)
+    }
+
+    private fun handleLockoutIntent(intent: Intent?) {
+        val blockedPkg = intent?.getStringExtra(EXTRA_LOCKOUT_PACKAGE) ?: return
+        intent.removeExtra(EXTRA_LOCKOUT_PACKAGE)
+        val usedMinutes = intent.getIntExtra(EXTRA_LOCKOUT_USED_MINUTES, 0)
+        val limitMinutes = intent.getIntExtra(EXTRA_LOCKOUT_LIMIT_MINUTES, prefs.getAppScreenTimeLimit(blockedPkg))
+        if (limitMinutes <= 0 || prefs.isAppSnoozed(blockedPkg)) return
+
+        val app = appRepo.getCachedApps().firstOrNull { it.packageName == blockedPkg } ?: return
+        showGentleLockoutDialog(app, usedMinutes.coerceAtLeast(limitMinutes), limitMinutes)
     }
 
     /**
@@ -1372,13 +1402,14 @@ class MainActivity : AppCompatActivity(), AppRepository.OnAppsChangedListener {
     private var mindfulTimer: CountDownTimer? = null
 
     fun launchApp(app: AppModel) {
-        // 1. App Screen-Time Limit Check
+        // 1. App Screen-Time Limit Check (live millisecond usage check)
         val limitMinutes = prefs.getAppScreenTimeLimit(app.packageName)
-        if (limitMinutes > 0 && UsageHelper.hasUsagePermission(this)) {
+        if (limitMinutes > 0 && app.packageName != packageName && UsageHelper.hasUsagePermission(this)) {
             val isSnoozed = prefs.isAppSnoozed(app.packageName)
             if (!isSnoozed) {
-                val usedMinutes = UsageHelper.getTodayUsageMinutes(this, app.packageName)
-                if (usedMinutes >= limitMinutes) {
+                val usedMillis = UsageHelper.getTodayUsageMillis(this, app.packageName)
+                if (usedMillis >= limitMinutes * 60_000L) {
+                    val usedMinutes = (usedMillis / 60_000L).toInt().coerceAtLeast(limitMinutes)
                     showGentleLockoutDialog(app, usedMinutes, limitMinutes)
                     return
                 }
@@ -1400,85 +1431,40 @@ class MainActivity : AppCompatActivity(), AppRepository.OnAppsChangedListener {
         val dialog = Dialog(this)
         val dialogBinding = DialogGentleLockoutBinding.inflate(layoutInflater)
         dialog.setContentView(dialogBinding.root)
-        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        dialog.window?.setLayout(
-            ViewGroup.LayoutParams.MATCH_PARENT,
-            ViewGroup.LayoutParams.WRAP_CONTENT
-        )
+        AppLimitDialogHelper.configureFullscreenDialog(dialog)
+        AppLimitDialogHelper.applyBottomSystemBarInsets(dialogBinding.bottomControlsContainer)
+        AppLimitDialogHelper.attachBreathingGuidance(dialogBinding.breathingBackdrop, dialogBinding.tvBreathPhase)
 
-        dialogBinding.tvLockoutMessage.text = "You've reached your ${limitMinutes}m daily limit for ${app.label} (${usedMinutes}m used today).\nTake a gentle break and recharge."
+        dialogBinding.tvLockoutMessage.text =
+            "You've reached your ${limitMinutes}m daily limit for ${app.label} (${usedMinutes}m used today).\nTake a slow breath, relax, and recharge."
 
-        val hasUsedSnoozeToday = prefs.hasUsedEmergencySnoozeToday(app.packageName)
-        var cooldownTimer: CountDownTimer? = null
-        var cooldownAnimator: ObjectAnimator? = null
-
-        if (hasUsedSnoozeToday) {
-            dialogBinding.btnSnoozeEmergency.text = "Emergency +5m already used today"
-            dialogBinding.btnSnoozeEmergency.isEnabled = false
-            dialogBinding.btnSnoozeEmergency.alpha = 0.4f
-            dialogBinding.progressEmergencyCooldown.isVisible = false
-        } else {
-            dialogBinding.btnSnoozeEmergency.isEnabled = false
-            dialogBinding.btnSnoozeEmergency.alpha = 0.4f
-            dialogBinding.btnSnoozeEmergency.text = "Emergency +5m (10s)"
-            dialogBinding.progressEmergencyCooldown.isVisible = true
-            dialogBinding.progressEmergencyCooldown.progress = 0
-
-            cooldownAnimator = ObjectAnimator.ofInt(dialogBinding.progressEmergencyCooldown, "progress", 0, 1000).apply {
-                duration = 10_000L
-                interpolator = LinearInterpolator()
-                start()
-            }
-
-            cooldownTimer = object : CountDownTimer(10_000L, 100L) {
-                override fun onTick(millisUntilFinished: Long) {
-                    val secondsLeft = (millisUntilFinished + 999) / 1000
-                    dialogBinding.btnSnoozeEmergency.text = "Emergency +5m (${secondsLeft}s)"
-                    val fraction = (10_000L - millisUntilFinished).toFloat() / 10_000f
-                    dialogBinding.btnSnoozeEmergency.alpha = 0.4f + (0.35f * fraction)
-                }
-
-                override fun onFinish() {
-                    dialogBinding.progressEmergencyCooldown.isVisible = false
-                    dialogBinding.btnSnoozeEmergency.isEnabled = true
-                    dialogBinding.btnSnoozeEmergency.text = "Emergency +5 Minutes (Once today)"
-                    vibrateTick()
-                    dialogBinding.btnSnoozeEmergency.animate()
-                        .alpha(1.0f)
-                        .scaleX(1.06f)
-                        .scaleY(1.06f)
-                        .setDuration(180)
-                        .withEndAction {
-                            dialogBinding.btnSnoozeEmergency.animate()
-                                .scaleX(1.0f)
-                                .scaleY(1.0f)
-                                .setDuration(120)
-                                .start()
-                        }
-                        .start()
-                }
-            }.start()
-
-            dialogBinding.btnSnoozeEmergency.setOnClickListener {
-                cooldownTimer?.cancel()
-                cooldownAnimator?.cancel()
+        val cooldownHandle = AppLimitDialogHelper.bindEmergencySnoozeButton(
+            context = this,
+            pkg = app.packageName,
+            appLabel = app.label,
+            btnSnooze = dialogBinding.btnSnoozeEmergency,
+            progressCooldown = dialogBinding.progressEmergencyCooldown,
+            onTickHaptic = { vibrateTick() },
+            onBeforeLaunchSnoozed = {
                 dialog.dismiss()
-                prefs.useEmergencySnooze(app.packageName, 5)
-                Toast.makeText(this, "Emergency 5 minutes granted for ${app.label}", Toast.LENGTH_SHORT).show()
                 executeLaunch(app)
             }
-        }
+        )
 
         dialogBinding.btnStepAway.setOnClickListener {
-            cooldownTimer?.cancel()
-            cooldownAnimator?.cancel()
-            dialog.dismiss()
+            cooldownHandle.cancel()
             Toast.makeText(this, "Good choice stepping away", Toast.LENGTH_SHORT).show()
+            dialogBinding.root.animate()
+                .alpha(0f)
+                .setDuration(180)
+                .withEndAction {
+                    if (dialog.isShowing) dialog.dismiss()
+                }
+                .start()
         }
 
         dialog.setOnDismissListener {
-            cooldownTimer?.cancel()
-            cooldownAnimator?.cancel()
+            cooldownHandle.cancel()
             if (activeDialog == dialog) {
                 activeDialog = null
             }
@@ -1486,9 +1472,17 @@ class MainActivity : AppCompatActivity(), AppRepository.OnAppsChangedListener {
 
         activeDialog = dialog
         dialog.show()
+        AppLimitDialogHelper.animateFullscreenEntrance(
+            dialogBinding.root,
+            dialogBinding.centerLockoutContainer,
+            dialogBinding.bottomControlsContainer
+        )
     }
 
     private fun executeLaunch(app: AppModel) {
+        if (prefs.getAppScreenTimeLimit(app.packageName) > 0) {
+            AppLimitMonitorService.onAppLaunchedFromLauncher(this, app.packageName)
+        }
         val launcherApps = getSystemService(Context.LAUNCHER_APPS_SERVICE) as LauncherApps
         try {
             launcherApps.startMainActivity(app.componentName, app.userHandle, null, null)
@@ -1507,28 +1501,34 @@ class MainActivity : AppCompatActivity(), AppRepository.OnAppsChangedListener {
     }
 
     private fun showMindfulDelayDialog(app: AppModel) {
+        if (activeDialog?.isShowing == true) return
         mindfulTimer?.cancel()
 
         val dialog = Dialog(this)
         val dialogBinding = DialogMindfulDelayBinding.inflate(layoutInflater)
         dialog.setContentView(dialogBinding.root)
-        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        dialog.window?.setLayout(
-            ViewGroup.LayoutParams.MATCH_PARENT,
-            ViewGroup.LayoutParams.WRAP_CONTENT
-        )
+        AppLimitDialogHelper.configureFullscreenDialog(dialog)
+        AppLimitDialogHelper.applyBottomSystemBarInsets(dialogBinding.bottomControlsContainer)
+        AppLimitDialogHelper.attachBreathingGuidance(dialogBinding.breathingBackdrop, dialogBinding.tvBreathPhase)
 
         val secondsTotal = prefs.mindfulDelaySeconds
-        dialogBinding.tvMindfulMessage.text = "Opening ${app.label}.\nIs this intentional, or just a reflex?"
+        dialogBinding.tvMindfulMessage.text =
+            "You're about to open ${app.label}.\nTake a slow breath, relax — is this intentional?"
         dialogBinding.tvMindfulCountdown.text = secondsTotal.toString()
-        dialogBinding.btnContinueMindful.text = "Continue in ${secondsTotal}s..."
+        dialogBinding.btnContinueMindful.text = "Continue in ${secondsTotal}s"
         dialogBinding.btnContinueMindful.isEnabled = false
-        dialogBinding.btnContinueMindful.alpha = 0.5f
+        dialogBinding.btnContinueMindful.alpha = 0.4f
 
         dialogBinding.btnCancelMindful.setOnClickListener {
             mindfulTimer?.cancel()
-            dialog.dismiss()
             Toast.makeText(this, "Stepped away", Toast.LENGTH_SHORT).show()
+            dialogBinding.root.animate()
+                .alpha(0f)
+                .setDuration(180)
+                .withEndAction {
+                    if (dialog.isShowing) dialog.dismiss()
+                }
+                .start()
         }
 
         dialog.setOnDismissListener {
@@ -1544,17 +1544,49 @@ class MainActivity : AppCompatActivity(), AppRepository.OnAppsChangedListener {
                 val secondsRemaining = ((millisUntilFinished + 500L) / 1000L).toInt()
                 if (secondsRemaining > 0) {
                     dialogBinding.tvMindfulCountdown.text = secondsRemaining.toString()
-                    dialogBinding.btnContinueMindful.text = "Continue in ${secondsRemaining}s..."
+                    dialogBinding.tvMindfulCountdown.alpha = 0.6f
+                    dialogBinding.tvMindfulCountdown.scaleX = 1.08f
+                    dialogBinding.tvMindfulCountdown.scaleY = 1.08f
+                    dialogBinding.tvMindfulCountdown.animate()
+                        .alpha(1f)
+                        .scaleX(1f)
+                        .scaleY(1f)
+                        .setDuration(240)
+                        .start()
+                    dialogBinding.btnContinueMindful.text = "Continue in ${secondsRemaining}s"
                     vibrateTick()
                 }
             }
 
             override fun onFinish() {
-                dialogBinding.tvMindfulCountdown.text = "0"
-                dialogBinding.btnContinueMindful.text = "Continue to ${app.label}"
+                dialogBinding.tvMindfulCountdown.animate()
+                    .alpha(0f)
+                    .setDuration(180)
+                    .withEndAction {
+                        dialogBinding.tvMindfulCountdown.textSize = 32f
+                        dialogBinding.tvMindfulCountdown.text = "Ready"
+                        dialogBinding.tvMindfulCountdown.animate()
+                            .alpha(0.9f)
+                            .setDuration(240)
+                            .start()
+                    }
+                    .start()
+                dialogBinding.btnContinueMindful.text = "Open ${app.label}"
                 dialogBinding.btnContinueMindful.isEnabled = true
-                dialogBinding.btnContinueMindful.alpha = 1.0f
                 dialogBinding.btnContinueMindful.setTextColor(getThemeColor(R.attr.primaryTextColor))
+                dialogBinding.btnContinueMindful.animate()
+                    .alpha(1.0f)
+                    .scaleX(1.05f)
+                    .scaleY(1.05f)
+                    .setDuration(180)
+                    .withEndAction {
+                        dialogBinding.btnContinueMindful.animate()
+                            .scaleX(1f)
+                            .scaleY(1f)
+                            .setDuration(120)
+                            .start()
+                    }
+                    .start()
                 dialogBinding.btnContinueMindful.setOnClickListener {
                     dialog.dismiss()
                     executeLaunch(app)
@@ -1564,6 +1596,11 @@ class MainActivity : AppCompatActivity(), AppRepository.OnAppsChangedListener {
 
         activeDialog = dialog
         dialog.show()
+        AppLimitDialogHelper.animateFullscreenEntrance(
+            dialogBinding.root,
+            dialogBinding.centerPromptContainer,
+            dialogBinding.bottomControlsContainer
+        )
     }
 
     fun showProShowcaseDialog(reason: String? = null) {
@@ -1809,6 +1846,7 @@ class MainActivity : AppCompatActivity(), AppRepository.OnAppsChangedListener {
 
         // Daily Limit
         val currentLimit = prefs.getAppScreenTimeLimit(app.packageName)
+        dialogBinding.actionSetLimit.isVisible = app.packageName != packageName
         dialogBinding.actionSetLimit.text = if (currentLimit > 0) {
             "Daily limit: ${currentLimit}m"
         } else {
@@ -1821,11 +1859,12 @@ class MainActivity : AppCompatActivity(), AppRepository.OnAppsChangedListener {
                 return@setOnClickListener
             }
             if (!UsageHelper.hasUsagePermission(this)) {
-                UsageHelper.openUsageAccessSettings(this)
-                Toast.makeText(this, "Please grant Usage Access to set app limits.", Toast.LENGTH_LONG).show()
+                AppLimitDialogHelper.showUsageAccessPromptDialog(this)
                 return@setOnClickListener
             }
-            showSetAppLimitDialog(app)
+            AppLimitDialogHelper.showSetAppLimitDialog(this, app) {
+                renderHomeSlots()
+            }
         }
 
         // 3. App Info
@@ -2053,37 +2092,6 @@ class MainActivity : AppCompatActivity(), AppRepository.OnAppsChangedListener {
         } catch (e: Exception) {
             // Ignored
         }
-    }
-
-    private fun showSetAppLimitDialog(app: AppModel) {
-        val currentLimit = prefs.getAppScreenTimeLimit(app.packageName)
-        val limits = intArrayOf(0, 15, 30, 45, 60, 90, 120)
-        val options = arrayOf(
-            "None (No limit)",
-            "15 minutes",
-            "30 minutes",
-            "45 minutes",
-            "1 hour (60m)",
-            "1.5 hours (90m)",
-            "2 hours (120m)"
-        )
-        val currentIdx = limits.indexOf(currentLimit).let { if (it >= 0) it else 0 }
-
-        AlertDialog.Builder(this)
-            .setTitle("Daily Limit: ${app.label}")
-            .setSingleChoiceItems(options, currentIdx) { dialog, which ->
-                val chosen = limits[which]
-                prefs.setAppScreenTimeLimit(app.packageName, chosen)
-                if (chosen > 0) {
-                    Toast.makeText(this, "Daily limit set to ${chosen}m for ${app.label}", Toast.LENGTH_SHORT).show()
-                } else {
-                    Toast.makeText(this, "Daily limit removed for ${app.label}", Toast.LENGTH_SHORT).show()
-                }
-                renderHomeSlots()
-                dialog.dismiss()
-            }
-            .setNegativeButton(R.string.cancel, null)
-            .show()
     }
 
     private fun getThemeColor(attrId: Int): Int {

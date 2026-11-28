@@ -36,8 +36,10 @@ import com.psei.launcher.databinding.ActivitySettingsBinding
 import com.psei.launcher.databinding.DialogAppPickerBinding
 import com.psei.launcher.databinding.DialogKansoProBinding
 import com.psei.launcher.databinding.DialogSecretVipBinding
+import com.psei.launcher.service.AppLimitMonitorService
 import com.psei.launcher.service.LauncherAdminReceiver
 import com.psei.launcher.service.LockAccessibilityService
+import com.psei.launcher.ui.AppLimitDialogHelper
 import com.psei.launcher.ui.AppListAdapter
 import com.psei.launcher.ui.InsetsUtils
 
@@ -96,6 +98,8 @@ class SettingsActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         updateUiState()
+        AppLimitMonitorService.syncMonitoringState(this)
+        LockAccessibilityService.syncEventSubscription(this)
     }
 
     override fun onDestroy() {
@@ -354,7 +358,11 @@ class SettingsActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
             if (!UsageHelper.hasUsagePermission(this)) {
-                showUsageAccessPromptDialog()
+                AppLimitDialogHelper.showUsageAccessPromptDialog(this)
+            } else if (!UsageHelper.hasOverlayPermission(this)) {
+                AppLimitDialogHelper.showOverlayPermissionPromptDialog(this) {
+                    showAppLimitsManagerDialog()
+                }
             } else {
                 showAppLimitsManagerDialog()
             }
@@ -478,10 +486,15 @@ class SettingsActivity : AppCompatActivity() {
                 "$mindfulCount apps configured with pause"
             }
             val configuredLimitsCount = prefs.getAllConfiguredLimits().size
-            binding.tvAppLimitsSummary.text = if (configuredLimitsCount > 0) {
-                "$configuredLimitsCount apps with daily caps"
-            } else {
-                "In-app daily usage caps with gentle lockouts"
+            binding.tvAppLimitsSummary.text = when {
+                configuredLimitsCount > 0 && !UsageHelper.hasUsagePermission(this) ->
+                    "$configuredLimitsCount apps capped (Usage Access needed)"
+                configuredLimitsCount > 0 && !UsageHelper.hasOverlayPermission(this) ->
+                    "$configuredLimitsCount apps capped (Tap to allow Overlay Guard)"
+                configuredLimitsCount > 0 ->
+                    "$configuredLimitsCount apps with daily caps (Guard active)"
+                else ->
+                    "In-app daily usage caps with automatic closing"
             }
             binding.switchBiometricLock.isChecked = prefs.isProUser && prefs.isBiometricLockEnabled
 
@@ -778,17 +791,6 @@ class SettingsActivity : AppCompatActivity() {
         dialog.show()
     }
 
-    private fun showUsageAccessPromptDialog() {
-        AlertDialog.Builder(this)
-            .setTitle("Usage Access Required")
-            .setMessage("To track daily screen time and enforce gentle lockouts, P-Sei needs Usage Access permission.")
-            .setPositiveButton("Open Settings") { _, _ ->
-                UsageHelper.openUsageAccessSettings(this)
-            }
-            .setNegativeButton(R.string.cancel, null)
-            .show()
-    }
-
     private fun showAppLimitsManagerDialog() {
         val dialog = Dialog(this, android.R.style.Theme_NoTitleBar)
         val pickerBinding = DialogAppPickerBinding.inflate(layoutInflater)
@@ -799,7 +801,8 @@ class SettingsActivity : AppCompatActivity() {
 
         val pickerAdapter = AppListAdapter(
             onAppClick = { chosenApp ->
-                showSetAppLimitDialog(chosenApp) {
+                AppLimitDialogHelper.showSetAppLimitDialog(this, chosenApp) {
+                    updateUiState()
                     dialog.dismiss()
                 }
             }
@@ -811,7 +814,9 @@ class SettingsActivity : AppCompatActivity() {
             setHasFixedSize(true)
         }
 
-        val allApps = appRepo.getCachedApps().filterNot { prefs.isAppHidden(it.componentKey) }
+        val allApps = appRepo.getCachedApps()
+            .filterNot { prefs.isAppHidden(it.componentKey) || it.packageName == packageName }
+            .sortedWith(compareByDescending<AppModel> { prefs.getAppScreenTimeLimit(it.packageName) > 0 }.thenBy { it.label.lowercase() })
         pickerAdapter.submitList(allApps)
 
         pickerBinding.etPickerSearch.addTextChangedListener(object : TextWatcher {
@@ -823,38 +828,6 @@ class SettingsActivity : AppCompatActivity() {
         })
 
         dialog.show()
-    }
-
-    private fun showSetAppLimitDialog(app: AppModel, onComplete: (() -> Unit)? = null) {
-        val currentLimit = prefs.getAppScreenTimeLimit(app.packageName)
-        val limits = intArrayOf(0, 15, 30, 45, 60, 90, 120)
-        val options = arrayOf(
-            "None (No limit)",
-            "15 minutes",
-            "30 minutes",
-            "45 minutes",
-            "1 hour (60m)",
-            "1.5 hours (90m)",
-            "2 hours (120m)"
-        )
-        val currentIdx = limits.indexOf(currentLimit).let { if (it >= 0) it else 0 }
-
-        AlertDialog.Builder(this)
-            .setTitle("Daily Limit: ${app.label}")
-            .setSingleChoiceItems(options, currentIdx) { dialog, which ->
-                val chosen = limits[which]
-                prefs.setAppScreenTimeLimit(app.packageName, chosen)
-                updateUiState()
-                if (chosen > 0) {
-                    Toast.makeText(this, "Daily limit set to ${chosen}m for ${app.label}", Toast.LENGTH_SHORT).show()
-                } else {
-                    Toast.makeText(this, "Daily limit removed for ${app.label}", Toast.LENGTH_SHORT).show()
-                }
-                dialog.dismiss()
-                onComplete?.invoke()
-            }
-            .setNegativeButton(R.string.cancel, null)
-            .show()
     }
 
     private fun showTextSizeDialog() {

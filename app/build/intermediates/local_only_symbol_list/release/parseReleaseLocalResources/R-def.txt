@@ -35,6 +35,7 @@ drawable ic_flame
 drawable ic_flame_grey
 drawable ic_launcher_background
 drawable ic_launcher_foreground
+drawable ic_timer_minimal
 id actionChangeSlot
 id actionHide
 id actionInfo
@@ -42,7 +43,9 @@ id actionRemoveFromHome
 id actionRename
 id actionSetLimit
 id actionUninstall
+id bottomControlsContainer
 id bottomShortcutsContainer
+id breathingBackdrop
 id btnAddFocusItem
 id btnBack
 id btnBackHidden
@@ -80,6 +83,8 @@ id btnUnhide
 id btnUnlockSecret
 id cardAccessibilityWarning
 id cardPSeiPro
+id centerLockoutContainer
+id centerPromptContainer
 id clockArea
 id clockDate
 id clockTime
@@ -107,6 +112,8 @@ id layoutIntentRow2
 id layoutIntentRow3
 id layoutPlans
 id layoutProActive
+id lockoutRoot
+id mindfulRoot
 id pathFlameInner
 id pathFlameOuter
 id progressEmergencyCooldown
@@ -161,6 +168,7 @@ id tvActionAppTitle
 id tvAppAlignmentSummary
 id tvAppLimitsSummary
 id tvAppName
+id tvBreathPhase
 id tvDailyIntentDialogSubtitle
 id tvDailyIntentDialogTitle
 id tvDailyIntentEmptyIcon
@@ -173,6 +181,7 @@ id tvEmptyHidden
 id tvEventBullet
 id tvEventTime
 id tvEventTitle
+id tvExitHint
 id tvFocusIcon
 id tvFocusText
 id tvHiddenAppName
@@ -180,10 +189,12 @@ id tvHiddenAppsSummary
 id tvHomeSlotsSummary
 id tvLockMethodSummary
 id tvLockoutMessage
+id tvLockoutTitle
 id tvMindfulAppsSummary
 id tvMindfulCountdown
 id tvMindfulDurationSummary
 id tvMindfulMessage
+id tvMindfulTitle
 id tvNoEvents
 id tvPickerTitle
 id tvPracticedStatus

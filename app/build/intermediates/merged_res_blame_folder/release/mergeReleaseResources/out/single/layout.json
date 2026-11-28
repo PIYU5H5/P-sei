@@ -68,7 +68,15 @@
         "source": "com.psei.launcher.app-main-27:/layout/dialog_gentle_lockout.xml"
     },
     {
+        "merged": "C:\\Users\\PIYUSH\\.gradle\\daemon\\8.9\\com.psei.launcher.app-mergeReleaseResources-24:\\layout\\overlay_gentle_lockout.xml",
+        "source": "C:\\Users\\PIYUSH\\.gradle\\daemon\\8.9\\com.psei.launcher.app-main-27:\\layout\\overlay_gentle_lockout.xml"
+    },
+    {
         "merged": "C:\\Users\\PIYUSH\\.gradle\\daemon\\8.9\\com.psei.launcher.app-mergeReleaseResources-24:\\layout\\dialog_secret_vip.xml",
         "source": "C:\\Users\\PIYUSH\\.gradle\\daemon\\8.9\\com.psei.launcher.app-main-27:\\layout\\dialog_secret_vip.xml"
+    },
+    {
+        "merged": "com.psei.launcher.app-mergeReleaseResources-24:/layout/dialog_mindful_delay.xml",
+        "source": "com.psei.launcher.app-main-27:/layout/dialog_mindful_delay.xml"
     }
 ]

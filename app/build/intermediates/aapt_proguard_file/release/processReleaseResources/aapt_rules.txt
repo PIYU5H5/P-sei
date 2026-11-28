@@ -11,6 +11,8 @@
 -keep class com.psei.launcher.MainActivity { <init>(); }
 -keep class com.psei.launcher.MinimalLauncherApp { <init>(); }
 -keep class com.psei.launcher.SettingsActivity { <init>(); }
+-keep class com.psei.launcher.service.AppLimitMonitorService { <init>(); }
+-keep class com.psei.launcher.service.BootReceiver { <init>(); }
 -keep class com.psei.launcher.service.DuolingoNotificationListener { <init>(); }
 -keep class com.psei.launcher.service.LauncherAdminReceiver { <init>(); }
 -keep class com.psei.launcher.service.LockAccessibilityService { <init>(); }
@@ -57,4 +59,6 @@
 -keep class androidx.core.widget.NestedScrollView { <init>(android.content.Context, android.util.AttributeSet); }
 
 -keep class androidx.recyclerview.widget.RecyclerView { <init>(android.content.Context, android.util.AttributeSet); }
+
+-keep class com.psei.launcher.ui.BreathingBackdropView { <init>(android.content.Context, android.util.AttributeSet); }
 

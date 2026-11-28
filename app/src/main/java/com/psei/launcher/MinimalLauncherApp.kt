@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.appcompat.app.AppCompatDelegate
 import com.psei.launcher.billing.BillingManager
 import com.psei.launcher.data.Prefs
+import com.psei.launcher.service.AppLimitMonitorService
 
 /**
  * Application entry point.
@@ -16,6 +17,7 @@ class MinimalLauncherApp : Application() {
         super.onCreate()
         applyThemeSetting()
         BillingManager.getInstance(this).startConnection()
+        AppLimitMonitorService.syncMonitoringState(this)
     }
 
     fun applyThemeSetting() {

@@ -4,6 +4,7 @@ package com.psei.launcher.databinding;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -12,13 +13,20 @@ import androidx.annotation.Nullable;
 import androidx.viewbinding.ViewBinding;
 import androidx.viewbinding.ViewBindings;
 import com.psei.launcher.R;
+import com.psei.launcher.ui.BreathingBackdropView;
 import java.lang.NullPointerException;
 import java.lang.Override;
 import java.lang.String;
 
 public final class DialogGentleLockoutBinding implements ViewBinding {
   @NonNull
-  private final LinearLayout rootView;
+  private final FrameLayout rootView;
+
+  @NonNull
+  public final LinearLayout bottomControlsContainer;
+
+  @NonNull
+  public final BreathingBackdropView breathingBackdrop;
 
   @NonNull
   public final TextView btnSnoozeEmergency;
@@ -27,24 +35,50 @@ public final class DialogGentleLockoutBinding implements ViewBinding {
   public final TextView btnStepAway;
 
   @NonNull
+  public final LinearLayout centerLockoutContainer;
+
+  @NonNull
+  public final FrameLayout lockoutRoot;
+
+  @NonNull
   public final ProgressBar progressEmergencyCooldown;
+
+  @NonNull
+  public final TextView tvBreathPhase;
+
+  @NonNull
+  public final TextView tvExitHint;
 
   @NonNull
   public final TextView tvLockoutMessage;
 
-  private DialogGentleLockoutBinding(@NonNull LinearLayout rootView,
-      @NonNull TextView btnSnoozeEmergency, @NonNull TextView btnStepAway,
-      @NonNull ProgressBar progressEmergencyCooldown, @NonNull TextView tvLockoutMessage) {
+  @NonNull
+  public final TextView tvLockoutTitle;
+
+  private DialogGentleLockoutBinding(@NonNull FrameLayout rootView,
+      @NonNull LinearLayout bottomControlsContainer,
+      @NonNull BreathingBackdropView breathingBackdrop, @NonNull TextView btnSnoozeEmergency,
+      @NonNull TextView btnStepAway, @NonNull LinearLayout centerLockoutContainer,
+      @NonNull FrameLayout lockoutRoot, @NonNull ProgressBar progressEmergencyCooldown,
+      @NonNull TextView tvBreathPhase, @NonNull TextView tvExitHint,
+      @NonNull TextView tvLockoutMessage, @NonNull TextView tvLockoutTitle) {
     this.rootView = rootView;
+    this.bottomControlsContainer = bottomControlsContainer;
+    this.breathingBackdrop = breathingBackdrop;
     this.btnSnoozeEmergency = btnSnoozeEmergency;
     this.btnStepAway = btnStepAway;
+    this.centerLockoutContainer = centerLockoutContainer;
+    this.lockoutRoot = lockoutRoot;
     this.progressEmergencyCooldown = progressEmergencyCooldown;
+    this.tvBreathPhase = tvBreathPhase;
+    this.tvExitHint = tvExitHint;
     this.tvLockoutMessage = tvLockoutMessage;
+    this.tvLockoutTitle = tvLockoutTitle;
   }
 
   @Override
   @NonNull
-  public LinearLayout getRoot() {
+  public FrameLayout getRoot() {
     return rootView;
   }
 
@@ -69,6 +103,18 @@ public final class DialogGentleLockoutBinding implements ViewBinding {
     // This is done to optimize the compiled bytecode for size and performance.
     int id;
     missingId: {
+      id = R.id.bottomControlsContainer;
+      LinearLayout bottomControlsContainer = ViewBindings.findChildViewById(rootView, id);
+      if (bottomControlsContainer == null) {
+        break missingId;
+      }
+
+      id = R.id.breathingBackdrop;
+      BreathingBackdropView breathingBackdrop = ViewBindings.findChildViewById(rootView, id);
+      if (breathingBackdrop == null) {
+        break missingId;
+      }
+
       id = R.id.btnSnoozeEmergency;
       TextView btnSnoozeEmergency = ViewBindings.findChildViewById(rootView, id);
       if (btnSnoozeEmergency == null) {
@@ -81,9 +127,29 @@ public final class DialogGentleLockoutBinding implements ViewBinding {
         break missingId;
       }
 
+      id = R.id.centerLockoutContainer;
+      LinearLayout centerLockoutContainer = ViewBindings.findChildViewById(rootView, id);
+      if (centerLockoutContainer == null) {
+        break missingId;
+      }
+
+      FrameLayout lockoutRoot = (FrameLayout) rootView;
+
       id = R.id.progressEmergencyCooldown;
       ProgressBar progressEmergencyCooldown = ViewBindings.findChildViewById(rootView, id);
       if (progressEmergencyCooldown == null) {
+        break missingId;
+      }
+
+      id = R.id.tvBreathPhase;
+      TextView tvBreathPhase = ViewBindings.findChildViewById(rootView, id);
+      if (tvBreathPhase == null) {
+        break missingId;
+      }
+
+      id = R.id.tvExitHint;
+      TextView tvExitHint = ViewBindings.findChildViewById(rootView, id);
+      if (tvExitHint == null) {
         break missingId;
       }
 
@@ -93,8 +159,15 @@ public final class DialogGentleLockoutBinding implements ViewBinding {
         break missingId;
       }
 
-      return new DialogGentleLockoutBinding((LinearLayout) rootView, btnSnoozeEmergency,
-          btnStepAway, progressEmergencyCooldown, tvLockoutMessage);
+      id = R.id.tvLockoutTitle;
+      TextView tvLockoutTitle = ViewBindings.findChildViewById(rootView, id);
+      if (tvLockoutTitle == null) {
+        break missingId;
+      }
+
+      return new DialogGentleLockoutBinding((FrameLayout) rootView, bottomControlsContainer,
+          breathingBackdrop, btnSnoozeEmergency, btnStepAway, centerLockoutContainer, lockoutRoot,
+          progressEmergencyCooldown, tvBreathPhase, tvExitHint, tvLockoutMessage, tvLockoutTitle);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));

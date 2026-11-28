@@ -4,6 +4,7 @@ package com.psei.launcher.databinding;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
@@ -11,13 +12,20 @@ import androidx.annotation.Nullable;
 import androidx.viewbinding.ViewBinding;
 import androidx.viewbinding.ViewBindings;
 import com.psei.launcher.R;
+import com.psei.launcher.ui.BreathingBackdropView;
 import java.lang.NullPointerException;
 import java.lang.Override;
 import java.lang.String;
 
 public final class DialogMindfulDelayBinding implements ViewBinding {
   @NonNull
-  private final LinearLayout rootView;
+  private final FrameLayout rootView;
+
+  @NonNull
+  public final LinearLayout bottomControlsContainer;
+
+  @NonNull
+  public final BreathingBackdropView breathingBackdrop;
 
   @NonNull
   public final TextView btnCancelMindful;
@@ -26,24 +34,46 @@ public final class DialogMindfulDelayBinding implements ViewBinding {
   public final TextView btnContinueMindful;
 
   @NonNull
+  public final LinearLayout centerPromptContainer;
+
+  @NonNull
+  public final FrameLayout mindfulRoot;
+
+  @NonNull
+  public final TextView tvBreathPhase;
+
+  @NonNull
   public final TextView tvMindfulCountdown;
 
   @NonNull
   public final TextView tvMindfulMessage;
 
-  private DialogMindfulDelayBinding(@NonNull LinearLayout rootView,
-      @NonNull TextView btnCancelMindful, @NonNull TextView btnContinueMindful,
-      @NonNull TextView tvMindfulCountdown, @NonNull TextView tvMindfulMessage) {
+  @NonNull
+  public final TextView tvMindfulTitle;
+
+  private DialogMindfulDelayBinding(@NonNull FrameLayout rootView,
+      @NonNull LinearLayout bottomControlsContainer,
+      @NonNull BreathingBackdropView breathingBackdrop, @NonNull TextView btnCancelMindful,
+      @NonNull TextView btnContinueMindful, @NonNull LinearLayout centerPromptContainer,
+      @NonNull FrameLayout mindfulRoot, @NonNull TextView tvBreathPhase,
+      @NonNull TextView tvMindfulCountdown, @NonNull TextView tvMindfulMessage,
+      @NonNull TextView tvMindfulTitle) {
     this.rootView = rootView;
+    this.bottomControlsContainer = bottomControlsContainer;
+    this.breathingBackdrop = breathingBackdrop;
     this.btnCancelMindful = btnCancelMindful;
     this.btnContinueMindful = btnContinueMindful;
+    this.centerPromptContainer = centerPromptContainer;
+    this.mindfulRoot = mindfulRoot;
+    this.tvBreathPhase = tvBreathPhase;
     this.tvMindfulCountdown = tvMindfulCountdown;
     this.tvMindfulMessage = tvMindfulMessage;
+    this.tvMindfulTitle = tvMindfulTitle;
   }
 
   @Override
   @NonNull
-  public LinearLayout getRoot() {
+  public FrameLayout getRoot() {
     return rootView;
   }
 
@@ -68,6 +98,18 @@ public final class DialogMindfulDelayBinding implements ViewBinding {
     // This is done to optimize the compiled bytecode for size and performance.
     int id;
     missingId: {
+      id = R.id.bottomControlsContainer;
+      LinearLayout bottomControlsContainer = ViewBindings.findChildViewById(rootView, id);
+      if (bottomControlsContainer == null) {
+        break missingId;
+      }
+
+      id = R.id.breathingBackdrop;
+      BreathingBackdropView breathingBackdrop = ViewBindings.findChildViewById(rootView, id);
+      if (breathingBackdrop == null) {
+        break missingId;
+      }
+
       id = R.id.btnCancelMindful;
       TextView btnCancelMindful = ViewBindings.findChildViewById(rootView, id);
       if (btnCancelMindful == null) {
@@ -77,6 +119,20 @@ public final class DialogMindfulDelayBinding implements ViewBinding {
       id = R.id.btnContinueMindful;
       TextView btnContinueMindful = ViewBindings.findChildViewById(rootView, id);
       if (btnContinueMindful == null) {
+        break missingId;
+      }
+
+      id = R.id.centerPromptContainer;
+      LinearLayout centerPromptContainer = ViewBindings.findChildViewById(rootView, id);
+      if (centerPromptContainer == null) {
+        break missingId;
+      }
+
+      FrameLayout mindfulRoot = (FrameLayout) rootView;
+
+      id = R.id.tvBreathPhase;
+      TextView tvBreathPhase = ViewBindings.findChildViewById(rootView, id);
+      if (tvBreathPhase == null) {
         break missingId;
       }
 
@@ -92,8 +148,15 @@ public final class DialogMindfulDelayBinding implements ViewBinding {
         break missingId;
       }
 
-      return new DialogMindfulDelayBinding((LinearLayout) rootView, btnCancelMindful,
-          btnContinueMindful, tvMindfulCountdown, tvMindfulMessage);
+      id = R.id.tvMindfulTitle;
+      TextView tvMindfulTitle = ViewBindings.findChildViewById(rootView, id);
+      if (tvMindfulTitle == null) {
+        break missingId;
+      }
+
+      return new DialogMindfulDelayBinding((FrameLayout) rootView, bottomControlsContainer,
+          breathingBackdrop, btnCancelMindful, btnContinueMindful, centerPromptContainer,
+          mindfulRoot, tvBreathPhase, tvMindfulCountdown, tvMindfulMessage, tvMindfulTitle);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));

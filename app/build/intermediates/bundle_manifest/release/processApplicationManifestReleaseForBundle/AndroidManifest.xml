@@ -18,8 +18,12 @@
     <!-- Offline Google Calendar Daily Events Widget -->
     <uses-permission android:name="android.permission.READ_CALENDAR" />
 
-    <!-- App Screen-Time Limits (Usage Stats) -->
+    <!-- App Screen-Time Limits (Usage Stats + Overlay Guard + Background Limit Monitor) -->
     <uses-permission android:name="android.permission.PACKAGE_USAGE_STATS" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <!-- Pure Black System Wallpaper Sync (Terminates OEM live wallpapers to eliminate Recents blur lag) -->
     <uses-permission android:name="android.permission.SET_WALLPAPER" />
@@ -157,6 +161,30 @@
                 <action android:name="android.service.notification.NotificationListenerService" />
             </intent-filter>
         </service>
+
+        <!--
+            App Time-Limit Foreground Monitor Service.
+            Enforces configured daily app limits across in-app expiry, notifications,
+            Recents menu, and redirection links.
+        -->
+        <service
+            android:name="com.psei.launcher.service.AppLimitMonitorService"
+            android:exported="false"
+            android:foregroundServiceType="specialUse" >
+            <property
+                android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
+                android:value="Digital wellbeing daily app timer and limit enforcement" />
+        </service>
+
+        <!-- Resumes active app limit monitoring after device reboot or app update -->
+        <receiver
+            android:name="com.psei.launcher.service.BootReceiver"
+            android:exported="true" >
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
+            </intent-filter>
+        </receiver>
 
         <!--
             Alternative Device Admin Receiver for legacy lockNow().

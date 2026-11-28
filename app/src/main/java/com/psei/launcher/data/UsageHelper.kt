@@ -1,19 +1,23 @@
 package com.psei.launcher.data
 
 import android.app.AppOpsManager
+import android.app.usage.UsageEvents
 import android.app.usage.UsageStatsManager
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Build
+import android.os.PowerManager
 import android.os.Process
 import android.provider.Settings
 import java.util.Calendar
 
 /**
  * Lightweight helper to query daily app screen-time usage from native UsageStatsManager.
- * Uses exact event intervals from local midnight (00:00:00) via UsageEvents to match
- * system Digital Wellbeing / Jovi exactly, without bucket-merging distortion from yesterday.
+ * - Uses native INTERVAL_DAILY buckets for total daily screen-time glance to match Digital Wellbeing.
+ * - Uses exact live UsageEvents intervals (including active ongoing foreground sessions) for
+ *   second-accurate app time-limit enforcement without OS bucket flush lag.
  * Zero external libraries, zero battery drain, zero network calls.
  */
 object UsageHelper {
@@ -48,7 +52,7 @@ object UsageHelper {
     @Volatile
     private var lastLauncherQueryTime: Long = 0L
 
-    private fun getIgnoredPackages(context: Context): Set<String> {
+    fun getIgnoredPackages(context: Context): Set<String> {
         val now = System.currentTimeMillis()
         val cached = cachedLauncherPackages
         if (cached != null && (now - lastLauncherQueryTime < 60_000L)) {
@@ -84,6 +88,16 @@ object UsageHelper {
         return allIgnored
     }
 
+    fun getStartOfDayMillis(): Long {
+        val calendar = Calendar.getInstance().apply {
+            set(Calendar.HOUR_OF_DAY, 0)
+            set(Calendar.MINUTE, 0)
+            set(Calendar.SECOND, 0)
+            set(Calendar.MILLISECOND, 0)
+        }
+        return calendar.timeInMillis
+    }
+
     /**
      * Checks if the user has granted PACKAGE_USAGE_STATS permission to P-Sei.
      */
@@ -107,6 +121,13 @@ object UsageHelper {
     }
 
     /**
+     * Checks if "Display over other apps" (SYSTEM_ALERT_WINDOW) is granted.
+     */
+    fun hasOverlayPermission(context: Context): Boolean {
+        return Settings.canDrawOverlays(context)
+    }
+
+    /**
      * Opens system Usage Access settings page.
      */
     fun openUsageAccessSettings(context: Context) {
@@ -127,45 +148,153 @@ object UsageHelper {
     }
 
     /**
-     * Returns total active foreground time spent on a specific app today (strictly since local midnight) in minutes.
-     * Aggregates active daily bucket(s) since midnight, correctly handling device reboots and eliminating
-     * 24h bucket-merging distortion from yesterday across all Android OEMs.
+     * Opens system "Display over other apps" permission screen directly for P-Sei.
      */
-    fun getTodayUsageMinutes(context: Context, packageName: String): Int {
-        if (!hasUsagePermission(context)) return 0
-        val usageStatsManager = context.getSystemService(Context.USAGE_STATS_SERVICE) as? UsageStatsManager ?: return 0
-
-        val calendar = Calendar.getInstance().apply {
-            set(Calendar.HOUR_OF_DAY, 0)
-            set(Calendar.MINUTE, 0)
-            set(Calendar.SECOND, 0)
-            set(Calendar.MILLISECOND, 0)
+    fun openOverlayPermissionSettings(context: Context) {
+        try {
+            val intent = Intent(
+                Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                Uri.parse("package:${context.packageName}")
+            ).apply {
+                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            }
+            context.startActivity(intent)
+        } catch (e: Exception) {
+            try {
+                context.startActivity(Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION).apply {
+                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                })
+            } catch (e2: Exception) {
+                openUsageAccessSettings(context)
+            }
         }
-        val startOfDay = calendar.timeInMillis
+    }
+
+    /**
+     * Returns real-time active foreground usage in milliseconds today (since local midnight)
+     * for a specific package, including any ongoing active foreground session right now.
+     *
+     * Handles multi-activity intra-app transitions cleanly (ActivityA.PAUSED -> ActivityB.RESUMED
+     * -> ActivityA.STOPPED) so active sessions are never prematurely dropped.
+     */
+    fun getTodayUsageMillis(context: Context, packageName: String): Long {
+        if (!hasUsagePermission(context)) return 0L
+        val usageStatsManager = context.getSystemService(Context.USAGE_STATS_SERVICE) as? UsageStatsManager ?: return 0L
+
+        val startOfDay = getStartOfDayMillis()
         val now = System.currentTimeMillis()
-        if (now <= startOfDay) return 0
+        if (now <= startOfDay) return 0L
+
+        var totalMillis = 0L
+        var hadEvents = false
 
         try {
-            val statsList = usageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_DAILY, startOfDay, now)
-            if (!statsList.isNullOrEmpty()) {
-                val pkgStats = statsList.filter { it.packageName == packageName && it.lastTimeUsed >= startOfDay }
-                if (pkgStats.isNotEmpty()) {
-                    val todayBuckets = pkgStats.filter { it.firstTimeStamp >= startOfDay }
-                    val totalTime = if (todayBuckets.isNotEmpty()) {
-                        todayBuckets.sumOf { it.totalTimeInForeground }
+            val events = usageStatsManager.queryEvents(startOfDay, now)
+            if (events != null) {
+                val event = UsageEvents.Event()
+                val activeCounts = HashMap<String, Int>()
+                var sessionStart = -1L
+
+                val maxSingleSessionMs = 12 * 3600 * 1000L
+
+                while (events.hasNextEvent()) {
+                    events.getNextEvent(event)
+                    val ts = event.timeStamp
+                    if (ts < startOfDay) continue
+
+                    val pkg = event.packageName ?: continue
+                    val type = event.eventType
+
+                    if (pkg == packageName) {
+                        hadEvents = true
+                        val compKey = event.className.orEmpty()
+
+                        when (type) {
+                            UsageEvents.Event.ACTIVITY_RESUMED -> {
+                                activeCounts[compKey] = (activeCounts[compKey] ?: 0) + 1
+                                if (sessionStart == -1L) {
+                                    sessionStart = ts
+                                }
+                            }
+                            UsageEvents.Event.ACTIVITY_PAUSED -> {
+                                val prev = activeCounts[compKey] ?: 0
+                                if (prev <= 1) {
+                                    activeCounts.remove(compKey)
+                                } else {
+                                    activeCounts[compKey] = prev - 1
+                                }
+                                if (activeCounts.isEmpty() && sessionStart != -1L) {
+                                    val delta = ts - sessionStart
+                                    if (delta in 1 until maxSingleSessionMs) {
+                                        totalMillis += delta
+                                    }
+                                    sessionStart = -1L
+                                }
+                            }
+                        }
                     } else {
-                        pkgStats.maxByOrNull { it.lastTimeStamp }?.totalTimeInForeground ?: 0L
+                        // Screen locked / display turned off / launcher resumed closes any open foreground session cleanly
+                        val closesSession = type == UsageEvents.Event.SCREEN_NON_INTERACTIVE ||
+                            type == UsageEvents.Event.KEYGUARD_SHOWN ||
+                            type == UsageEvents.Event.DEVICE_SHUTDOWN ||
+                            (pkg == context.packageName && type == UsageEvents.Event.ACTIVITY_RESUMED)
+
+                        if (closesSession && sessionStart != -1L) {
+                            val delta = ts - sessionStart
+                            if (delta in 1 until maxSingleSessionMs) {
+                                totalMillis += delta
+                            }
+                            sessionStart = -1L
+                            activeCounts.clear()
+                        }
                     }
-                    if (totalTime > 0L) {
-                        return (totalTime / 60_000L).toInt()
+                }
+
+                // Include currently running foreground session if screen is on
+                if (sessionStart != -1L && now > sessionStart) {
+                    val powerManager = context.getSystemService(Context.POWER_SERVICE) as? PowerManager
+                    val isInteractive = powerManager?.isInteractive ?: true
+                    if (isInteractive) {
+                        val delta = now - sessionStart
+                        if (delta in 1 until maxSingleSessionMs) {
+                            totalMillis += delta
+                        }
                     }
                 }
             }
         } catch (e: Exception) {
-            // Fallback
+            // Fall through to bucket fallback
         }
 
-        return 0
+        // Fallback if UsageEvents buffer was unavailable or empty
+        if (!hadEvents || totalMillis == 0L) {
+            try {
+                val statsList = usageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_DAILY, startOfDay, now)
+                if (!statsList.isNullOrEmpty()) {
+                    val pkgStats = statsList.filter { it.packageName == packageName && it.lastTimeUsed >= startOfDay }
+                    val todayBuckets = pkgStats.filter { it.firstTimeStamp >= startOfDay }
+                    val bucketMillis = if (todayBuckets.isNotEmpty()) {
+                        todayBuckets.sumOf { it.totalTimeInForeground }
+                    } else {
+                        0L
+                    }
+                    if (bucketMillis > totalMillis) {
+                        return bucketMillis
+                    }
+                }
+            } catch (e: Exception) {
+                // Ignored
+            }
+        }
+
+        return totalMillis
+    }
+
+    /**
+     * Returns total active foreground time spent on a specific app today (strictly since local midnight) in minutes.
+     */
+    fun getTodayUsageMinutes(context: Context, packageName: String): Int {
+        return (getTodayUsageMillis(context, packageName) / 60_000L).toInt()
     }
 
     /**
